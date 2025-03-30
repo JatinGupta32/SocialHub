@@ -1,4 +1,4 @@
-const { type } = require("@testing-library/user-event/dist/type");
+// const { type } = require("@testing-library/user-event/dist/type");
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
@@ -17,4 +17,3 @@ const commentSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("comment",commentSchema);
-//fedfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

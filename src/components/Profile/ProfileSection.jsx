@@ -82,25 +82,7 @@ const ProfileSection = () => {
                 <img src={Photo6} alt="Photo6" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
                 <img src={Photo7} alt="Photo7" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
                 <img src={Photo8} alt="Photo8" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                {/* <img src={Photo9} alt="Photo9" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo1} alt="Photo1" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo2} alt="Photo2" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo3} alt="Photo3" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo4} alt="Photo4" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo5} alt="Photo5" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo6} alt="Photo6" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo7} alt="Photo7" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo8} alt="Photo8" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
                 <img src={Photo9} alt="Photo9" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo1} alt="Photo1" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo2} alt="Photo2" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo3} alt="Photo3" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo4} alt="Photo4" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo5} alt="Photo5" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo6} alt="Photo6" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo7} alt="Photo7" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo8} alt="Photo8" className="w-12 h-12 cursor-pointer rounded-full object-cover" />
-                <img src={Photo9} alt="Photo9" className="w-12 h-12 cursor-pointer rounded-full object-cover" /> */}
 
                 <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
                     <GrLinkNext size={18} className="text-white" />

@@ -1,4 +1,4 @@
-import React,{ useState }  from 'react'
+import React,{ useEffect, useState }  from 'react'
 import { IoMdBookmark } from "react-icons/io";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
@@ -12,11 +12,32 @@ import Photo7 from '../../assets/Profile Photos/Photo7.jpeg';
 import Photo8 from '../../assets/Profile Photos/Photo8.jpeg';
 import Photo9 from '../../assets/Profile Photos/Photo9.jpeg';
 import {motion} from 'framer-motion'
+import PostModal from '../Profile/PostModal'
+import { useDispatch, useSelector } from 'react-redux';
+import {getUserPostsApi} from '../../apis/postAPI'
 
 const PostSection = () => {
   const [hovered1,setHovered1] = useState(false);
   const [hovered2,setHovered2] = useState(false);
   const [hovered3,setHovered3] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [posts,setPosts] = useState([]);
+  const {user} = useSelector((state)=>state.profile);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+        const res = await dispatch(getUserPostsApi(user));         
+        setPosts(res); // This triggers a re-render, but doesn't update immediately
+    };
+    fetchPosts();
+  }, [dispatch, user]);
+
+  // This will log `posts` only when it updates
+  useEffect(() => {
+      console.log("Updated posts:", posts);
+  }, [posts]);
+
   return (
     <div className=' min-h-screen overflow-x-hidden bg-gradient-to-b from-gray-900 to-black border-l border-white/20 flex-col justify-between px-8 py-4'>
         <div className='h-12 flex justify-center items-center gap-8 border-b-1 border-white/20'>
@@ -45,8 +66,8 @@ const PostSection = () => {
             <div className='cursor-pointer px-1 py-2 flex items-center gap-1 text-lg hover:border-b-1 hover:border-purple-500 hover:text-purple-500'><MdOutlinePersonAddAlt1 size={22}/>Tagged</div> */}
         </div>
         <div className='grid grid-cols-3 my-8 gap-5'>
-            <img src={Photo1} alt='Photo1' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo2} alt='Photo2' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
+            <img src={Photo1} onClick={() => setSelectedImage(Photo1)} alt='Photo1' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
+            <img src={Photo2} onClick={() => setSelectedImage(Photo2)} alt='Photo2' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
             <img src={Photo3} alt='Photo3' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
             <img src={Photo4} alt='Photo4' className='w-full h-[350px] object-cover rounded-lg cursor-pointerr'></img>
             <img src={Photo5} alt='Photo5' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
@@ -56,6 +77,11 @@ const PostSection = () => {
             <img src={Photo9} alt='Photo9' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
             <img src={Photo6} alt='Photo6' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
         </div>
+
+        {selectedImage && (
+          <PostModal Photo={selectedImage} onClose={() => setSelectedImage(null)} />
+        )}
+
     </div>
   )
 }

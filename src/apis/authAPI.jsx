@@ -38,12 +38,15 @@ export function sendOtpApi(identifier, username, navigate) {
 export function loginApi(identifier, password, navigate){
     return async (dispatch) => {
         try{
-            const response = await axios.post("http://localhost:3000/api/v1/login",{identifier,password}, { withCredentials:true });
+            const response = await axios.post("http://localhost:3000/api/v1/login",{identifier,password}, 
+                // { withCredentials:true }
+            );
             console.log("Response:", response.data);
 
             localStorage.setItem('token',response.data.token);
             console.log(localStorage.getItem('token'));
             toast.success("🎉 Logged in successfully!");
+            dispatch(setUser(response.data.user))
             dispatch(setToken(response.data.token));
             navigate("/home");  
         }

@@ -1,16 +1,34 @@
-const { type } = require("@testing-library/user-event/dist/type");
+// const { type } = require("@testing-library/user-event/dist/type");
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-    media: [{
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+    },
+    photos: [{
         type: String,
         required: true,
     }],
-    description: {
+    caption: {
         type: String,
     },
     music: {
         type: String,
+    },
+    location: {
+        type: String,
+    },
+    tagPeople: {
+        type: String,
+    },
+    commentAllowed: {
+        type: Boolean,
+    },
+    privacyStatus: {
+        type: String,
+        enum: ["private", "public"], 
+        default: "private", 
     },
     likes: [
         {

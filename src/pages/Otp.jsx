@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Background from '../components/Auth/background';
 import OTPInput from 'react-otp-input';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,12 @@ const Otp = () => {
     const [otp, setOtp] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {signUpData} = useSelector((state) => state.auth);
+    const {signUpData,token} = useSelector((state) => state.auth);
+    useEffect(()=>{
+      if(!token){
+        navigate('/');
+      }
+    },[])
     const handleOnClick = async (e) => {
         e.preventDefault();
         const {

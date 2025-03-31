@@ -46,7 +46,10 @@ export function loginApi(identifier, password, navigate){
             localStorage.setItem('token',response.data.token);
             console.log(localStorage.getItem('token'));
             toast.success("🎉 Logged in successfully!");
-            dispatch(setUser(response.data.user))
+            const userImage = response.data?.user?.image
+            ? response.data.user.image
+            : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.fullname}`
+            dispatch(setUser({ ...response.data.user, image: userImage }))
             dispatch(setToken(response.data.token));
             navigate("/home");  
         }

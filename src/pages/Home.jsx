@@ -1,13 +1,20 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Background from "../components/Auth/background";
 import logo from '../assets/logo1.png';
 import { FcGoogle } from "react-icons/fc";
 import Sidebar from "../components/Sidebar";
 import SocialPosts from "../components/SocialPosts";
+import { useSelector } from "react-redux";
 
 const Home = () => {
     const navigate = useNavigate();
+    const {token} = useSelector((state) => state.auth);
+    useEffect(()=>{
+      if(!token){
+        navigate('/');
+      }
+    },[])
     return (
         <div className="w-full min-h-screen flex ">
             <Sidebar />

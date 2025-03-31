@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken')
 
 exports.auth = async (req,res,next) => {
     try{
-        console.log(req.body);
+        console.log("auth start")
+        console.log("Cookies token",req.cookies.token);
         const token = req.body.token || req.cookies.token || req.headers["authorization"]?.replace("Bearer ","");
+        // const token = req.cookies.token || req.headers["authorization"]?.replace("Bearer ","");
         console.log(token);
         if(!token){
             return res.status(401).json({
@@ -12,7 +14,6 @@ exports.auth = async (req,res,next) => {
                 message: "Token is missing"
             })
         }
-        // console.log("2");
         // Verify the token
         const decodedData = jwt.verify(token,process.env.JWT_SECRET);
         console.log(decodedData);

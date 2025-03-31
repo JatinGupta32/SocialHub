@@ -2,41 +2,28 @@ import React,{ useEffect, useState }  from 'react'
 import { IoMdBookmark } from "react-icons/io";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
-import Photo1 from '../../assets/Profile Photos/Photo1.jpeg';
-import Photo2 from '../../assets/Profile Photos/Photo2.jpeg';
-import Photo3 from '../../assets/Profile Photos/Photo3.jpeg';
-import Photo4 from '../../assets/Profile Photos/Photo4.jpeg';
-import Photo5 from '../../assets/Profile Photos/Photo5.jpeg';
-import Photo6 from '../../assets/Profile Photos/Photo6.jpeg';
-import Photo7 from '../../assets/Profile Photos/Photo7.jpeg';
-import Photo8 from '../../assets/Profile Photos/Photo8.jpeg';
-import Photo9 from '../../assets/Profile Photos/Photo9.jpeg';
 import {motion} from 'framer-motion'
 import PostModal from '../Profile/PostModal'
-import { useDispatch, useSelector } from 'react-redux';
-import {getUserPostsApi} from '../../apis/postAPI'
+import { useSelector } from 'react-redux';
+import { FaHeart } from "react-icons/fa";
+import { FaComment } from "react-icons/fa";
 
 const PostSection = () => {
   const [hovered1,setHovered1] = useState(false);
   const [hovered2,setHovered2] = useState(false);
   const [hovered3,setHovered3] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [posts,setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [activePost, setActivePost] = useState(null);
   const {user} = useSelector((state)=>state.profile);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-        const res = await dispatch(getUserPostsApi(user));         
-        setPosts(res); // This triggers a re-render, but doesn't update immediately
-    };
-    fetchPosts();
-  }, [dispatch, user]);
+      console.log("UserDetails:", user);
+  }, [user]);
 
-  // This will log `posts` only when it updates
-  useEffect(() => {
-      console.log("Updated posts:", posts);
-  }, [posts]);
+  // useEffect(()=>{selecedPost: ',selectedPost);
+  // },[selectedPost]
+  //   console.log(');
+  const [hoverPost,setHoverPost] = useState(1);
 
   return (
     <div className=' min-h-screen overflow-x-hidden bg-gradient-to-b from-gray-900 to-black border-l border-white/20 flex-col justify-between px-8 py-4'>
@@ -65,21 +52,36 @@ const PostSection = () => {
             {/* <div className='cursor-pointer px-1 py-2 flex items-center gap-1 text-lg hover:border-b-1 hover:border-purple-500 hover:text-purple-500'><IoMdBookmark size={22}/>Saved</div>
             <div className='cursor-pointer px-1 py-2 flex items-center gap-1 text-lg hover:border-b-1 hover:border-purple-500 hover:text-purple-500'><MdOutlinePersonAddAlt1 size={22}/>Tagged</div> */}
         </div>
-        <div className='grid grid-cols-3 my-8 gap-5'>
-            <img src={Photo1} onClick={() => setSelectedImage(Photo1)} alt='Photo1' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo2} onClick={() => setSelectedImage(Photo2)} alt='Photo2' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo3} alt='Photo3' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo4} alt='Photo4' className='w-full h-[350px] object-cover rounded-lg cursor-pointerr'></img>
-            <img src={Photo5} alt='Photo5' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo6} alt='Photo6' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo7} alt='Photo7' className='w-full h-[350px] object-cover rounded-lg cursor-pointerr'></img>
-            <img src={Photo8} alt='Photo8' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo9} alt='Photo9' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
-            <img src={Photo6} alt='Photo6' className='w-full h-[350px] object-cover rounded-lg cursor-pointer'></img>
+        <div className='grid grid-cols-3 my-8 gap-4'>
+        {
+          user?.posts?.map((post, i) => (
+              <div key={i} 
+                className='relative cursor-pointer transition-all duration-300 brightness-100 hover:brightness-50'
+                onClick={() => {setActivePost(i); setSelectedPost(post)}} 
+                onMouseEnter={()=>setHoverPost(i)}
+                onMouseLeave={()=>setHoverPost(null)}>
+                
+                <img 
+                  src={post.photos[0]} 
+                  key={i}
+                  
+                  alt={`Photo ${i}`}                
+                  className={`w-full h-[350px] object-cover rounded-lg cursor-pointer ${hoverPost==i ? `brightness-60` : `brightness-100`}`} 
+                />
+                {hoverPost===i && 
+                  <div className='absolute inset-0 flex items-center justify-center gap-6 text-white font-semibold text-lg opacity-0 hover:opacity-100 transition-opacity duration-300'>
+                    <div className='flex items-center gap-2'><FaHeart/> <span>{post.likes.length}</span></div>
+                    <div className='flex items-center gap-2'><FaComment/> <span> {post.comments.length}</span></div>
+                  </div>
+                }
+              </div>
+          ))
+        }
+            
         </div>
 
-        {selectedImage && (
-          <PostModal Photo={selectedImage} onClose={() => setSelectedImage(null)} />
+        {selectedPost && (
+          <PostModal Post={selectedPost} activePost={activePost} user={user} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
         )}
 
     </div>

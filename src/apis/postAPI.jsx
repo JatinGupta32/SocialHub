@@ -1,9 +1,9 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import setUser from "../slices/profileSlice"
+import {setUser} from "../slices/profileSlice"
 
 export function createPostApi (formData,navigate){
-    return async () => {
+    return async (dispatch) => {
         try{
             const token = localStorage.getItem("token");
             const response = await axios.post("http://localhost:3000/api/v1/createPost", formData ,{
@@ -13,7 +13,9 @@ export function createPostApi (formData,navigate){
             });
             console.log("Response:", response.data);
             toast.success("🎉 Post Created successfully!");
-            navigate("/profile"); 
+            dispatch(setUser(response.data.updatedUserDetails));
+            const userId = response.data.updatedUserDetails._id;
+            navigate(`/profile/:${userId}`); 
         }
         catch(error){
             console.error("Error sending data:", error);

@@ -76,6 +76,14 @@ body {
 .custom-scrollbar1::-webkit-scrollbar-thumb:hover {
   background: #505e6e; /* Hover effect */
 }
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;  /* Show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* a {
   font-weight: 500;
   color: #646cff;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiFillHome } from "react-icons/ai";
 import { IoSearch } from "react-icons/io5";
 import { TbMessageFilled } from "react-icons/tb";
@@ -9,8 +9,13 @@ import { CgDetailsMore } from "react-icons/cg";
 import logo from '../assets/logo1.png';
 import "@fontsource/pacifico";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
+    const {user} = useSelector((state)=>state.profile)
+    useEffect(()=>{
+        console.log("user freom sidebar: ", user);
+    })
     const navigate = useNavigate();
     return (
       <div className="w-1/6 bg-gradient-to-b from-gray-900 to-black h-screen fixed left-0 top-0 flex flex-col items-center border-r border-gray-700 shadow-lg">
@@ -51,7 +56,7 @@ const Sidebar = () => {
                   </button>
               </div>
               <div className="w-full px-2"> 
-                  <button onClick={()=>navigate('/profile')} className="flex items-center cursor-pointer gap-4 w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                  <button onClick={()=>navigate(`/profile/:${user._id}`)} className="flex items-center cursor-pointer gap-4 w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                       <FaUserCircle className="w-7 h-7" />
                       <p>Profile</p>
                   </button>

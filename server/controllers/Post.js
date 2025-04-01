@@ -53,11 +53,12 @@ exports.createPost = async (req,res) => {
                 }
             },
             { new: true }
-        );
+        ).populate("additionalDetails followers following posts")
+        .exec();
         // console.log(newPost, updatedUserDetails);
         return res.status(200).json({
             success: true,
-            // updatedUserDetails,
+            updatedUserDetails,
             message: "New Post Created",
         })
     }
@@ -226,7 +227,7 @@ exports.addCommentOnPost = async (req,res) => {
         })
         .exec();
         
-        console.log("updatedPostDetails: ", updatedPostDetails);
+        // console.log("updatedPostDetails: ", updatedPostDetails);
         return res.status(200).json({
             success: true,
             updatedPostDetails,

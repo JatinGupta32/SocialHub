@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa";
 
-const PostSection = () => {
+const PostSection = ({User}) => {
   const [hovered1,setHovered1] = useState(false);
   const [hovered2,setHovered2] = useState(false);
   const [hovered3,setHovered3] = useState(false);
@@ -16,9 +16,9 @@ const PostSection = () => {
   const [activePost, setActivePost] = useState(null);
   const {user} = useSelector((state)=>state.profile);
 
-  useEffect(() => {
-      console.log("UserDetails:", user);
-  }, [user]);
+  // useEffect(() => {
+  //     console.log("UserDetails:", user);
+  // }, [user]);
 
   // useEffect(()=>{selecedPost: ',selectedPost);
   // },[selectedPost]
@@ -54,7 +54,7 @@ const PostSection = () => {
         </div>
         <div className='grid grid-cols-3 my-8 gap-4'>
         {
-          user?.posts?.map((post, i) => (
+          User?.posts?.map((post, i) => (
               <div key={i} 
                 className='relative cursor-pointer transition-all duration-300 brightness-100 hover:brightness-50'
                 onClick={() => {setActivePost(i); setSelectedPost(post)}} 
@@ -81,7 +81,7 @@ const PostSection = () => {
         </div>
 
         {selectedPost && (
-          <PostModal Post={selectedPost} activePost={activePost} user={user} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
+          <PostModal Post={selectedPost} activePost={activePost} user={User} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
         )}
 
     </div>

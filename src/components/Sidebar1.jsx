@@ -8,8 +8,10 @@ import { FaUserCircle } from "react-icons/fa";
 import { CgDetailsMore } from "react-icons/cg";
 import logo from '../assets/logo1.png';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Sidebar1 = () => {
+    const {user} = useSelector((state)=>state.profile)
     const navigate = useNavigate();
   return (
     <div className="bg-gradient-to-b h-screen fixed left-0 top-0 from-gray-900 to-black flex flex-col items-center border-r border-gray-700 shadow-lg">
@@ -44,7 +46,7 @@ const Sidebar1 = () => {
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button onClick={()=>navigate('/profile')} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>navigate(`/profile/:${user._id}`)} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <FaUserCircle className="w-7 h-7" />
                 </button>
             </div>

@@ -34,7 +34,7 @@ function App() {
 
         {/* Profile and Posts */}
         <Route path="/create-post" element={<CreatePost/>}/>
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/profile/:userId" element={<Profile/>}/>
 
       </Routes>
     </div>

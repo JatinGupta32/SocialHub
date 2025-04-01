@@ -4,17 +4,23 @@ import Background from "../components/Auth/background";
 import logo from '../assets/logo1.png';
 import { FcGoogle } from "react-icons/fc";
 import Sidebar from "../components/Sidebar";
-import SocialPosts from "../components/SocialPosts";
-import { useSelector } from "react-redux";
+import SocialPosts from "../components/Post/SocialPosts";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserApi } from "../apis/profileAPI";
 
 const Home = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     const {token} = useSelector((state) => state.auth);
     useEffect(()=>{
       if(!token){
         navigate('/');
       }
     },[])
+    useEffect(()=>{
+      dispatch(getUserApi())
+    },[])
+
     return (
         <div className="w-full min-h-screen flex ">
             <Sidebar />

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { AiFillHome } from "react-icons/ai";
 import { IoSearch } from "react-icons/io5";
 import { TbMessageFilled } from "react-icons/tb";
@@ -13,9 +13,6 @@ import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
     const {user} = useSelector((state)=>state.profile)
-    useEffect(()=>{
-        console.log("user freom sidebar: ", user);
-    })
     const navigate = useNavigate();
     return (
       <div className="w-1/6 bg-gradient-to-b from-gray-900 to-black h-screen fixed left-0 top-0 flex flex-col items-center border-r border-gray-700 shadow-lg">

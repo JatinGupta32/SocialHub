@@ -5,7 +5,6 @@ import PostSection from '../components/Profile/PostSection'
 import { getUserDetailsApi } from '../apis/profileAPI'
 import { useState,useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../slices/profileSlice'
 import { useNavigate, useParams, useLocation  } from 'react-router-dom'
 import { getUserApi } from "../apis/profileAPI";
 
@@ -20,30 +19,34 @@ const Profile = () => {
   const {user} = useSelector((state)=>state.profile);
   const {token} = useSelector((state) => state.auth);
   const [profileUser,setProfileUser] = useState({});
-  
-
   useEffect(() => {
-    dispatch(getUserDetailsApi(userid))
-      .then((res) => setProfileUser(res))
-      .catch((err) => console.log(err)); // Fixed console error
-  }, [userid]); // Include dependencies
+    if (!token) {
+      navigate('/');
+    }
+  }, [token, navigate]);
+
+  // Only fetch user data if token is available
+  useEffect(() => {
+    if (token) {
+      dispatch(getUserDetailsApi(userid))
+        .then((res) => setProfileUser(res))
+        .catch((err) => console.log(err));
+    }
+  }, [token, userid, dispatch]); 
+
+//   useEffect(()=>{
+//     if(!token) navigate('/');
+//   },[])
+//   useEffect(() => {
+//     dispatch(getUserDetailsApi(userid))
+//       .then((res) => setProfileUser(res))
+//       .catch((err) => console.log(err)); // Fixed console error
 // }, [userid,dispatch]); // Include dependencies
 
-  useEffect(()=>{
-    if(!token) navigate('/');
-  },[])
-
-  useEffect(()=>{
-        dispatch(getUserApi())
-      },[])
-
-  // useEffect(() => {
-  //   dispatch(getUserDetailsApi(userid));
-  // }, [dispatch]);
 
   // useEffect(()=>{
-  //   console.log('userDetails: ',user);
-  // },[user]);
+  //       dispatch(getUserApi())
+  //     },[])
 
   if(!profileUser) return <div>No user exist by this id</div>
 
@@ -56,7 +59,7 @@ const Profile = () => {
         <ProfileSection User={profileUser} setProfileUser={setProfileUser}/>    
       </div>
       <div className='w-12/19 h-screen overflow-y-scroll custom-scrollbar'>
-        <PostSection  User={profileUser}/>
+        <PostSection  User={profileUser} user={user}/>
       </div>
       
     </div>

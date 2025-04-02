@@ -11,11 +11,11 @@ const Otp = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {signUpData,token} = useSelector((state) => state.auth);
-    useEffect(()=>{
-      if(!token){
-        navigate('/');
-      }
-    },[])
+    // useEffect(()=>{
+    //   if(!token){
+    //     navigate('/');
+    //   }
+    // },[])
     const handleOnClick = async (e) => {
         e.preventDefault();
         const {

@@ -1,28 +1,18 @@
-import React,{ useEffect, useState }  from 'react'
+import React,{ useState }  from 'react'
 import { IoMdBookmark } from "react-icons/io";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import {motion} from 'framer-motion'
 import PostModal from '../Profile/PostModal'
-import { useSelector } from 'react-redux';
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa";
 
-const PostSection = ({User}) => {
+const PostSection = ({User,user}) => {
   const [hovered1,setHovered1] = useState(false);
   const [hovered2,setHovered2] = useState(false);
   const [hovered3,setHovered3] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [activePost, setActivePost] = useState(null);
-  const {user} = useSelector((state)=>state.profile);
-
-  // useEffect(() => {
-  //     console.log("UserDetails:", user);
-  // }, [user]);
-
-  // useEffect(()=>{selecedPost: ',selectedPost);
-  // },[selectedPost]
-  //   console.log(');
   const [hoverPost,setHoverPost] = useState(1);
 
   return (
@@ -49,8 +39,6 @@ const PostSection = ({User}) => {
             <motion.div animate={{width: hovered3 ? "100%" : "0%", opacity: hovered3 ? 1 : 0 }} transition={{duration: 0.3}} className="absolute bottom-0 left-0 bg-purple-500 h-1 rounded-full"></motion.div>
           </div>
             
-            {/* <div className='cursor-pointer px-1 py-2 flex items-center gap-1 text-lg hover:border-b-1 hover:border-purple-500 hover:text-purple-500'><IoMdBookmark size={22}/>Saved</div>
-            <div className='cursor-pointer px-1 py-2 flex items-center gap-1 text-lg hover:border-b-1 hover:border-purple-500 hover:text-purple-500'><MdOutlinePersonAddAlt1 size={22}/>Tagged</div> */}
         </div>
         <div className='grid grid-cols-3 my-8 gap-4'>
         {
@@ -81,7 +69,7 @@ const PostSection = ({User}) => {
         </div>
 
         {selectedPost && (
-          <PostModal Post={selectedPost} activePost={activePost} user={User} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
+          <PostModal Post={selectedPost} activePost={activePost} user={user} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
         )}
 
     </div>
@@ -89,8 +77,3 @@ const PostSection = ({User}) => {
 }
 
 export default PostSection
-
-
-{/* <div className='bg-purple-200 h-75 rounded-lg cursor-pointer'>
-    <img src={Photo1} alt='Photo1' className='object-cover'></img>
-</div> */}

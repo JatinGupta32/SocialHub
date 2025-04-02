@@ -1,3 +1,4 @@
+import ModalPortal from './ModalPortal'; // Import portal wrapper
 import { motion } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
@@ -13,10 +14,9 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { addCommentOnPostApi, getPostDetailsApi,updateLikeOnPostApi } from "../../apis/postAPI";
 import { FiVolume2 } from "react-icons/fi";
 import { FiVolumeX } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSelectedPost, onClose }) => {
-  const navigate = useNavigate()
+const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
   const dispatch = useDispatch();
   const[activePhoto,setActivePhoto] = useState(0);
   const[post,setPost] = useState(Post);
@@ -26,21 +26,18 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const audio = audioRef.current;
     
-    if (!selectedPost?.music) {
+    if (!post?.music) {
       stopAudio();
       return;
     }
-
-    // useEffect(()=>{
-    //         dispatch(getUserApi())
-    //       },[])
   
     // Reset and Load New Audio
-    audio.src = selectedPost.music;
+    audio.src = post.music;
     audio.load(); // Ensure it loads properly
     setIsPlaying(false);
   
@@ -63,12 +60,12 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
       audio.removeEventListener("loadeddata", handleLoadedData);
       stopAudio();
     };
-  }, [selectedPost]);
+  }, [post]);
 
   // Toggle Play/Pause
   const togglePlay = () => {
     const audio = audioRef.current;
-    if (!selectedPost?.music) return; // No music, no toggle
+    if (!post?.music) return; // No music, no toggle
 
     if (isPlaying) {
       audio.pause();
@@ -90,8 +87,14 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
   };
 
   useEffect(() => {
-    dispatch(getPostDetailsApi(Post._id)).then(setPost).catch(console.error);
-  }, [dispatch, Post._id]);
+    dispatch(getPostDetailsApi(post._id)).then(setPost).catch(console.error);
+    // console.log('userImage :', userImage);
+  }, [ post._id]);
+
+  useEffect(()=>{
+      console.log('Post-Details: ',post);
+    },[post]);
+
         
   const addEmoji = (emoji) => {
       setComment(comment + emoji.native);
@@ -101,9 +104,9 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
     dispatch(addCommentOnPostApi(post._id,comment)).then(setPost).catch(console.error);
     setComment('');
   }
-
+  
   const handleOnLike = (e) => {
-    dispatch(updateLikeOnPostApi(post._id)).then(res=>setPost(res)).catch(console.error);
+    dispatch(updateLikeOnPostApi(post._id)).then(setPost).catch(console.error);
   }
 
   useEffect(()=>{
@@ -122,41 +125,9 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
   },[])
 
   return (
-    <div
-      className="fixed inset-0 rounded-2xl bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
-      onClick={onClose}
-    >
-        {activePost < user.posts.length - 1 && (
-        <FaCircleChevronRight
-          onClick={(e) => {
-            e.stopPropagation();
-            setActivePost((prevActive) => {
-              const newActive = prevActive + 1;
-              setSelectedPost(user.posts[newActive]); // Update the selected post
-              return newActive;
-            });
-          }}
-          size={33}
-          className="absolute z-11 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer"
-        />
-      )}
-
-      {activePost > 0 && (
-        <FaCircleChevronLeft
-          onClick={(e) => {
-            e.stopPropagation();
-            setActivePost((prevActive) => {
-              const newActive = prevActive - 1;
-              setSelectedPost(user.posts[newActive]); // Update the selected post
-              return newActive;
-            });
-          }}
-          size={33}
-          className="absolute z-11 translate-x-[-46vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer"
-        />
-      )}
-      <div 
-        className=" flex w-[80vw] h-[94vh] bg-black rounded-lg "
+    <ModalPortal onClose={onClose}>
+            <div 
+        className="absolute flex w-[80vw] h-[94vh] bg-black rounded-lg "
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >
         {/* Left Section (Image) */}
@@ -171,10 +142,9 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
         {activePhoto < post.photos.length-1 && <FaCircleChevronRight onClick={()=>setActivePhoto(activePhoto+1)} size={24} className="absolute z-10 opacity-60 translate-x-[43.5vw] translate-y-[25vw] hover:opacity-90 cursor-pointer"/>}
         {activePhoto > 0 && <FaCircleChevronLeft onClick={()=>setActivePhoto(activePhoto-1)} size={24} className="absolute z-10 opacity-60 translate-x-[1vw] translate-y-[25vw] hover:opacity-90 cursor-pointer"/>}
 
-
         {/* Right Section (Extra Content) */}
         <div className="w-3/7 flex-col pt-5 px-5 font-sans">
-          <button
+        <button
             onClick={togglePlay}
             className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-full"
           >
@@ -184,22 +154,22 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
           {/* Hidden Audio Element */}
           <audio ref={audioRef} src={post.music} />
           <div className="flex w-full items-center gap-3 border-b border-white/20 pb-3">
-            <img src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 rounded-full object-cover cursor-pointer"></img>
+            <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 rounded-full object-cover cursor-pointer"></img>
             <div>
-              <div className="font-semibold text-sm cursor-pointer hover:brightness-50">{post.user.username}</div>
+              <div onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} className="font-semibold text-sm cursor-pointer hover:brightness-50">{post.user.username}</div>
               <p className="text-white/90 text-xs">{post.location}</p>
             </div>
             
           </div>
           <div className="h-[39vw] border-b border-white/20 overflow-y-scroll custom-scrollbar">
             <div className="flex w-full items-center space-x-4 pt-3 pb-2 ">
-                <img src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
+                <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
                 <div className="text-sm w-fit">
-                      <span className="font-bold cursor-pointer hover:brightness-50">{post?.user?.username}</span>
+                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} className="font-bold cursor-pointer hover:brightness-50">{post?.user?.username}</span>
                       <span>&nbsp;</span>
                       {post.caption}
                     </div>
-                
+                {/* <span className="text-sm w-fit">{post.caption}</span> */}
             </div>
             
             {
@@ -218,9 +188,10 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
           <div className="w-full h-[2vw] py-6 flex justify-between items-center">
             <div className="gap-4 flex">
                 {
-                  post.likes.some(like => like._id === user?._id) ?  
+                  post.likes.some(like => like._id === user._id) ?  
                   <FaHeart size={23} onClick={handleOnLike} className="cursor-pointer text-red-500"/> : 
                   <FaRegHeart size={23} onClick={handleOnLike} className="cursor-pointer"/>
+                  
                 }
                 <FaRegComment size={23} className="cursor-pointer"/>
                 <LuSend size={23} className="cursor-pointer"/>
@@ -229,6 +200,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
           </div>
           <div className="flex-col space-y-1 border-b border-white/20 pb-4">
             {
+              // likes.length===0 ? (<div>No likes </div>) : 
               (
                 <div className="flex text-sm gap-2 items-center ">
                   {
@@ -263,6 +235,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
                         </div>
                     )}
                 </div>
+                {/* <FaRegFaceSmile size={25}  className="cursor-pointer"/> */}
                 <input 
                     type="text"
                     name="comment"
@@ -275,11 +248,33 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
                 <button onClick={handleOnComment} className="text-purple-500 hover:text-white cursor-pointer font-semibold text-md">Post</button>
             </label>
             
-          </div>
+        </div>
         </div>
       </div>
-    </div>
-  );
+    </ModalPortal>
+//     <div
+//       className=" fixed inset-0 rounded-2xl bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
+//       onClick={onClose}
+//     >
+
+//       </div>
+//   );
+);
 };
 
-export default PostModal;
+export default PostModalSocial;
+
+
+// const handleOnLike = () => {
+//   const hasLiked = Post.likes.some(like => like._id === user._id);
+  
+//   // Optimistically update the UI
+//   const updatedLikes = hasLiked
+//       ? Post.likes.filter(like => like._id !== user._id) // Remove like
+//       : [...Post.likes, { _id: user._id }]; // Add like
+  
+//   setPost(prev => ({ ...prev, likes: updatedLikes }));
+
+//   // Dispatch API call
+//   dispatch(updateLikeOnPostApi(Post._id));
+// }

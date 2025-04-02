@@ -6,34 +6,38 @@ import { FcGoogle } from "react-icons/fc";
 import Sidebar from "../components/Sidebar";
 import SocialPosts from "../components/Post/SocialPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserApi } from "../apis/profileAPI";
+import { getSocialPostsApi } from "../apis/postAPI";
+import RightSidebar from "../components/RightSidebar";
 
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const {token} = useSelector((state) => state.auth);
+    const {user} = useSelector((state) => state.profile);
     useEffect(()=>{
       if(!token){
         navigate('/');
       }
     },[])
     useEffect(()=>{
-      dispatch(getUserApi())
+      dispatch(getSocialPostsApi())
     },[])
 
+
     return (
-        <div className="w-full min-h-screen flex ">
-            <Sidebar />
-            <div className="ml-[16.67%] w-5/6 flex">
-                <div className="flex-1 w-1/2 min-h-screen overflow-hidden flex flex-col">
-                    <SocialPosts />
-                </div>
-                <div className="overflow-hidden w-1/3 bg-gradient-to-b from-gray-900 to-black flex flex-col items-center border-l border-gray-700 shadow-lg">
-                </div>
-            </div>
-            
-        </div>
-    )
+      <div className="w-full min-h-screen flex overflow-x-hidden scrollbar-hide">
+          <div className="w-1/6">
+            <Sidebar/> 
+          </div>
+          <div className="h-screen w-7/12 ">
+            <SocialPosts />
+          </div>
+          <div className="w-1/4 h-screen overflow-y-scroll custom-scrollbar bg-gradient-to-b from-gray-900 to-black flex flex-col items-center border-l border-gray-700 shadow-lg">
+            <RightSidebar/>
+          </div>
+      </div>
+  )
+  
 }
 
 export default Home;

@@ -1,30 +1,31 @@
 import React from "react";
-import { FaCheck } from "react-icons/fa";
 import { FiMail, FiMoreHorizontal } from "react-icons/fi";
-import profilephoto from "../../assets/profile.png";
-import Photo1 from '../../assets/Profile Photos/Photo1.jpeg';
-import Photo2 from '../../assets/Profile Photos/Photo2.jpeg';
 import { RiUserFollowFill } from "react-icons/ri";
 import { GrLinkNext } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { MdEdit } from "react-icons/md";
-import { FaShareAlt } from "react-icons/fa";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { updateFollowApi } from "../../apis/profileAPI";
+import { getUserApi, updateFollowApi } from "../../apis/profileAPI";
+import { useEffect } from "react";
 
 const ProfileSection = ({User,setProfileUser}) => {
   const {user} = useSelector((state)=>state.profile);
+  console.log("User: ",User);
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  console.log("Logined User: ", user?._id);
-  console.log("Profile User: ", User._id);
+  // console.log("Logined User: ", user?._id);
+  // console.log("Profile User: ", User._id);
   const handleOnfollow = (e) =>{
     e.preventDefault();
     dispatch(updateFollowApi(User._id))
     .then((res)=>setProfileUser(res))
     .catch((err) => console.log(err));
   }
+
+  // useEffect(()=>{
+  //         dispatch(getUserApi())
+  //       },[])
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-gray-900 to-black p-8">
@@ -34,12 +35,12 @@ const ProfileSection = ({User,setProfileUser}) => {
           <img
             src={User.image}
             alt="Profile"
-            className="w-27 h-27 cursor-pointer rounded-xl object-cover shadow-md border-4 border-purple-500"
+            className="w-24 h-24 rounded-full cursor-pointer object-cover  shadow-md border-3 border-purple-500"
           />
 
           {/* Name & Username */}
           <div className="text-2xl font-bold text-white mt-3">{User.fullname}</div>
-          <div className="text-gray-400 text-sm">{User.fullname}</div>
+          <div className="text-gray-400 text-sm">{User.username}</div>
 
           {/* Stats */}
           <div className="flex justify-center gap-5 my-4 text-gray-300 text-sm">
@@ -76,7 +77,7 @@ const ProfileSection = ({User,setProfileUser}) => {
                 </button>
               </div>  :
               <div className="flex items-center gap-3 mt-2">
-                <button className="flex items-center bg-purple-500 cursor-pointer text-white px-3 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+                <button onClick={()=>(navigate('/edit-profile'))} className="flex items-center bg-purple-500 cursor-pointer text-white px-3 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
                   <MdEdit size={19} className="mr-1"/>Edit Profile
                 </button>
                 <button className="flex items-center bg-purple-500 cursor-pointer text-white px-3 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
@@ -93,49 +94,51 @@ const ProfileSection = ({User,setProfileUser}) => {
           <div className="w-full mt-6 text-left">
             <h3 className="text-gray-300 font-bold text-sm">ABOUT</h3>
             <p className="text-gray-400 text-sm leading-relaxed mt-1">
-              {User?.addionalDetails?.bio}
+              {User?.additionalDetails?.bio}
             </p>
           </div>
 
           {/* Friends List */}
-          <div className="w-full mt-5">
-            <h3 className="text-gray-300 font-bold text-sm">Followers</h3>
-            <div className="grid grid-cols-6 gap-3 mt-3">
-                <img src={Photo2} alt="Photo2" className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
+          <div className="w-full mt-5 flex-col space-y-5">
+            <div className="flex-col space-y-2">
+              <h3 className="text-gray-300 font-bold text-sm">Followers</h3>
+              <div className="grid grid-cols-6 gap-3">
 
-                {
-                  User?.followers?.map((follower,i)=>(
-                    <img onClick={() => navigate(`/profile/${follower?._id}`)}
-                      src={follower?.image} alt="Photo"
-                      className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
-                  ))
-                }
+                  {
+                    User?.followers?.map((follower,i)=>(
+                      <img onClick={() => navigate(`/profile/${follower?._id}`)}
+                        src={follower?.image} alt="Photo"
+                        className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
+                    ))
+                  }
 
-                <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
-                    <GrLinkNext size={18} className="text-white" />
-                </button>
+                  <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
+                      <GrLinkNext size={18} className="text-white" />
+                  </button>
+              </div>
             </div>
-            <h3 className="text-gray-300 font-bold text-sm">Following</h3>
-            <div className="grid grid-cols-6 gap-3 mt-3">
-                <img src={Photo2} alt="Photo2" className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
+            <div className="flex-col space-y-2">
+              <h3 className="text-gray-300 font-bold text-sm">Following</h3>
+              <div className="grid grid-cols-6 gap-3 mt-3">
+                  {
+                    User?.following?.map((f,i)=>(
+                      <img onClick={() => navigate(`/profile/${f?._id}`)}
+                        src={f?.image} alt="Photo"
+                        className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
+                    ))
+                  }
 
-                {
-                  User?.following?.map((f,i)=>(
-                    <img onClick={() => navigate(`/profile/${f?._id}`)}
-                      src={f?.image} alt="Photo"
-                      className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
-                  ))
-                }
-
-                <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
-                    <GrLinkNext size={18} className="text-white" />
-                </button>
+                  <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
+                      <GrLinkNext size={18} className="text-white" />
+                  </button>
+              </div>
             </div>
+            
           </div>
 
         </div>
     </div>
   );
 };
-GrLinkNext
+
 export default ProfileSection;

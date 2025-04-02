@@ -1,5 +1,7 @@
+const Profile = require("../models/Profile");
 const User = require("../models/User");
 const mongoose = require("mongoose");
+
 exports.getUser = async (req,res) => {
     try{
         const userid = req.user.id;
@@ -99,97 +101,46 @@ exports.getUserDetails = async (req,res) => {
 }
 
 
-// exports.updateFollow = async (req,res) => {
-//     try{
-//         const {profileUserid} = req.body;
-//         const userid = req.user.id;
-//         console.log(userid,profileUserid);
-//         // console.log(userid);
-//         if(!userid){
-//             return res.status(401).json({
-//                 success: false,
-//                 message: "This user does not exist",
-//             })
-//         }
-//         // Fetch post details
-//         let updatedUserDetails,updatedProfileUserDetails;
-//         const userDetails = await User.findById(userid);
-//         const profileUserDetails = await User.findById(profileUserid);
-//         if(userDetails?.following?.includes(profileUserid)){
-//             updatedUserDetails = await User.findByIdAndUpdate(
-//                 userid,
-//                 {
-//                     $pull: {
-//                         following: {
-//                             $each: [profileUserid],
-//                             $position: 0  // Insert at the beginning
-//                         }
-//                     }
-//                 })
-//                 .populate("additionalDetails followers following posts")
-//                 .exec()
-//             }
-//         else{
-//             updatedUserDetails = await User.findByIdAndUpdate(
-//                 userid,
-//                 {
-//                     $push: {
-//                         following: {
-//                             $each: [profileUserid],
-//                             $position: 0  // Insert at the beginning
-//                         }
-//                     }
-//                 })
-//                 .populate("additionalDetails followers following posts")
-//                 .exec()
-//         }
+exports.getUser = async (req,res) => {
+    try{
+        const userid = req.user.id;
+        console.log("12");
+        const userDetails = await User.findById(
+            userid,
+            {
+                username: true,
+                fullname: true,
+                email: true,
+                contactNumber: true,
+                additionalDetails: true,
+                followers: true,
+                following: true,
+                posts: true,
+                image: true,
+            })
+            .populate("additionalDetails followers following posts")
+            .exec()
+        // console.log('userDetails1: ', userDetails);
+        if(!userid){
+            return res.status(403).json({
+                success: false,
+                message: "This user is not exist",
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            userDetails: userDetails,
+            message: "We have successfully retrieved user details",
+        })
 
-//         if(profileUserDetails?.followers?.includes(userid)){
-//             updatedProfileUserDetails = await User.findByIdAndUpdate(
-//                 profileUserid,
-//                 {
-//                     $pull: {
-//                         followers: {
-//                             $each: [userid],
-//                             $position: 0  // Insert at the beginning
-//                         }
-//                     }
-//                 })
-//                 .populate("additionalDetails followers following posts")
-//                 .exec()
-//         }
-//         else{
-//             updatedProfileUserDetails = await User.findByIdAndUpdate(
-//                 profileUserid,
-//                 {
-//                     $push: {
-//                         followers: {
-//                             $each: [userid],
-//                             $position: 0  // Insert at the beginning
-//                         }
-//                     }
-//                 })
-//                 .populate("additionalDetails followers following posts")
-//                 .exec()
-//         }
-
-//         console.log("updatedUserDetails: ", updatedUserDetails);
-//         console.log("updatedProfileUserDetails: ", updatedProfileUserDetails);
-//         return res.status(200).json({
-//             success: true,
-//             updatedUserDetails,
-//             updatedProfileUserDetails,
-//             message: "Follow update succesfull",
-//         })
-//     }
-//     catch(error){
-//         console.log(error)
-//         return res.status(500).json({
-//             success: false,
-//             message: "Some error is coming while updating Follow",
-//         })
-//     }
-// }
+    }
+    catch(error){
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching data",
+        })
+    }
+}
 
 exports.updateFollow = async (req, res) => {
     try {
@@ -270,3 +221,132 @@ exports.updateFollow = async (req, res) => {
         });
     }
 };
+
+exports.createPost = async (req,res) => {
+    try{
+        const {photos,caption,music,location,tagPeople,commentAllowed,privacyStatus} = req.body;
+        const userid = req.user.id;
+        console.log(userid);
+        if(!userid){
+            return res.status(401).json({
+                success: false,
+                message: "This user does not exist",
+            })
+        }
+        if(!photos){
+            return res.status(400).json({
+                success: false,
+                message: "This user does not exist",
+            })
+        }
+        const Photos = [];
+        for (let i = 0; i < photos.length; i++) {
+            if (!photos[i].startsWith("data:image")) {
+                console.error("Invalid base64 format at index", i);
+                continue;
+            }
+            try {
+                let imageUrl = await uploadImageToCloudinary(photos[i], process.env.FOLDER_NAME);
+                Photos.push(imageUrl.secure_url);
+            } catch (error) {
+                console.error("Upload failed for image", i, error);
+            }
+        }
+        // console.log("Cloudinary_urls",Photos);
+        const newPost = await Post.create({
+            user: userid,
+            photos: Photos, 
+            caption, music, location, tagPeople, commentAllowed, privacyStatus,
+            likes:[],
+            comments:[],
+        });
+        const updatedUserDetails = await User.findByIdAndUpdate(
+            userid,
+            {
+                $push: {
+                    posts: {
+                        $each: [newPost._id],
+                        $position: 0  // Insert at the beginning
+                    }
+                }
+            },
+            { new: true }
+        ).populate("additionalDetails followers following posts")
+        .exec();
+        // console.log(newPost, updatedUserDetails);
+        return res.status(200).json({
+            success: true,
+            updatedUserDetails,
+            message: "New Post Created",
+        })
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success: false,
+            message: "Some error is coming while creating post",
+        })
+    }
+}
+
+exports.editProfile = async (req, res) => {
+    try {        
+        const { username, fullname, bio, image, gender, dateOfBirth } = req.body;
+        const userid = req.user.id;
+        
+        console.log("userid", userid);
+
+        // Find user by ID
+        const userdetail = await User.findById(userid);
+        if (!userdetail) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // Find and update Profile (using additionalDetails reference)
+        const updatedProfile = await Profile.findByIdAndUpdate(
+            userdetail.additionalDetails,  // Directly pass the ObjectId
+            {
+                gender: gender,
+                bio: bio,
+                dateOfBirth: dateOfBirth,
+            },
+            { new: true }
+        );
+
+        // Update User details
+        if (!image.startsWith("data:image")) {
+            console.error("Invalid base64 format at index", i);
+        }
+        try {
+            let imageUrl = await uploadImageToCloudinary(image, process.env.FOLDER_NAME);
+            image.push(imageUrl.secure_url);
+        } catch (error) {
+            console.error("Upload failed for image", error);
+        }
+        const updatedUserDetails = await User.findByIdAndUpdate(
+            userid,
+            {
+                username: username,
+                fullname: fullname,
+                image: image,
+            },
+            { new: true }
+        ).populate("additionalDetails followers following posts")
+        .exec();
+
+        return res.status(200).json({
+            success: true,
+            updatedUserDetails,
+            // updatedProfile,  // Include updated profile
+            message: "We have successfully updated the user profile",
+        });
+    } catch (error) {
+        console.error("Error in fetching data:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in updating profile",
+        });
+    }
+};
+
+

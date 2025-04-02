@@ -1,6 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import {setUser} from "../slices/profileSlice"
+import { setSocialPosts } from "../slices/postSlice";
 
 export function createPostApi (formData,navigate){
     return async (dispatch) => {
@@ -84,3 +85,24 @@ export function addCommentOnPostApi (postid,comment){
         }
     }
 }
+
+export function getSocialPostsApi() {
+    return async (dispatch) => {
+      try {
+        const token = localStorage.getItem("token");
+        // console.log('token: ', token);
+        const response = await axios.get("http://localhost:3000/api/v1/getSocialPosts", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token should be sent in headers
+        },
+        });
+  
+        console.log('getHomeUserApi: ', response.data);
+        dispatch(setUser(response.data.userDetails));
+        dispatch(setSocialPosts(response.data.postDetails));
+      } catch (error) {
+        console.error("Error sending data:", error);
+        toast.error(error.response?.data?.message || "Unable to fetch HomeUser details");
+      }
+    };
+  }

@@ -242,3 +242,55 @@ exports.addCommentOnPost = async (req,res) => {
         })
     }
 }
+
+exports.getSocialPosts = async (req, res) => {
+    try {
+        const userid = req.user?.id;
+        console.log("Userid:", userid);
+
+        if (!userid) {
+            return res.status(403).json({
+                success: false,
+                message: "User does not exist",
+            });
+        }
+
+        // Step 1: Find user and get following list
+        const user = await User.findById(userid).select("following");
+        console.log("User found:", user);
+
+        if (!user || !Array.isArray(user.following) || user.following.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found or not following anyone",
+            });
+        }
+
+        console.log("Following Users:", user.following);
+
+        // Step 2: Fetch and sort posts
+        const posts = await Post.find({ user: { $in: user.following } })
+            .populate("user", "username fullname image")
+            .populate("comments likes")
+            // .populate("likes")
+            .sort({ date: -1 })
+            .lean()
+            .exec();
+
+        console.log("Posts Found:", posts.length);
+        const userDetails = await User.findById(userid,{password:false});
+        return res.status(200).json({
+            success: true,
+            postDetails: posts,
+            userDetails: userDetails,
+            message: "Successfully retrieved home posts details",
+        });
+
+    } catch (error) {
+        console.error("Error fetching home posts:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching data",
+        });
+    }
+};

@@ -31,14 +31,6 @@ const CreatePostForm = () => {
         'privacyStatus': "private"
     })
 
-    // useEffect(()=>{
-    //     if(user){
-    //         setFormData((prev)=>({
-    //             ...prev,
-    //             username: user.username || '',
-    //         }))
-    //     }
-    // },user)
     const handleOnChange = (e) => {
         setFormData((prev) => ({
             ...prev,

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setUser } from "../slices/profileSlice";
 import toast from "react-hot-toast";
+// import { setSocialPosts } from "../slices/postSlice";
 
 export function getUserApi(userid) {
   return async (dispatch) => {
@@ -63,3 +64,24 @@ export function updateFollowApi (profileUserid){
   }
 }
 
+export function editProfileApi (formData,navigate){
+  return async (dispatch) => {
+      try{
+          const token = localStorage.getItem("token");
+          const response = await axios.post("http://localhost:3000/api/v1/editProfile", formData ,{
+              headers: {
+                  Authorization: `Bearer ${token}`, // Token should be sent in headers
+              },
+          });
+          console.log("updatedUserDetails:", response.data);
+          toast.success("🎉 Profile updated successfully!");
+          dispatch(setUser(response.data.updatedUserDetails));
+          const userid = response.data.updatedUserDetails._id;
+          navigate(`/profile/:${userid}`); 
+      }
+      catch(error){
+          console.error("Error sending data:", error);
+          toast.error(error.response?.data?.message || "Unable to create a post");
+      }
+  }
+}

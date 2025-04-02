@@ -20,7 +20,13 @@
 }
 
 :root {
-  font-family: 'Poppins', 'Lora', system-ui, Avenir, Helvetica, Arial, sans-serif, var(--font-sans);
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+:root {
+  font-family: 'Poppins', 'Lora', "Segoe UI", system-ui, Avenir, Helvetica, Arial, Inter, sans-serif, var(--font-sans);
+
   line-height: 1.5;
   font-weight: 400;
 
@@ -83,6 +89,19 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.cursor-grabbing {
+  cursor: grabbing !important;
 }
 /* a {
   font-weight: 500;

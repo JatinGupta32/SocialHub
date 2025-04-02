@@ -9,6 +9,7 @@ import CreatePost from './pages/CreatePost';
 import Profile from './pages/Profile';
 import { useDispatch } from 'react-redux';
 import { getUserDetailsApi } from './apis/profileAPI';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   // const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App() {
         {/* Profile and Posts */}
         <Route path="/create-post" element={<CreatePost/>}/>
         <Route path="/profile/:userId" element={<Profile/>}/>
+        <Route path="/edit-profile" element={<EditProfile/>}/>
 
       </Routes>
     </div>

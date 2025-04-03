@@ -1,5 +1,6 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
+const Post = require("../models/Post");
 const mongoose = require("mongoose");
 
 exports.getUser = async (req,res) => {
@@ -46,7 +47,7 @@ exports.getUser = async (req,res) => {
 exports.getUserDetails = async (req,res) => {
     try{
         const { userid } = req.query;
-        console.log("userid:", userid);
+        // console.log("userid:", userid);
         const userDetails = await User.findById(
             userid,
             {
@@ -104,7 +105,6 @@ exports.getUserDetails = async (req,res) => {
 exports.getUser = async (req,res) => {
     try{
         const userid = req.user.id;
-        console.log("12");
         const userDetails = await User.findById(
             userid,
             {
@@ -158,7 +158,7 @@ exports.updateFollow = async (req, res) => {
         userid = new mongoose.Types.ObjectId(userid);
         profileUserid = new mongoose.Types.ObjectId(profileUserid);
 
-        console.log(userid, profileUserid);
+        // console.log(userid, profileUserid);
 
         if (!userid) {
             return res.status(401).json({
@@ -203,8 +203,8 @@ exports.updateFollow = async (req, res) => {
             ).populate("additionalDetails followers following posts").exec();
         }
 
-        console.log("updatedUserDetails: ", updatedUserDetails);
-        console.log("updatedProfileUserDetails: ", updatedProfileUserDetails);
+        // console.log("updatedUserDetails: ", updatedUserDetails);
+        // console.log("updatedProfileUserDetails: ", updatedProfileUserDetails);
 
         return res.status(200).json({
             success: true,
@@ -226,7 +226,7 @@ exports.createPost = async (req,res) => {
     try{
         const {photos,caption,music,location,tagPeople,commentAllowed,privacyStatus} = req.body;
         const userid = req.user.id;
-        console.log(userid);
+        // console.log(userid);
         if(!userid){
             return res.status(401).json({
                 success: false,
@@ -294,7 +294,7 @@ exports.editProfile = async (req, res) => {
         const { username, fullname, bio, image, gender, dateOfBirth } = req.body;
         const userid = req.user.id;
         
-        console.log("userid", userid);
+        // console.log("userid", userid);
 
         // Find user by ID
         const userdetail = await User.findById(userid);
@@ -349,4 +349,43 @@ exports.editProfile = async (req, res) => {
     }
 };
 
+
+exports.getUnfollowUser = async (req, res) => {
+    try {        
+        const userid = req.user.id;
+        console.log("userid", userid);
+
+        // Await user details
+        const userDetails = await User.findById(userid);
+
+        // Check if user exists
+        if (!userDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Extract followed user IDs
+        const followedUsers = userDetails.following.map(user => user._id);
+        followedUsers.push(userid)
+
+        // Await the Post.find() query
+        const unFollowedUsers = await User.find({ _id: { $nin: followedUsers } });
+
+        console.log("unFollowedUsers: ", unFollowedUsers);
+
+        return res.status(200).json({
+            success: true,
+            unFollowedUsers,
+            message: "We have successfully retrieved unfollowed users",
+        });
+    } catch (error) {
+        console.error("Error in fetching data:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in retrieving unfollowed users",
+        });
+    }
+};
 

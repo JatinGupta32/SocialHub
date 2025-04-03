@@ -33,7 +33,6 @@ const SocialPost = ({post}) => {
     
     useEffect(()=>{
         setPost(post);
-        console.log(post);
     },[post])
 
     const addEmoji = (emoji) => {
@@ -64,7 +63,7 @@ const SocialPost = ({post}) => {
         setPost(prev => ({ ...prev, likes: updatedLikes }));
     
         // Dispatch API call
-        dispatch(updateLikeOnPostApi(Post._id));
+        dispatch(updateLikeOnPostApi(Post?._id));
     };
     useEffect(()=>{
       const handleClickOutside= (event) => {
@@ -128,13 +127,6 @@ const SocialPost = ({post}) => {
                     </p>
                 </div>
 
-                {/* Post Image */}
-                {/* <div className='flex gap-3 overfow-x-scroll w-full items-center'>
-                    {post?.photos?.map((photo,i)=>(
-                        <img src={photo} className='cursor-pointer w-65 h-80 object-cover rounded-xl mx-auto' alt="Post" />
-                    ))}
-                    
-                </div> */}
                 <div className="relative w-full overflow-hidden">
                     <div
                         ref={scrollRef}
@@ -164,7 +156,7 @@ const SocialPost = ({post}) => {
             <div className='flex items-center justify-between py-4 border-y-1 border-white/20 px-3'>
                 <div className='flex gap-4'>
                     {
-                      Post.likes.some(like => like._id === user._id) ?  
+                      Post?.likes.some(like => like?._id === user?._id) ?  
                       <FaHeart size={25} onClick={handleOnLike} className="cursor-pointer text-red-500"/> : 
                       <FaRegHeart size={25} onClick={handleOnLike} className="hover:brightness-60 cursor-pointer"/>
                     }

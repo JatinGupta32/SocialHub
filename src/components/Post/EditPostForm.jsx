@@ -11,7 +11,7 @@ import { createPostApi } from '../../apis/postAPI';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-const CreatePostForm = () => {
+const EditPostForm = () => {
     const navigate = useNavigate();
     const [imageFile,setImageFile] = useState("");
     const [musicFile,setMusicFile] = useState("");
@@ -20,6 +20,39 @@ const CreatePostForm = () => {
     const pickerRef = useRef(null)
     const textAreaRef = useRef(null)
     const {user} = useSelector((state)=> state.profile);
+    const [query, setQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+  
+    const fetchLocations = async (input) => {
+      if (input.length < 2) return;
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${input}`
+      );
+      const data = await response.json();
+      setSuggestions(data);
+    };
+  
+    const handleSelect = (location) => {
+        const parts = location.display_name.split(",");
+        const conciseName = parts.slice(0, 2).join(", "); // Example: "New York, USA"
+    
+        // Update input field with short name
+        setQuery(conciseName);
+    
+        // Store only the concise location in formData
+        setFormData((prev) => ({
+            ...prev,
+            location: conciseName, // Store short version
+        }));
+    
+        // Clear suggestions after selection
+        setSuggestions([]);
+        // onSelect({
+        //     address: location.display_name,
+        //     lat: location.lat,
+        //     lng: location.lon,
+        // });
+    }; 
     
     const [formData, setFormData] = useState({
         'photos': [],
@@ -187,10 +220,10 @@ const CreatePostForm = () => {
             
           </div>
           <div className="bg-white/10 h-10/12 mt-7 pt-10 backdrop-blur-lg rounded-2xl shadow-lg px-33 flex flex-col items-center border border-white/20">
-            <form onSubmit={handleOnSubmit} className='flex gap-x-13 h-full w-full'>
+            <form onSubmit={handleOnSubmit} className='flex gap-x-12 h-full w-full'>
                 <div className="flex flex-col w-2/5 space-y-6 h-[72vh] overflow-y-auto custom-scrollbar">
-                    <div className='flex items-center justify-center gap-4'>
-                    <label className="w-75 h-100 flex flex-col border-2 ml-8 rounded-2xl border-dashed p-4 border-gray-400 items-center justify-center cursor-pointer hover:border-purple-500 transition">
+                    <div className='flex items-center justify-center gap-4 mt-1'>
+                    <label className="w-75 h-100 flex flex-col border-2 hover:border-0 bg-[#18181b] border-gray-600  ml-8 rounded-2xl p-4 items-center justify-center cursor-pointer shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed">
                         <input
                             type="file"
                             required
@@ -200,7 +233,7 @@ const CreatePostForm = () => {
                             onChange={handleFileChange}
                         />
                         {imageFile ? (
-                            <img src={imageFile} alt="Selected" className="w-75 h-100 absolute z-2 object-cover rounded-2xl" />
+                            <img src={imageFile} alt="Selected" className="w-75 h-100 absolute z-2 object-cover rounded-2xl " />
                         ) : (
                             <>
                                 <FaCloudUploadAlt className="text-3xl text-gray-600 mb-3" />
@@ -219,10 +252,10 @@ const CreatePostForm = () => {
                         ))}
                     </div>
                 </div>
-                <div className='flex-col items-center w-3/5 h-[72vh] space-y-5 overflow-y-auto custom-scrollbar1 pr-10'>
+                <div className='flex-col items-center w-3/5 h-[72vh] space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar1 pr-10'>
                     <div>
-                        <label className='block'>
-                            <p className='pb-2 text-lg font-medium'>Caption</p>
+                        <label className='block ml-1'>
+                            <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Caption</p>
                             <textarea
                                 type='textarea'
                                 ref={textAreaRef}
@@ -230,7 +263,7 @@ const CreatePostForm = () => {
                                 value={formData.caption}
                                 onChange={handleOnChange}
                                 placeholder='Write a caption...'
-                                className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-36 rounded-xl border border-slate-300 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:border-2'
+                                className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-36 text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                             />
                             <div className='relative inline-block mt-1'>
                                 <button 
@@ -249,9 +282,9 @@ const CreatePostForm = () => {
                             </div>
                         </label>
                     </div>
-                    <div className='w-full flex-col'>                        
-                        <p className='py-2 text-lg font-medium'>Upload a Music file</p>
-                        <div className='w-full px-5 py-3 rounded-2xl border-1 mb-4 border-slate-300 cursor-pointer'>
+                    <div className='w-full flex-col ml-1'>                        
+                        <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Upload a Music file</p>
+                        <div className='w-full px-5 py-3 mb-4 cursor-pointer text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'>
                             {musicFile ? musicFile.name : "No file chosen"}
                         </div>
                         <div className='w-full flex justify-between'>
@@ -270,33 +303,51 @@ const CreatePostForm = () => {
                             <button onClick={handleUpload} className='translate-x-8 mx-8 px-5 py-2 bg-purple-600 rounded-3xl hover:brightness-75 cursor-pointer text-center text-white'>Upload</button>
                         </div>
                     </div>
-                    <div className=''>
-                        <label className='block'>
-                            <p className='py-2 text-lg font-medium'>Location</p>
-                            <input
-                                type='text'
-                                name='location'
-                                value={formData.location}
-                                onChange={handleOnChange}
-                                placeholder='Add a location'
-                                className='px-4 w-full py-3 rounded-xl border border-slate-300 '
-                                />
-                        </label>
+                    <div className='relative inline-block w-full ml-1'>
+                        <div className="pb-2 text-lg font-medium font-[Segoe_UI]">Location</div>
+                        <input
+                            value={query}
+                            onChange={(e) => {
+                                setQuery(e.target.value);
+                                fetchLocations(e.target.value);
+                            }}
+                            placeholder="Enter location"
+                            className='w-full bg-[#18181b] px-4 py-3 text-gray-300  border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
+                        />
+                        {suggestions.length > 0 && (
+                            <ul className='absolute z-50 bg-[#1f1f3a] text-gray-300'>
+                            {suggestions.map((location) => {
+                              // Extract city and country from display_name
+                              const parts = location.display_name.split(",");
+                              const conciseName = parts.slice(0, 2).join(", "); // Example: "New York, USA"
+                          
+                              return (
+                                <li
+                                  key={location.place_id}
+                                  className='cursor-pointer hover:bg-blue-300 px-4 py-1 hover:font-semibold font-[Segoe_UI] text-gray-200 hover:text-[#18181b]'
+                                  onClick={() => handleSelect(location)}
+                                >
+                                  {conciseName}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
                     </div>
                     <div className=''>
-                        <label className='block'>
-                            <p className='py-2 text-lg font-medium'>Tag People</p>
+                        <label className='block ml-1'>
+                            <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Tag People</p>
                             <input
                                 type='text'
                                 name='tagPeople'
                                 value={formData.tagPeople}
                                 onChange={handleOnChange}
                                 placeholder='Add People'
-                                className='px-4 w-full py-3 rounded-xl border border-slate-300'
+                                className='px-4 w-full py-3 text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                                 />
                         </label>
                     </div>
-                    <div className='flex items-center gap-4 my-6'>
+                    <div className='flex items-center gap-4 my-6 ml-1'>
                         <Switch.Root
                             className={`w-12 h-7 rounded-full relative cursor-pointer transition-colors duration-300 ${
                                 isOn ? "bg-purple-600" : "bg-gray-500"
@@ -309,11 +360,11 @@ const CreatePostForm = () => {
                             >
                             <Switch.Thumb className={`block w-6 h-6 bg-white rounded-full transition-transform duration-300 ${
                                 isOn ? "translate-x-5" : "translate-x-0"
-                            }`}/>
+                            }`}/> 
                         </Switch.Root>
-                        <div className='text-lg'>Allow people to comment</div>
+                        <div className='text-lg font-[Segoe_UI]'>Allow people to comment</div>
                     </div>
-                    <div className='flex items-center gap-5'>
+                    <div className='flex items-center gap-5 ml-1'>
                         <div className='flex items-center gap-2'>
                             <input
                                 type='radio'
@@ -324,7 +375,7 @@ const CreatePostForm = () => {
                                 className='accent-purple-600 w-5 h-5 cursor-pointer'
                                 />
                             <label>
-                                <p className='text-lg'>Private</p>
+                                <p className='text-lg font-[Segoe_UI]'>Private</p>
                             </label>
                         </div>
                         <div className='flex items-center gap-2'>
@@ -337,7 +388,7 @@ const CreatePostForm = () => {
                                 className='accent-purple-600 w-5 h-5 cursor-pointer'
                                 />
                             <label>
-                                <p className='text-lg'>Public</p>
+                                <p className='text-lg font-[Segoe_UI]'>Public</p>
                             </label>
                         </div>
                     </div>
@@ -350,22 +401,4 @@ const CreatePostForm = () => {
   )
 }
 
-export default CreatePostForm
-
-
-
-// const url = URL.createObjectURL(file);
-// img.src = url;
-
-// If editing is needed
-// const reader = new FileReader();
-// reader.onload = () => {
-// const img = new Image();
-// img.src = reader.result;
-// img.onload = () => {
-//     canvas.width = img.width / 2;
-//     canvas.height = img.height / 2;
-//     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-// };
-// };
-// reader.readAsDataURL(file);
+export default EditPostForm

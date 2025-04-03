@@ -43,7 +43,7 @@ const Otp = () => {
             renderInput={(props) => (
                 <input
                     {...props}
-                    className="aspect-square text-center text-4xl font-semibold border border-gray-500 rounded bg-gray-900 text-white focus:border-yellow-500 outline-none"
+                    className="aspect-square text-center text-4xl font-[Segoe_UI] font-semibold border border-gray-500 rounded bg-gray-900 text-white focus:border-yellow-500 outline-none"
                     style={{
                         width: "3rem",  // Increase width manually
                         height: "4.5rem", // Make it square

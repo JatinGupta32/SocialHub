@@ -13,7 +13,7 @@ export function getUserApi(userid) {
       },
       });
 
-      console.log('getUserApi: ', response.data);
+      // console.log('getUserApi: ', response.data);
       dispatch(setUser(response.data.userDetails));
     } catch (error) {
       console.error("Error sending data:", error);
@@ -32,7 +32,7 @@ export function getUserDetailsApi(userid) {
           Authorization: `Bearer ${token}`, // Token should be sent in headers
         },
       });
-      console.log("getUserDetailsApi Response:", response.data);
+      // console.log("getUserDetailsApi Response:", response.data);
       dispatch(setUser(response.data.loginUserDetails));
       return response.data.userDetails;
     } catch (error) {
@@ -51,7 +51,7 @@ export function updateFollowApi (profileUserid){
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
           });
-          console.log("UserDetsils after update follow:", response.data);
+          // console.log("UserDetsils after update follow:", response.data);
           dispatch(setUser(response.data.updatedUserDetails));
           toast.success("🎉 Follow updated successfully!");
 
@@ -73,7 +73,7 @@ export function editProfileApi (formData,navigate){
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
           });
-          console.log("updatedUserDetails:", response.data);
+          // console.log("updatedUserDetails:", response.data);
           toast.success("🎉 Profile updated successfully!");
           dispatch(setUser(response.data.updatedUserDetails));
           const userid = response.data.updatedUserDetails._id;
@@ -81,7 +81,28 @@ export function editProfileApi (formData,navigate){
       }
       catch(error){
           console.error("Error sending data:", error);
-          toast.error(error.response?.data?.message || "Unable to create a post");
+          toast.error(error.response?.data?.message || "Unable to edit a post");
       }
+  }
+}
+
+export function getUnfollowUserApi(){
+  return async () => {
+    try{
+      const token = localStorage.getItem("token");
+      console.log("token: sadsaio ", token);
+      const response = await axios.get("http://localhost:3000/api/v1/getUnfollowUser", {
+          headers: {
+              Authorization: `Bearer ${token}`, // Token should be sent in headers
+          },
+      });
+      console.log("unFollowedUsers:", response.data);
+      // toast.success("🎉 Get unfollowed Users successfully!");
+      return response.data.unFollowedUsers;
+    }
+    catch(error){
+        console.error("Error sending data:", error);
+        toast.error(error.response?.data?.message || "Unable to get Unfollow users");
+    }
   }
 }

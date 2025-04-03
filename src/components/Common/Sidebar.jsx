@@ -6,7 +6,7 @@ import { IoNotificationsSharp } from "react-icons/io5";
 import { IoMdCreate } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { CgDetailsMore } from "react-icons/cg";
-import logo from '../assets/logo1.png';
+import logo from '../../assets/logo1.png';
 import "@fontsource/pacifico";
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -53,7 +53,7 @@ const Sidebar = () => {
                   </button>
               </div>
               <div className="w-full px-2"> 
-                  <button onClick={()=>navigate(`/profile/:${user._id}`)} className="flex items-center cursor-pointer gap-4 w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                  <button onClick={()=>navigate(`/profile/:${user?._id}`)} className="flex items-center cursor-pointer gap-4 w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                       <FaUserCircle className="w-7 h-7" />
                       <p>Profile</p>
                   </button>

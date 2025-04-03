@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import Sidebar1 from '../components/Sidebar1'
+import Sidebar1 from '../components/Common/Sidebar1'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import EditProfileForm from '../components/Profile/EditPostForm';
+import EditProfileForm from '../components/Profile/EditProfileForm';
 
 const EditProfile = () => {
   const navigate = useNavigate()

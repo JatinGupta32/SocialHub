@@ -13,7 +13,9 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { addCommentOnPostApi, getPostDetailsApi,updateLikeOnPostApi } from "../../apis/postAPI";
 import { FiVolume2 } from "react-icons/fi";
 import { FiVolumeX } from "react-icons/fi";
+import { HiDotsHorizontal } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import ActionModal from "../Common/ActionModal";
 
 const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSelectedPost, onClose }) => {
   const navigate = useNavigate()
@@ -26,6 +28,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
+  const [action, setAction] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -137,7 +140,9 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
             });
           }}
           size={33}
-          className="absolute z-11 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer"
+          className={`absolute z-11 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer ${
+            action ? "hidden" : ""
+          }`}
         />
       )}
 
@@ -152,7 +157,9 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
             });
           }}
           size={33}
-          className="absolute z-11 translate-x-[-46vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer"
+          className={`absolute z-11 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer ${
+            action ? "hidden" : ""
+          }`}
         />
       )}
       <div 
@@ -168,8 +175,12 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
         >
           <img src={post.photos[activePhoto]} alt="Post" className="rounded-lg w-fit max-h-full object-cover cursor-pointer" />
         </motion.div>
-        {activePhoto < post.photos.length-1 && <FaCircleChevronRight onClick={()=>setActivePhoto(activePhoto+1)} size={24} className="absolute z-10 opacity-60 translate-x-[43.5vw] translate-y-[25vw] hover:opacity-90 cursor-pointer"/>}
-        {activePhoto > 0 && <FaCircleChevronLeft onClick={()=>setActivePhoto(activePhoto-1)} size={24} className="absolute z-10 opacity-60 translate-x-[1vw] translate-y-[25vw] hover:opacity-90 cursor-pointer"/>}
+        {activePhoto < post.photos.length-1 && <FaCircleChevronRight onClick={()=>setActivePhoto(activePhoto+1)} size={24} className={`absolute z-10 opacity-60 translate-x-[43.5vw] translate-y-[25vw] hover:opacity-90 cursor-pointer ${
+            action ? "hidden" : ""
+          }`}/>}
+        {activePhoto > 0 && <FaCircleChevronLeft onClick={()=>setActivePhoto(activePhoto-1)} size={24} className={`absolute z-10 opacity-60 translate-x-[1vw] translate-y-[25vw] hover:opacity-90 cursor-pointer ${
+            action ? "hidden" : ""
+          }`}/>}
 
 
         {/* Right Section (Extra Content) */}
@@ -189,13 +200,14 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
               <div className="font-semibold text-sm cursor-pointer hover:brightness-50">{post.user.username}</div>
               <p className="text-white/90 text-xs">{post.location}</p>
             </div>
+            <HiDotsHorizontal onClick={()=>setAction(1)} size={23} className="ml-auto cursor-pointer"></HiDotsHorizontal>
             
           </div>
           <div className="h-[39vw] border-b border-white/20 overflow-y-scroll custom-scrollbar">
             <div className="flex w-full items-center space-x-4 pt-3 pb-2 ">
                 <img src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
                 <div className="text-sm w-fit">
-                      <span className="font-bold cursor-pointer hover:brightness-50">{post?.user?.username}</span>
+                      <span className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{post?.user?.username}</span>
                       <span>&nbsp;</span>
                       {post.caption}
                     </div>
@@ -207,7 +219,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
                 <div className="flex w-full items-center space-x-4 py-2">
                     <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} src={comment?.user?.image ? comment?.user?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${comment?.user?.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
                     <div className="text-sm w-fit">
-                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} className="font-bold cursor-pointer hover:brightness-50">{comment?.user?.username}</span>
+                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{comment?.user?.username}</span>
                       <span>&nbsp;</span>
                       {comment?.statement}
                     </div>
@@ -232,13 +244,21 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
               (
                 <div className="flex text-sm gap-2 items-center ">
                   {
-                    (post.likes.length>1 || (post.likes.some(like => like.username !== user.username) && post.likes.length>0)) ?
-                    <div className="flex gap-1 ">
-                      <img src={post.likes[0]?.image ? post.likes[0]?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.likes[0]?.fullname}`} className="w-5 h-5 mb-auto rounded-full object-cover cursor-pointer"></img>
-                      Liked by {post.likes[0].username===user.username ? post.likes[1]?.username : post.likes[0]?.username} 
-                      {post.likes.length>1 && ` and ${post.likes.length-1} others`}
-                    </div> :
-                    <div>Be the first to like this</div>
+                    post.likes.length>0 ? 
+                       (
+                        <div className="flex gap-1 ">
+                          <img src={post.likes[0]?.image ? post.likes[0]?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.likes[0]?.fullname}`} className="w-5 h-5 mb-auto rounded-full object-cover cursor-pointer"></img>
+                          <div>
+                            <span>Liked by</span>
+                            <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post.likes[1]?._id}`)}} className="font-[Segoe_UI] font-semibold cursor-pointer"> {post.likes[0]?.username} </span>
+                            {
+                              post?.likes.length>1 ? <span>and {post?.likes.length-1} {post?.likes.length>2 ? "others" : "other"}</span> : ""
+                            }                          
+                          </div>
+                          
+                        </div>                        
+                       ) :                 
+                      <div>Be the first to like this</div>
                   }
 
                 </div>                  
@@ -270,7 +290,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
                     value={comment}
                     onChange={(e)=>setComment(e.target.value)}
                     placeholder="Add a comment..."
-                    className="w-full placeholder:text-sm text-md h-[3vw] outline-none"
+                    className="w-full placeholder:text-sm placeholder:font-[Segoe_UI] placeholder:font-semibold text-sm h-[3vw] outline-none"
                 />
                 <button onClick={handleOnComment} className="text-purple-500 hover:text-white cursor-pointer font-semibold text-md">Post</button>
             </label>
@@ -278,6 +298,10 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
           </div>
         </div>
       </div>
+      {
+        action && <ActionModal ></ActionModal>
+      }
+      
     </div>
   );
 };

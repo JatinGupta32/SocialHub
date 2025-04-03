@@ -144,7 +144,7 @@ const EditProfileForm = () => {
                 
               </div>
               <div className="bg-white/10 h-10/12 mt-7 pt-10 backdrop-blur-lg rounded-2xl shadow-lg px-33 flex flex-col items-center border border-white/20">
-                <form onSubmit={handleOnSubmit} className='flex gap-x-15 h-full w-full'>
+                <form onSubmit={handleOnSubmit} className='flex gap-x-13 h-full w-full'>
                     <div className="flex flex-col justify-center w-2/5 space-y-6 h-[72vh] overflow-y-auto custom-scrollbar items-center">
                             <label className="flex flex-col space-y-7 ml-8 text-gray-300 items-center justify-center cursor-pointer ">
                                 <input
@@ -156,7 +156,7 @@ const EditProfileForm = () => {
                                     onChange={handleFileChange}
                                 />
                                 {imageFile ? (
-                                    <img src={imageFile || ""} alt="Selected" className="w-70 h-90 z-2 object-cover rounded-4xl" />
+                                    <img src={imageFile || ""} alt="Selected" className="border w-70 h-90 z-2 object-cover rounded-4xl hover:ring-2 hover:ring-[#8B5CF6]"/>
                                 ) : (
                                     <div className=' border bg-[#18181b] border-gray-600 rounded-4xl w-70 h-90 flex flex-col justify-center items-center shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed'>
                                         <FaCloudUploadAlt className="text-3xl text-gray-600 mb-3" />
@@ -168,9 +168,9 @@ const EditProfileForm = () => {
 
                     </div>
                     <div className='flex-col items-center w-3/5 h-[72vh] space-y-5 overflow-y-auto custom-scrollbar1 pr-10'>
-                        <div className=''>
+                        <div className='ml-1'>
                             <label className='block'>
-                                <p className='py-2 text-lg font-medium'>Name</p>
+                                <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Name</p>
                                 <input
                                     type='text'
                                     name='fullname'
@@ -181,9 +181,9 @@ const EditProfileForm = () => {
                                     />
                             </label>
                         </div>
-                        <div className=''>
+                        <div className='ml-1'>
                             <label className='block'>
-                                <p className='py-2 text-lg font-medium'>Username</p>
+                                <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Username</p>
                                 <input
                                     type='text'
                                     name='username'
@@ -195,8 +195,8 @@ const EditProfileForm = () => {
                             </label>
                         </div>
                         <div>
-                            <label className='block'>
-                                <p className='pb-2 text-lg font-medium'>Bio</p>
+                            <label className='block ml-1'>
+                                <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Bio</p>
                                 <textarea
                                     type='textarea'
                                     ref={textAreaRef}
@@ -225,8 +225,8 @@ const EditProfileForm = () => {
                             </label>
                         </div>
 
-                        <div className="relative inline-block w-full">
-                            <div className="pb-2 text-lg font-medium text-gray-300">Gender</div>
+                        <div className="relative inline-block w-full ml-1">
+                            <div className="pb-2 text-lg font-medium font-[Segoe_UI]">Gender</div>
                             <div className="relative">
                                 <select
                                     name="gender"
@@ -256,8 +256,8 @@ const EditProfileForm = () => {
                             </div>
                         </div>
 
-                        <div className="relative inline-block w-full">
-                        <div className="pb-2 text-lg font-medium text-gray-300">Date of Birth</div>
+                        <div className="relative inline-block w-full ml-1 mb-3">
+                        <div className="pb-2 text-lg font-medium font-[Segoe_UI]">Date of Birth</div>
                             <div className="relative">
                                 <input
                                     type="date"

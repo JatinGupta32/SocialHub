@@ -1,4 +1,4 @@
-import ModalPortal from './ModalPortal'; // Import portal wrapper
+import ModalPortal from '../Common/ModalPortal'; // Import portal wrapper
 import { motion } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
@@ -165,7 +165,7 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
             <div className="flex w-full items-center space-x-4 pt-3 pb-2 ">
                 <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
                 <div className="text-sm w-fit">
-                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} className="font-bold cursor-pointer hover:brightness-50">{post?.user?.username}</span>
+                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{post?.user?.username}</span>
                       <span>&nbsp;</span>
                       {post.caption}
                     </div>
@@ -177,7 +177,7 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
                 <div className="flex w-full items-center space-x-4 py-2">
                     <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} src={comment?.user?.image ? comment?.user?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${comment?.user?.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
                     <div className="text-sm w-fit">
-                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} className="font-bold cursor-pointer hover:brightness-50">{comment?.user?.username}</span>
+                      <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{comment?.user?.username}</span>
                       <span>&nbsp;</span>
                       {comment?.statement}
                     </div>
@@ -204,13 +204,21 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
               (
                 <div className="flex text-sm gap-2 items-center ">
                   {
-                    (post.likes.length>1 || (post.likes.some(like => like.username !== user.username) && post.likes.length>0)) ?
-                    <div className="flex gap-1 ">
-                      <img src={post.likes[0]?.image ? post.likes[0]?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.likes[0]?.fullname}`} className="w-5 h-5 mb-auto rounded-full object-cover cursor-pointer"></img>
-                      Liked by {post.likes[0].username===user.username ? post.likes[1]?.username : post.likes[0]?.username} 
-                      {post.likes.length>1 && ` and ${post.likes.length-1} others`}
-                    </div> :
-                    <div>Be the first to like this</div>
+                    post.likes.length>0 ? 
+                    (
+                     <div className="flex gap-1 ">
+                       <img src={post.likes[0]?.image ? post.likes[0]?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.likes[0]?.fullname}`} className="w-5 h-5 mb-auto rounded-full object-cover cursor-pointer"></img>
+                       <div>
+                         <span>Liked by</span>
+                         <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post.likes[1]?._id}`)}} className="font-[Segoe_UI] font-semibold cursor-pointer"> {post.likes[0]?.username} </span>
+                         {
+                           post?.likes.length>1 ? <span>and {post?.likes.length-1} {post?.likes.length>2 ? "others" : "other"}</span> : ""
+                         }                          
+                       </div>
+                       
+                     </div>                        
+                    ) :                 
+                   <div>Be the first to like this</div>
                   }
 
                 </div>                  
@@ -243,7 +251,7 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
                     value={comment}
                     onChange={(e)=>setComment(e.target.value)}
                     placeholder="Add a comment..."
-                    className="w-full placeholder:text-sm text-md h-[3vw] outline-none"
+                    className="w-full placeholder:text-sm placeholder:font-[Segoe_UI] placeholder:font-semibold text-sm h-[3vw] outline-none"
                 />
                 <button onClick={handleOnComment} className="text-purple-500 hover:text-white cursor-pointer font-semibold text-md">Post</button>
             </label>

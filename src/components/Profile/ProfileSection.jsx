@@ -39,8 +39,8 @@ const ProfileSection = ({User,setProfileUser}) => {
           />
 
           {/* Name & Username */}
-          <div className="text-2xl font-bold text-white mt-3">{User.fullname}</div>
-          <div className="text-gray-400 text-sm">{User.username}</div>
+          <div className="text-2xl font-[Segoe_UI] font-bold text-white mt-3">{User.fullname}</div>
+          <div className="brightness-75 text-md font-serif ">{User.username}</div>
 
           {/* Stats */}
           <div className="flex justify-center gap-5 my-4 text-gray-300 text-sm">
@@ -92,7 +92,7 @@ const ProfileSection = ({User,setProfileUser}) => {
 
           {/* About Section */}
           <div className="w-full mt-6 text-left">
-            <h3 className="text-gray-300 font-bold text-sm">ABOUT</h3>
+            <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-sm">ABOUT</h3>
             <p className="text-gray-400 text-sm leading-relaxed mt-1">
               {User?.additionalDetails?.bio}
             </p>
@@ -101,7 +101,7 @@ const ProfileSection = ({User,setProfileUser}) => {
           {/* Friends List */}
           <div className="w-full mt-5 flex-col space-y-5">
             <div className="flex-col space-y-2">
-              <h3 className="text-gray-300 font-bold text-sm">Followers</h3>
+              <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-md">Followers</h3>
               <div className="grid grid-cols-6 gap-3">
 
                   {
@@ -118,7 +118,7 @@ const ProfileSection = ({User,setProfileUser}) => {
               </div>
             </div>
             <div className="flex-col space-y-2">
-              <h3 className="text-gray-300 font-bold text-sm">Following</h3>
+              <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-md">Following</h3>
               <div className="grid grid-cols-6 gap-3 mt-3">
                   {
                     User?.following?.map((f,i)=>(

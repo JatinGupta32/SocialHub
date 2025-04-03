@@ -12,7 +12,7 @@ export function createPostApi (formData,navigate){
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
             });
-            console.log("Response:", response.data);
+            // console.log("Response:", response.data);
             toast.success("🎉 Post Created successfully!");
             dispatch(setUser(response.data.updatedUserDetails));
             const userId = response.data.updatedUserDetails._id;
@@ -36,7 +36,7 @@ export function getPostDetailsApi(postid) {
             },
         });
         
-        console.log('getPostDetails: ', response.data);
+        // console.log('getPostDetails: ', response.data);
         return response.data.postDetails;
     } catch (error) {
         console.error("Error sending data:", error);
@@ -54,7 +54,7 @@ export function updateLikeOnPostApi (postid){
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
             });
-            console.log("Updated Post after like update:", response.data);
+            // console.log("Updated Post after like update:", response.data);
             // toast.success("🎉 Like updated successfully!");
             return response.data.updatedPostDetails;
         }
@@ -75,7 +75,7 @@ export function addCommentOnPostApi (postid,comment){
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
             });
-            console.log("Updated Post after adding Comment:", response.data);
+            // console.log("Updated Post after adding Comment:", response.data);
             // toast.success("🎉 Comment added successfully!");
             return response.data.updatedPostDetails;
         }
@@ -96,8 +96,8 @@ export function getSocialPostsApi() {
             Authorization: `Bearer ${token}`, // Token should be sent in headers
         },
         });
-  
-        console.log('getHomeUserApi: ', response.data);
+
+        // console.log('getHomeUserApi: ', response.data);
         dispatch(setUser(response.data.userDetails));
         dispatch(setSocialPosts(response.data.postDetails));
       } catch (error) {
@@ -106,3 +106,4 @@ export function getSocialPostsApi() {
       }
     };
   }
+  

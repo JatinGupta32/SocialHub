@@ -1,11 +1,11 @@
 import React from 'react'
-import Sidebar1 from '../components/Sidebar1'
+import Sidebar1 from '../components/Common/Sidebar1'
 import ProfileSection from '../components/Profile/ProfileSection'
 import PostSection from '../components/Profile/PostSection'
 import { getUserDetailsApi } from '../apis/profileAPI'
 import { useState,useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams, useLocation  } from 'react-router-dom'
+import { useNavigate, useLocation  } from 'react-router-dom'
 import { getUserApi } from "../apis/profileAPI";
 
 const Profile = () => {

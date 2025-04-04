@@ -6,7 +6,6 @@ import { getUserDetailsApi } from '../apis/profileAPI'
 import { useState,useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation  } from 'react-router-dom'
-import { getUserApi } from "../apis/profileAPI";
 
 const Profile = () => {
   const dispatch = useDispatch();

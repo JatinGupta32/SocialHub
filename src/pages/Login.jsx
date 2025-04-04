@@ -1,5 +1,5 @@
 import React from 'react'
-import Background from '../components/Auth/background';
+import Background from '../components/Auth/Background';
 import LoginForm from '../components/Auth/LoginForm';
 import logo from '../assets/logo1.png';
 import { useNavigate } from 'react-router-dom';

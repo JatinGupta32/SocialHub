@@ -4,7 +4,6 @@ import OTPInput from 'react-otp-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signupApi } from '../apis/authAPI';
-import { setUser } from '../slices/profileSlice';
 
 const Otp = () => {
     const [otp, setOtp] = useState("");

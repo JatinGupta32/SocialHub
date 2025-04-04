@@ -6,7 +6,7 @@ import { LuSend } from "react-icons/lu";
 import { FiBookmark } from "react-icons/fi";
 import { useState,useEffect, useRef } from "react";
 import { FaCircleChevronRight,FaCircleChevronLeft } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { MdEmojiEmotions } from "react-icons/md";
@@ -16,8 +16,9 @@ import { FiVolumeX } from "react-icons/fi";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import ActionModal from "../Common/ActionModal";
+import { setCurrentSelectedPost } from "../../slices/postSlice";
 
-const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSelectedPost, onClose }) => {
+const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selectedPost, setSelectedPost, onClose }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const[activePhoto,setActivePhoto] = useState(0);
@@ -29,6 +30,11 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
   const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
   const [action, setAction] = useState(false);
+  const {currentSelectedPost} = useSelector((state)=>state.post);
+    
+  useEffect(() => {
+      dispatch(setCurrentSelectedPost(selectedPost));
+  }, [selectedPost]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -299,7 +305,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, selectedPost, setSel
         </div>
       </div>
       {
-        action && <ActionModal ></ActionModal>
+        action && <ActionModal postid={selectedPost._id} userid={user._id} profileUserid={profileUserid} onClose={()=>setAction(0)}></ActionModal>
       }
       
     </div>

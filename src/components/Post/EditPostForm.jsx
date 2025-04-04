@@ -7,9 +7,9 @@ import Picker from '@emoji-mart/react';
 import { MdEmojiEmotions } from "react-icons/md";
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPostApi } from '../../apis/postAPI';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { editPostApi } from '../../apis/postAPI';
 
 const EditPostForm = () => {
     const navigate = useNavigate();
@@ -22,6 +22,14 @@ const EditPostForm = () => {
     const {user} = useSelector((state)=> state.profile);
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
+    const {currentSelectedPost} = useSelector((state)=>state.post);
+
+    useEffect(()=>{
+        // if(!currentSelectedPost) navigate('/')
+        setQuery(currentSelectedPost?.location);
+        setIsOn(currentSelectedPost?.commentAllowed)
+        console.log("currentSelectedPost: ",currentSelectedPost);
+    },[])
   
     const fetchLocations = async (input) => {
       if (input.length < 2) return;
@@ -55,13 +63,13 @@ const EditPostForm = () => {
     }; 
     
     const [formData, setFormData] = useState({
-        'photos': [],
-        'caption': '',
-        'music': '',
-        'location': '',
-        'tagPeople': '',
-        'commentAllowed': isOn,    
-        'privacyStatus': "private"
+        'photos': currentSelectedPost?.photos || [],
+        'caption': currentSelectedPost?.caption,
+        'music': currentSelectedPost?.music,
+        'location': currentSelectedPost?.location,
+        'tagPeople': currentSelectedPost?.tagPeople,
+        'commentAllowed': currentSelectedPost?.commentAllowed,    
+        'privacyStatus': currentSelectedPost?.privacyStatus
     })
 
     const handleOnChange = (e) => {
@@ -136,9 +144,8 @@ const EditPostForm = () => {
         setIsOn(false);
         setMusicFile("");
         console.log(formData);
-        dispatch(createPostApi(formData,navigate));
+        dispatch(editPostApi(formData,currentSelectedPost._id,navigate));
         setFormData({
-            // 'username': user.username,
             'photos': [],
             'caption': '',
             'music': '',
@@ -214,7 +221,7 @@ const EditPostForm = () => {
                 Reset
               </button>
               <button onClick={handleOnSubmit} className='py-2.5 font-sans px-6 cursor-pointer text-white text-xl bg-purple-600 hover:brightness-70 font-semibold rounded-4xl transition-all'>
-                Create
+                Update
               </button>
             </div>
             
@@ -247,7 +254,7 @@ const EditPostForm = () => {
                     </button>
                     </div>
                     <div className="grid grid-cols-3 w-full gap-y-4">
-                        {formData.photos.map((photo, index) => (
+                        {formData?.photos?.map((photo, index) => (
                             <img key={index} src={photo} alt={`Uploaded ${index}`} className="w-24 h-32 object-cover rounded-md" />
                         ))}
                     </div>

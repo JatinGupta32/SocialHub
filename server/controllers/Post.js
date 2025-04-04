@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Comment = require("../models/Comment")
 const {uploadImageToCloudinary} = require('../utils/imageUploader')
 require('dotenv').config();
+const cloudinary = require("cloudinary").v2;
 
 exports.createPost = async (req,res) => {
     try{
@@ -291,6 +292,104 @@ exports.getSocialPosts = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in fetching data",
+        });
+    }
+};
+
+
+exports.editPost = async (req, res) => {
+    try {        
+        const { photos, caption, music, location, tagPeople, commentAllowed, privacyStatus, postid } = req.body;
+        const userid = req.user.id;
+        
+        // Ensure `photos` is always an array
+        const Photos = Array.isArray(photos) ? [...photos] : [];
+        
+        for (let i = 0; i < Photos.length; i++) {
+            if (!Photos[i].startsWith("data:image") && !Photos[i].startsWith("https://res.cloudinary.com")) {
+                console.error("Invalid format at index", i);
+                continue;
+            }
+            try {
+                if (!Photos[i].startsWith("https://res.cloudinary.com")) {
+                    let imageUrl = await uploadImageToCloudinary(Photos[i], process.env.FOLDER_NAME);
+                    Photos[i] = imageUrl.secure_url;
+                }
+            } catch (error) {
+                console.error("Upload failed for image", i, error);
+            }
+        }
+
+        // Update post
+        const updatedPost = await Post.findByIdAndUpdate(
+            postid,
+            { photos: Photos, caption, music, location, tagPeople, commentAllowed, privacyStatus },
+            { new: true }
+        );
+
+        const updatedUserDetails = await User.findById(userid)
+            .populate("additionalDetails followers following posts")
+            .exec();
+
+        return res.status(200).json({
+            success: true,
+            updatedUserDetails,
+            updatedPost,
+            message: "Post edited successfully!",
+        });
+
+    } catch (error) {
+        console.error("Error in updating post:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in editing post",
+        });
+    }
+};
+
+exports.deletePost = async (req, res) => {
+    try {
+        const { postid } = req.body;
+        const userid = req.user.id;
+        console.log("postid: ", postid)
+        // Check if post exists
+        const post = await Post.findById(postid);
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found!",
+            });
+        }
+
+        // Delete images from Cloudinary (if any)
+        for (const photo of post.photos) {
+            if (photo.startsWith("https://res.cloudinary.com")) {
+                const publicId = photo.split("/").pop().split(".")[0]; // Extract public ID
+                await cloudinary.uploader.destroy(publicId);
+            }
+        }
+
+        // Delete post from database
+        await Post.findByIdAndDelete(postid);
+
+        // Remove post ID from user's posts array
+        const updatedUserDetails = await User.findByIdAndUpdate(
+            userid,
+            { $pull: { posts: postid } },
+            { new: true }
+        ).populate("additionalDetails followers following posts");
+
+        return res.status(200).json({
+            success: true,
+            updatedUserDetails,
+            message: "Post deleted successfully!",
+        });
+
+    } catch (error) {
+        console.error("Error in deleting post:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in deleting post",
         });
     }
 };

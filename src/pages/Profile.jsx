@@ -34,20 +34,6 @@ const Profile = () => {
     }
   }, [token, userid, dispatch]); 
 
-//   useEffect(()=>{
-//     if(!token) navigate('/');
-//   },[])
-//   useEffect(() => {
-//     dispatch(getUserDetailsApi(userid))
-//       .then((res) => setProfileUser(res))
-//       .catch((err) => console.log(err)); // Fixed console error
-// }, [userid,dispatch]); // Include dependencies
-
-
-  // useEffect(()=>{
-  //       dispatch(getUserApi())
-  //     },[])
-
   if(!profileUser) return <div>No user exist by this id</div>
 
   return (

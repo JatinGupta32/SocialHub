@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
     socialPosts: null,
+    currentSelectedPost: null,
 }
 
 const postSlice = createSlice({
@@ -10,9 +11,12 @@ const postSlice = createSlice({
     reducers: {
         setSocialPosts(state,action){
             state.socialPosts = action.payload;
+        },
+        setCurrentSelectedPost(state,action){
+            state.currentSelectedPost = action.payload;
         }
     }
 })
 
-export const {setSocialPosts} = postSlice.actions;
+export const {setSocialPosts, setCurrentSelectedPost} = postSlice.actions;
 export default postSlice.reducer

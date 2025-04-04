@@ -69,7 +69,7 @@ const PostSection = ({User,user}) => {
         </div>
 
         {selectedPost && (
-          <PostModal Post={selectedPost} activePost={activePost} user={user} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
+          <PostModal Post={selectedPost} activePost={activePost} user={user} profileUserid={User._id} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />
         )}
 
     </div>

@@ -11,7 +11,7 @@ import { createPostApi } from '../../apis/postAPI';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-const EditPostForm = () => {
+const CreatePostForm = () => {
     const navigate = useNavigate();
     const [imageFile,setImageFile] = useState("");
     const [musicFile,setMusicFile] = useState("");

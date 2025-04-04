@@ -25,7 +25,7 @@ function App() {
   return (
     <div className='flex min-h-screen w-screen flex-col'>
       <Routes>
-        {/* <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Home />} />
+        {/* <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/dashboard" element={localStorage.getItem('token') ? <Dashboard /> : <Navigate to="/signup" />} /> */}
 
         <Route path="/" element={<Login/>}/>

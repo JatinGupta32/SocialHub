@@ -107,3 +107,46 @@ export function getSocialPostsApi() {
     };
   }
   
+  export function editPostApi (formData, postid, navigate){
+    return async (dispatch) => {
+        try{
+            const token = localStorage.getItem("token");
+            const response = await axios.post("http://localhost:3000/api/v1/editPost", {...formData,postid} ,{
+                headers: {
+                    Authorization: `Bearer ${token}`, // Token should be sent in headers
+                },
+            });
+            console.log("EditPost User:", response.data);
+            toast.success("🎉 Post Created successfully!");
+            dispatch(setUser(response.data));
+            const userId = response.data.updatedUserDetails._id;
+            navigate(`/profile/:${userId}`); 
+        }
+        catch(error){
+            console.error("Error sending data:", error);
+            toast.error(error.response?.data?.message || "Unable to create a post");
+        }
+    }
+}
+
+export function deletePostApi (postid, navigate){
+    return async (dispatch) => {
+        try{
+            const token = localStorage.getItem("token");
+            const response = await axios.post("http://localhost:3000/api/v1/deletePost", {postid} ,{
+                headers: {
+                    Authorization: `Bearer ${token}`, // Token should be sent in headers
+                },
+            });
+            console.log("deletePost User:", response.data);
+            toast.success("🎉 Post deleted successfully!");
+            dispatch(setUser(response.data));
+            const userId = response.data.updatedUserDetails._id;
+            navigate(`/profile/:${userId}`); 
+        }
+        catch(error){
+            console.error("Error sending data:", error);
+            toast.error(error.response?.data?.message || "Unable to create a post");
+        }
+    }
+}

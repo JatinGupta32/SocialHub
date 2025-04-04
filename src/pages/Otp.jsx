@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import Background from '../components/Auth/background';
+import Background from '../components/Auth/Background';
 import OTPInput from 'react-otp-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

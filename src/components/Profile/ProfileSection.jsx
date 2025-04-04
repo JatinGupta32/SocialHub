@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiMail, FiMoreHorizontal } from "react-icons/fi";
 import { RiUserFollowFill } from "react-icons/ri";
 import { GrLinkNext } from "react-icons/gr";
@@ -8,12 +8,14 @@ import { IoShareSocialSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { getUserApi, updateFollowApi } from "../../apis/profileAPI";
 import { useEffect } from "react";
+import ModalPortal from "../Common/ModalPortal";
 
 const ProfileSection = ({User,setProfileUser}) => {
   const {user} = useSelector((state)=>state.profile);
   console.log("User: ",User);
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [action, setAction] = useState(false);
   // console.log("Logined User: ", user?._id);
   // console.log("Profile User: ", User._id);
   const handleOnfollow = (e) =>{
@@ -35,7 +37,8 @@ const ProfileSection = ({User,setProfileUser}) => {
           <img
             src={User.image}
             alt="Profile"
-            className="w-24 h-24 rounded-full cursor-pointer object-cover  shadow-md border-3 border-purple-500"
+            onClick={()=>setAction(true)}
+            className="w-32 h-32 rounded-full cursor-pointer object-cover  shadow-md border-3 border-purple-800"
           />
 
           {/* Name & Username */}
@@ -107,7 +110,7 @@ const ProfileSection = ({User,setProfileUser}) => {
                   {
                     User?.followers?.map((follower,i)=>(
                       <img onClick={() => navigate(`/profile/${follower?._id}`)}
-                        src={follower?.image} alt="Photo"
+                        src={follower.image ? follower.image : `https://api.dicebear.com/5.x/initials/svg?seed=${follower.fullname}`} alt="Photo"
                         className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
                     ))
                   }
@@ -123,7 +126,8 @@ const ProfileSection = ({User,setProfileUser}) => {
                   {
                     User?.following?.map((f,i)=>(
                       <img onClick={() => navigate(`/profile/${f?._id}`)}
-                        src={f?.image} alt="Photo"
+                        src={f.image ? f.image : `https://api.dicebear.com/5.x/initials/svg?seed=${f.fullname}`}
+                        alt="Photo"
                         className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
                     ))
                   }
@@ -137,6 +141,18 @@ const ProfileSection = ({User,setProfileUser}) => {
           </div>
 
         </div>
+        {
+          action && (
+            <ModalPortal onClose={()=>setAction(false)}>
+              <div className="inset fixed  bg-opacity-50 z-50 flex justify-center items-center" >
+              <img src={User.image}
+                alt="Profile" 
+                className="flex w-80 h-80 bg-black rounded-full cursor-pointer object-cover shadow-md border-5 border-purple-800"></img>
+            </div>
+            </ModalPortal>
+            
+          )
+        }
     </div>
   );
 };

@@ -13,7 +13,7 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { addCommentOnPostApi,getSocialPostsApi,updateLikeOnPostApi } from "../../apis/postAPI";
 import { useDispatch, useSelector } from 'react-redux';
 import PostModalSocial from './PostModalSocial';
-// import PostModalSocial from './PostModalSocial';
+import ActionModal from "../Common/ActionModal";
 
 const SocialPost = ({post}) => {
     const navigate = useNavigate();
@@ -30,6 +30,7 @@ const SocialPost = ({post}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [action, setAction] = useState(false);   
     
     useEffect(()=>{
         setPost(post);
@@ -111,7 +112,7 @@ const SocialPost = ({post}) => {
                         <div className='opacity-80 text-sm font-[Segoe_UI] font-normal'>{Post.location}</div>
                     </div>
                 </div>
-                <HiDotsHorizontal size={26} className='hover:brightness-60 cursor-pointer'/>
+                <HiDotsHorizontal onClick={()=>setAction(1)} size={26} className='hover:brightness-60 cursor-pointer'/>
             </div>
 
             <div className='space-y-5 h-fit w-full py-4 flex flex-col justify-between items-center '>
@@ -164,7 +165,7 @@ const SocialPost = ({post}) => {
                     <LuSend size={25} className='cursor-pointer hover:brightness-60'/>
                 </div>
                 <div className='flex gap-2'>
-                    <LuForward size={25} className='cursor-pointer hover:brightness-60'/>
+                    <LuForward onClick={()=>setSelectedPost(Post)} size={25} className='cursor-pointer hover:brightness-60'/>
                     <FiBookmark size={25} className='cursor-pointer hover:brightness-60'/>
                 </div>
             </div>
@@ -209,6 +210,9 @@ const SocialPost = ({post}) => {
             {selectedPost && (
                 <PostModalSocial Post={selectedPost} user={user} setSelectedPost={setSelectedPost} onClose={() =>{setSelectedPost(null)}} />
             )}
+            {
+                action && <ActionModal postid={Post?._id} userid={user?._id} profileUserid={post?.user?._id} setSelectedPost={setSelectedPost} onClose={()=>setAction(null)}></ActionModal>
+            }
         </div>
     );
 }

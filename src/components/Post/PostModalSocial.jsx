@@ -14,6 +14,8 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { addCommentOnPostApi, getPostDetailsApi,updateLikeOnPostApi } from "../../apis/postAPI";
 import { FiVolume2 } from "react-icons/fi";
 import { FiVolumeX } from "react-icons/fi";
+import { HiDotsHorizontal } from "react-icons/hi";
+import ActionModal from "../Common/ActionModal";
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
@@ -26,6 +28,7 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const audioRef = useRef(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
+  const [action, setAction] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -146,7 +149,7 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
         <div className="w-3/7 flex-col pt-5 px-5 font-sans">
         <button
             onClick={togglePlay}
-            className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+            className="absolute top-[0] left-[0] bg-purple-800 bg-opacity-50 text-white p-2 rounded-full"
           >
             {isPlaying ? <FiVolume2 size={24} /> : <FiVolumeX size={24} />}
           </button>
@@ -159,8 +162,10 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
               <div onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} className="font-semibold text-sm cursor-pointer hover:brightness-50">{post.user.username}</div>
               <p className="text-white/90 text-xs">{post.location}</p>
             </div>
+            <HiDotsHorizontal onClick={()=>setAction(1)} size={23} className="ml-auto cursor-pointer hover:brightness-50"></HiDotsHorizontal>
             
           </div>
+
           <div className="h-[39vw] border-b border-white/20 overflow-y-scroll custom-scrollbar">
             <div className="flex w-full items-center space-x-4 pt-3 pb-2 ">
                 <img onClick={()=>{setSelectedPost(null); navigate(`/profile/:${post?.user?._id}`)}} src={post.user.image ? post.user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${post.user.fullname}`} className="w-9 h-9 mb-auto rounded-full object-cover cursor-pointer"></img>
@@ -169,7 +174,6 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
                       <span>&nbsp;</span>
                       {post.caption}
                     </div>
-                {/* <span className="text-sm w-fit">{post.caption}</span> */}
             </div>
             
             {
@@ -258,15 +262,12 @@ const PostModalSocial = ({ Post, user, setSelectedPost, onClose }) => {
             
         </div>
         </div>
+        {
+          action && <ActionModal postid={Post?._id} userid={user?._id} profileUserid={post?.user?._id} setSelectedPost={setSelectedPost} onClose={()=>setAction(null)}></ActionModal>
+        }
+              
       </div>
     </ModalPortal>
-//     <div
-//       className=" fixed inset-0 rounded-2xl bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
-//       onClick={onClose}
-//     >
-
-//       </div>
-//   );
 );
 };
 

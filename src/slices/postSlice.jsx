@@ -14,7 +14,7 @@ const postSlice = createSlice({
         },
         setCurrentSelectedPost(state,action){
             state.currentSelectedPost = action.payload;
-        }
+        },
     }
 })
 

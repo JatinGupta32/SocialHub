@@ -10,7 +10,6 @@ const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const {token} = useSelector((state) => state.auth);
-    const {user} = useSelector((state) => state.profile);
 
     useEffect(()=>{
       if(!token) navigate('/');

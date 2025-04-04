@@ -99,6 +99,7 @@ export function getSocialPostsApi() {
         });
 
         // console.log('getHomeUserApi: ', response.data);
+        // toast.success("🎉 Posts retrieved successfully!");
         dispatch(setUser(response.data.userDetails));
         dispatch(setSocialPosts(response.data.postDetails));
       } catch (error) {

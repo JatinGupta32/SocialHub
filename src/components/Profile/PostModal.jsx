@@ -206,7 +206,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
               <div className="font-semibold text-sm cursor-pointer hover:brightness-50">{post.user.username}</div>
               <p className="text-white/90 text-xs">{post.location}</p>
             </div>
-            <HiDotsHorizontal onClick={()=>setAction(1)} size={23} className="ml-auto cursor-pointer"></HiDotsHorizontal>
+            <HiDotsHorizontal onClick={()=>setAction(1)} size={23} className="ml-auto cursor-pointer hover:brightness-50"></HiDotsHorizontal>
             
           </div>
           <div className="h-[39vw] border-b border-white/20 overflow-y-scroll custom-scrollbar">

@@ -2,12 +2,13 @@ import axios from "axios";
 import { setUser } from "../slices/profileSlice";
 import toast from "react-hot-toast";
 // import { setSocialPosts } from "../slices/postSlice";
+const url = import.meta.env.VITE_API_URL;
 
 export function getUserApi(userid) {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/api/v1/getUser", {
+      const response = await axios.get(`${url}/api/v1/api/v1/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`, // Token should be sent in headers
       },
@@ -27,7 +28,7 @@ export function getUserDetailsApi(userid) {
     try {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      const response = await axios.get(`http://localhost:3000/api/v1/getUserDetails?userid=${userid}`, {
+      const response = await axios.get(`${url}/api/v1/api/v1/getUserDetails?userid=${userid}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Token should be sent in headers
         },
@@ -46,7 +47,7 @@ export function updateFollowApi (profileUserid){
   return async (dispatch) => {
       try{
           const token = localStorage.getItem("token");
-          const response = await axios.post("http://localhost:3000/api/v1/updateFollow", {profileUserid}, {
+          const response = await axios.post(`${url}/api/v1/api/v1/updateFollow`, {profileUserid}, {
               headers: {
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
@@ -68,7 +69,7 @@ export function editProfileApi (formData,navigate){
   return async (dispatch) => {
       try{
           const token = localStorage.getItem("token");
-          const response = await axios.post("http://localhost:3000/api/v1/editProfile", formData ,{
+          const response = await axios.post(`${url}/api/v1/api/v1/editProfile`, formData ,{
               headers: {
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
@@ -91,7 +92,7 @@ export function getUnfollowUserApi(){
     try{
       const token = localStorage.getItem("token");
       console.log("token: sadsaio ", token);
-      const response = await axios.get("http://localhost:3000/api/v1/getUnfollowUser", {
+      const response = await axios.get(`${url}/api/v1/api/v1/getUnfollowUser`, {
           headers: {
               Authorization: `Bearer ${token}`, // Token should be sent in headers
           },

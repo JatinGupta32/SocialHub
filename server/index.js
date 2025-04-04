@@ -14,7 +14,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 
 const app = express();
-
+app
 // Middleware setup
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));

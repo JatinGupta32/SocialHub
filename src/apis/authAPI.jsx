@@ -3,11 +3,12 @@ import toast from "react-hot-toast";
 import { setUser } from '../slices/profileSlice';
 import { setToken } from "../slices/authSlice";
 import { setSignUpData } from "../slices/authSlice";
+const url = import.meta.env.VITE_API_URL;
 
 export function signupApi(username,fullname,identifier,password,confirmPassword,otp,navigate) {  
     return async (dispatch) => {
         try {
-            const response = await axios.post("http://localhost:3000/api/v1/signup", {username,fullname,identifier,password,confirmPassword,otp});  
+            const response = await axios.post(`${url}/api/v1/signup`, {username,fullname,identifier,password,confirmPassword,otp});  
             console.log("Response:", response.data);
             toast.success("✅ Signed up successfully!");
             dispatch(setUser(response.data.user))
@@ -24,7 +25,7 @@ export function signupApi(username,fullname,identifier,password,confirmPassword,
 export function sendOtpApi(identifier, username, navigate) {  
     return async () => {
         try {
-            const response = await axios.post("http://localhost:3000/api/v1/sendotp", {identifier, username}); 
+            const response = await axios.post(`${url}/api/v1/sendotp`, {identifier, username}); 
             console.log("Response:", response.data);
             toast.success("OTP sent successfully!");
             navigate("/otp-verify");  
@@ -38,7 +39,7 @@ export function sendOtpApi(identifier, username, navigate) {
 export function loginApi(identifier, password, navigate){
     return async (dispatch) => {
         try{
-            const response = await axios.post("http://localhost:3000/api/v1/login",{identifier,password}, 
+            const response = await axios.post(`${url}/api/v1/login`,{identifier,password}, 
                 // { withCredentials:true }
             );
             console.log("Response:", response.data);

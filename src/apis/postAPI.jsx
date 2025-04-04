@@ -50,7 +50,7 @@ export function updateLikeOnPostApi (postid){
     return async () => {
         try{
             const token = localStorage.getItem("token");
-            const response = await axios.post(`${url}/api/v1/api/v1/updateLikeOnPost`, {postid}, {
+            const response = await axios.post(`${url}/api/v1/updateLikeOnPost`, {postid}, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
@@ -71,7 +71,7 @@ export function addCommentOnPostApi (postid,comment){
         try{
             // console.log(postid, statement)
             const token = localStorage.getItem("token");
-            const response = await axios.post(`${url}/api/v1/api/v1/addCommentOnPost`, {postid,comment}, {
+            const response = await axios.post(`${url}/api/v1/addCommentOnPost`, {postid,comment}, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
@@ -92,7 +92,7 @@ export function getSocialPostsApi() {
       try {
         const token = localStorage.getItem("token");
         // console.log('token: ', token);
-        const response = await axios.get(`${url}/api/v1/api/v1/getSocialPosts`, {
+        const response = await axios.get(`${url}/api/v1/getSocialPosts`, {
           headers: {
             Authorization: `Bearer ${token}`, // Token should be sent in headers
         },
@@ -112,7 +112,7 @@ export function getSocialPostsApi() {
     return async (dispatch) => {
         try{
             const token = localStorage.getItem("token");
-            const response = await axios.post(`${url}/api/v1/api/v1/editPost`, {...formData,postid} ,{
+            const response = await axios.post(`${url}/api/v1/editPost`, {...formData,postid} ,{
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
@@ -134,7 +134,7 @@ export function deletePostApi (postid, navigate){
     return async (dispatch) => {
         try{
             const token = localStorage.getItem("token");
-            const response = await axios.post(`${url}/api/v1/api/v1/deletePost`, {postid} ,{
+            const response = await axios.post(`${url}/api/v1/deletePost`, {postid} ,{
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },

@@ -146,7 +146,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
             });
           }}
           size={33}
-          className={`absolute z-11 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer ${
+          className={`absolute z-12 translate-x-[47vw] translate-y-[-1vw] hover:brightness-75 cursor-pointer ${
             action ? "hidden" : ""
           }`}
         />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SignupForm from '../components/Auth/SignupForm';
-import Background from '../components/Auth/background';
+import Background from '../components/Auth/Background';
 import logo from '../assets/logo1.png';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';

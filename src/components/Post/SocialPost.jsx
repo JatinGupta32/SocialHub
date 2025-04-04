@@ -105,7 +105,7 @@ const SocialPost = ({post}) => {
         <div className='h-fit overflow-x-hidden bg-black/10 backdrop-blur-lg w-14/15 rounded-xl mx-auto shadow-lg p-6 border border-white/20 transition-all'>
             <div className='h-fit flex items-center justify-between'>
                 <div className='flex gap-x-2 items-center'>
-                    <img onClick={()=>navigate(`/profile/:${post?.user?._id}`)} src={Post?.photos[0]} className='w-10 h-10 rounded-full object-cover cursor-pointer' alt="Profile"/>
+                    <img onClick={()=>navigate(`/profile/:${post?.user?._id}`)} src={Post?.user?.image} className='w-10 h-10 rounded-full object-cover cursor-pointer' alt="Profile"/>
                     <div className='flex-col '>
                         <div><span  onClick={()=>navigate(`/profile/:${post?.user?._id}`)} className='font-[Segoe_UI] font-semibold text-md cursor-pointer hover:brightness-70'>{Post?.user?.username}  </span ><span className='text-md font-[Segoe_UI] font-normal opacity-70'>· 2d</span></div>
                         <div className='opacity-80 text-sm font-[Segoe_UI] font-normal'>{Post.location}</div>

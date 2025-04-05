@@ -169,7 +169,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
         />
       )}
       <div 
-        className=" flex w-[100vw] h-[100vh] bg-black rounded-lg "
+        className=" flex w-[100vw] min-h-[94vh] bg-black rounded-lg "
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >
         {/* Left Section (Image) */}

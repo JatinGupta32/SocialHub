@@ -204,7 +204,7 @@ const CreatePostForm = () => {
     },[])
     
     return (
-        <div className='w-18/19 pt-6 px-10 min-h-screen bg-gradient-to-b text-amber-50 from-gray-900 to-black flex-col '>
+        <div className='w-18/19 pt-6 px-10 min-h-[100%] bg-gradient-to-b text-amber-50 from-gray-900 to-black flex-col '>
           <div className='h-1/12 flex justify-between items-center py-10 border-b-1 border-white/20'>
             <div className='text-3xl font-sans font-semibold'>
               Create new post

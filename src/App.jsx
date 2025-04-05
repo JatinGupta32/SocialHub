@@ -26,7 +26,7 @@ function App() {
   const isAuthenticated = !!token;
 
   return (
-    <div className='flex min-h-screen w-screen flex-col'>
+    <div className='flex min-h-[100vh] min-w-[100vw] flex-col'>
       <Routes>
 
         {/* Public routes */}

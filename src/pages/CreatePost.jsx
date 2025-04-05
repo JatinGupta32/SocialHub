@@ -12,7 +12,7 @@ const CreatePost = () => {
   },[])
 
   return (
-    <div className="w-full min-h-screen flex ">
+    <div className="flex ">
       <div className='w-1/19'>
         <Sidebar1/>
       </div>

@@ -17,8 +17,8 @@ const app = express();
 // Middleware setup
 app.use(
     cors({
-        // origin: "http://localhost:5173",
-        origin: "https://socialhub-gamma.vercel.app",
+        origin: "http://localhost:5173",
+        // origin: "https://socialhub-gamma.vercel.app",
         credentials: true,
     })
 );

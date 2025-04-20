@@ -21,8 +21,8 @@ function App() {
   const [isAuthenticated,setIsAuthenticated] = useState(!!token);
   
   useEffect(()=>{
-    dispatch(setToken(localStorage.getItem('token')));
-    dispatch(getTokenApi())
+    dispatch(setToken(localStorage.getItem('token')))
+      dispatch(getTokenApi())
       .then((res) => {
         dispatch(setToken(res)); 
         setIsAuthenticated(!!token);

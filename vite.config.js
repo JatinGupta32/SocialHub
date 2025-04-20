@@ -9,7 +9,8 @@ export default defineConfig({
     tailwindcss(),
     react(),
   ],
-  server: {
-    historyApiFallback: true,
+  build: {
+    outDir: 'dist',
   },
+  base: '/', // Ensure the base is root
 })

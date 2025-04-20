@@ -12,11 +12,13 @@ const EditPost = () => {
   },[])
 
   return (
-    <div className="w-full min-h-screen flex ">
-      <div className='w-1/19'>
+    <div className="flex w-full min-h-[100dvh]">
+      <div className='w-[5%]'>
         <Sidebar1/>
       </div>
-      <EditPostForm/>
+      <div className='w-full pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] h-screen px-4 bg-gradient-to-b from-gray-900 to-black text-amber-50 flex flex-col items-center'>
+        <EditPostForm/>
+      </div>      
     </div>
   )
 }

@@ -202,57 +202,58 @@ const CreatePostForm = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     },[])
-    
+    // min-h-[calc(100vh-3.5rem)]
     return (
-        <div className='w-18/19 pt-6 px-10 min-h-[100%] bg-gradient-to-b text-amber-50 from-gray-900 to-black flex-col '>
-          <div className='h-1/12 flex justify-between items-center py-10 border-b-1 border-white/20'>
-            <div className='text-3xl font-sans font-semibold'>
+        <div className='w-[95%] h-screen bg-gradient-to-b text-amber-50 from-gray-900 to-black flex-col justify-between'>
+          <div className='h-[12%] flex justify-between items-center py-3 border-b-1 border-white/20'>
+            <div className='text-3xl font-sans font-semibold '>
               Create new post
             </div>
             <div className='gap-x-5 flex'>
-              <button onClick={handleOnReset} className='py-2.5 font-sans px-6 cursor-pointer text-white text-xl bg-purple-600 hover:brightness-70 rounded-4xl font-semibold transition-all'>
+              <button onClick={handleOnReset} className='py-2 font-sans px-5 cursor-pointer text-white text-xl bg-purple-600 hover:brightness-70 rounded-4xl font-semibold transition-all'>
                 Reset
               </button>
-              <button onClick={handleOnSubmit} className='py-2.5 font-sans px-6 cursor-pointer text-white text-xl bg-purple-600 hover:brightness-70 font-semibold rounded-4xl transition-all'>
+              <button onClick={handleOnSubmit} className='py-2 font-sans px-5 cursor-pointer text-white text-xl bg-purple-600 hover:brightness-70 font-semibold rounded-4xl transition-all'>
                 Create
               </button>
             </div>
-            
+    
           </div>
-          <div className="bg-white/10 h-10/12 mt-7 pt-10 backdrop-blur-lg rounded-2xl shadow-lg px-33 flex flex-col items-center border border-white/20">
-            <form onSubmit={handleOnSubmit} className='flex gap-x-12 h-full w-full'>
-                <div className="flex flex-col w-2/5 space-y-6 h-[72vh] overflow-y-auto custom-scrollbar">
-                    <div className='flex items-center justify-center gap-4 mt-1'>
-                    <label className="w-75 h-100 flex flex-col border-2 hover:border-0 bg-[#18181b] border-gray-600  ml-8 rounded-2xl p-4 items-center justify-center cursor-pointer shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed">
-                        <input
-                            type="file"
-                            required
-                            name="photos"
-                            accept='.jpg,.jpeg,.png'
-                            className="hidden"
-                            onChange={handleFileChange}
-                        />
-                        {imageFile ? (
-                            <img src={imageFile} alt="Selected" className="w-75 h-100 absolute z-2 object-cover rounded-2xl " />
-                        ) : (
-                            <>
-                                <FaCloudUploadAlt className="text-3xl text-gray-600 mb-3" />
-                                <p className="text-gray-500">Choose a file or drag and drop it here</p>
-                            </>
-                        )}
-                    </label> 
-                    {/* Add Image Button */}
-                    <button onClick={handleAddImage}>
-                        <IoIosAddCircle className="hover:brightness-70 cursor-pointer text-purple-400" size={40} />
-                    </button>
+          <div className='h-[88%] w-full flex justify-center items-center'>
+          <div className="bg-white/10 h-[90%] w-[99%] px-20 py-7 backdrop-blur-lg rounded-2xl overflow-y-hidden shadow-lg flex flex-col items-center border border-white/20">
+            <form onSubmit={handleOnSubmit} className='flex gap-x-8 h-full w-full'>
+                <div className="flex flex-col w-[40%] pt-3 space-y-[2rem] overflow-y-auto custom-scrollbar scroll-smooth">
+                    <div className='flex items-center justify-center gap-4 mx-auto'>
+                        <label className="w-[17rem] h-[22rem] flex flex-col border-2 overflow-hidden hover:border-0 bg-[#18181b] border-gray-600 rounded-2xl items-center justify-center cursor-pointer shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed">
+                            <input
+                                type="file"
+                                required
+                                name="photos"
+                                accept='.jpg,.jpeg,.png'
+                                className="hidden"
+                                onChange={handleFileChange}
+                            />
+                            {imageFile ? (
+                                <img src={imageFile} alt="Selected" className="w-[17rem] h-[22rem] object-cover rounded-2xl " />
+                            ) : (
+                                <div className='p-4 '>
+                                    <FaCloudUploadAlt className="text-3xl mx-auto text-gray-600 mb-3" />
+                                    <p className="text-gray-500 text-center">Choose a file or drag and drop it here</p>
+                                </div>
+                            )}
+                        </label> 
+                        {/* Add Image Button */}
+                        <button onClick={handleAddImage}>
+                            <IoIosAddCircle className="hover:brightness-70 cursor-pointer text-purple-400" size={40} />
+                        </button>
                     </div>
-                    <div className="grid grid-cols-3 w-full gap-y-4">
+                    <div className="grid grid-cols-3 w-full gap-5 pr-[3rem]">
                         {formData.photos.map((photo, index) => (
-                            <img key={index} src={photo} alt={`Uploaded ${index}`} className="w-24 h-32 object-cover rounded-md" />
+                            <img key={index} src={photo} alt={`Uploaded ${index}`} className="w-[7rem] h-[9rem] object-cover rounded-md" />
                         ))}
                     </div>
                 </div>
-                <div className='flex-col items-center w-3/5 h-[72vh] space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar1 pr-10'>
+                <div className='flex-col items-center w-[60%] space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar1 pr-10'>
                     <div>
                         <label className='block ml-1'>
                             <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Caption</p>
@@ -263,14 +264,14 @@ const CreatePostForm = () => {
                                 value={formData.caption}
                                 onChange={handleOnChange}
                                 placeholder='Write a caption...'
-                                className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-36 text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
+                                className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                             />
                             <div className='relative inline-block mt-1'>
                                 <button 
                                     onClick={(e) => { e.preventDefault();
                                                     setShowEmojiPicker(!showEmojiPicker)
                                                     }}
-                                    className="mt-1 px-1.5 py-1.5 cursor-pointer rounded-full border border-gray-200 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+                                    className="px-1.5 py-1.5 cursor-pointer rounded-full border border-gray-200 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
                                 >
                                     <MdEmojiEmotions size={25}/>
                                 </button>
@@ -315,7 +316,7 @@ const CreatePostForm = () => {
                             className='w-full bg-[#18181b] px-4 py-3 text-gray-300  border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                         />
                         {suggestions.length > 0 && (
-                            <ul className='absolute z-50 bg-[#1f1f3a] text-gray-300'>
+                            <ul className='absolute z-50 bg-[#1f1f3a] text-gray-300 rounded-md'>
                             {suggestions.map((location) => {
                               // Extract city and country from display_name
                               const parts = location.display_name.split(",");
@@ -349,7 +350,7 @@ const CreatePostForm = () => {
                     </div>
                     <div className='flex items-center gap-4 my-6 ml-1'>
                         <Switch.Root
-                            className={`w-12 h-7 rounded-full relative cursor-pointer transition-colors duration-300 ${
+                            className={`w-[2.6rem] h-[1.5rem] rounded-full relative cursor-pointer transition-colors duration-300 ${
                                 isOn ? "bg-purple-600" : "bg-gray-500"
                             }`}
                             checked={isOn}
@@ -358,7 +359,7 @@ const CreatePostForm = () => {
                                 setIsOn(!isOn);
                             }}
                             >
-                            <Switch.Thumb className={`block w-6 h-6 bg-white rounded-full transition-transform duration-300 ${
+                            <Switch.Thumb className={`block w-[1.5rem] h-[1.5rem] bg-white rounded-full transition-transform duration-300 ${
                                 isOn ? "translate-x-5" : "translate-x-0"
                             }`}/> 
                         </Switch.Root>
@@ -395,6 +396,8 @@ const CreatePostForm = () => {
                 </div>
             </form>
         </div>
+          </div>
+          
 
     </div>
         
@@ -420,3 +423,4 @@ export default CreatePostForm
 // };
 // };
 // reader.readAsDataURL(file);
+

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* @import "tailwindcss/preflight";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities"; */
 
 @keyframes scroll {
   from {
@@ -8,6 +11,13 @@
     transform: translateY(-100%);
   }
 }
+
+/* @theme {
+  --breakpoint-*: initial;
+  --breakpoint-md: { 'raw': '(max-width: 1920px)' };
+  --breakpoint-lg: { 'raw': '(max-width: 2160px)' };
+
+} */
 
 .animate-scroll1 {
   animation: scroll 60s linear infinite;

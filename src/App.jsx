@@ -12,21 +12,31 @@ import { getUserDetailsApi } from './apis/profileAPI';
 import EditProfile from './pages/EditProfile';
 import EditPost from './pages/EditPost';
 import { setToken } from './slices/authSlice';
+import { getTokenApi } from './apis/authAPI';
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {token} = useSelector((state)=>state.auth)
-
+  const [isAuthenticated,setIsAuthenticated] = useState(!!token);
+  
   useEffect(()=>{
-    setToken(localStorage.getItem('token'));
-    console.log(token);
-  },[])
+    // setToken(localStorage.getItem('token'));
+    dispatch(getTokenApi())
+      .then((res) => {
+        dispatch(setToken(res)); 
+        setIsAuthenticated(!!token);
+        console.log("isAuthenticated: ", isAuthenticated);
+      })
+      .catch((err) => console.log(err));
+    // console.log("Token:",token);
+  },[token])
 
-  const isAuthenticated = !!token;
-
+  
+  // console.log("isAuthenticated: ", isAuthenticated);
+  
   return (
-    <div className='flex min-h-[100vh] min-w-[100vw] flex-col'>
+    <div className='flex min-h-screen w-full flex-col'>
       <Routes>
 
         {/* Public routes */}
@@ -53,3 +63,9 @@ function App() {
 }
 
 export default App
+
+// useEffect(() => {
+//   const Token = getTokenFromCookie();
+//   console.log("Token:", Token);
+//   setToken(token);
+// }, []);

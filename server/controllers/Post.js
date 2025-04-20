@@ -9,7 +9,7 @@ exports.createPost = async (req,res) => {
     try{
         const {photos,caption,music,location,tagPeople,commentAllowed,privacyStatus} = req.body;
         const userid = req.user.id;
-        console.log(userid);
+        // console.log(userid);
         if(!userid){
             return res.status(401).json({
                 success: false,
@@ -76,7 +76,7 @@ exports.getPostDetails = async (req,res) => {
     try{        
         // console.log("12345",req.body);
         const { postid } = req.query;
-        console.log("postid",postid);
+        // console.log("postid",postid);
         const postDetails = await Post.findById(postid)
         .select("user photos caption music location tagPeople commentAllowed privacyStatus date likes comments")
         .populate("user likes") 
@@ -191,20 +191,19 @@ exports.addCommentOnPost = async (req,res) => {
         const {postid, comment} = req.body;
         const userid = req.user.id;
 
-        console.log(userid);
+        // console.log(userid);
         if(!userid){
             return res.status(401).json({
                 success: false,
                 message: "This user does not exist",
             })
         }
-        console.log("1");
         const commentData = await Comment.create({
             user: userid,
             post: postid,
             statement: comment,
         })
-        console.log(commentData);
+        // console.log(commentData);
         const updatedPostDetails = await Post.findByIdAndUpdate(
             postid,
             {
@@ -247,7 +246,7 @@ exports.addCommentOnPost = async (req,res) => {
 exports.getSocialPosts = async (req, res) => {
     try {
         const userid = req.user?.id;
-        console.log("Userid:", userid);
+        // console.log("Userid:", userid);
 
         if (!userid) {
             return res.status(403).json({
@@ -258,7 +257,7 @@ exports.getSocialPosts = async (req, res) => {
 
         // Step 1: Find user and get following list
         const user = await User.findById(userid).select("following");
-        console.log("User found:", user);
+        // console.log("User found:", user);
 
         if (!user || !Array.isArray(user.following) || user.following.length === 0) {
             return res.status(404).json({
@@ -267,7 +266,7 @@ exports.getSocialPosts = async (req, res) => {
             });
         }
 
-        console.log("Following Users:", user.following);
+        // console.log("Following Users:", user.following);
 
         // Step 2: Fetch and sort posts
         const posts = await Post.find({ user: { $in: user.following } })
@@ -278,7 +277,7 @@ exports.getSocialPosts = async (req, res) => {
             .lean()
             .exec();
 
-        console.log("Posts Found:", posts.length);
+        // console.log("Posts Found:", posts.length);
         const userDetails = await User.findById(userid,{password:false});
         return res.status(200).json({
             success: true,
@@ -351,7 +350,7 @@ exports.deletePost = async (req, res) => {
     try {
         const { postid } = req.body;
         const userid = req.user.id;
-        console.log("postid: ", postid)
+        // console.log("postid: ", postid)
         // Check if post exists
         const post = await Post.findById(postid);
         if (!post) {

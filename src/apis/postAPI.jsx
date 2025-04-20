@@ -12,6 +12,7 @@ export function createPostApi (formData,navigate){
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
+                withCredentials: true 
             });
             // console.log("Response:", response.data);
             toast.success("🎉 Post Created successfully!");
@@ -35,6 +36,7 @@ export function getPostDetailsApi(postid) {
             headers: {
                 Authorization: `Bearer ${token}`, // Token should be sent in headers
             },
+            withCredentials: true 
         });
         
         // console.log('getPostDetails: ', response.data);
@@ -54,6 +56,7 @@ export function updateLikeOnPostApi (postid){
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
+                withCredentials: true 
             });
             // console.log("Updated Post after like update:", response.data);
             // toast.success("🎉 Like updated successfully!");
@@ -75,6 +78,7 @@ export function addCommentOnPostApi (postid,comment){
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
+                withCredentials: true 
             });
             // console.log("Updated Post after adding Comment:", response.data);
             // toast.success("🎉 Comment added successfully!");
@@ -95,7 +99,8 @@ export function getSocialPostsApi() {
         const response = await axios.get(`${url}/api/v1/getSocialPosts`, {
           headers: {
             Authorization: `Bearer ${token}`, // Token should be sent in headers
-        },
+            },
+            withCredentials: true 
         });
 
         // console.log('getHomeUserApi: ', response.data);
@@ -104,7 +109,7 @@ export function getSocialPostsApi() {
         dispatch(setSocialPosts(response.data.postDetails));
       } catch (error) {
         console.error("Error sending data:", error);
-        toast.error(error.response?.data?.message || "Unable to fetch HomeUser details");
+        // toast.error(error.response?.data?.message || "Unable to fetch HomeUser details");
       }
     };
   }
@@ -117,6 +122,7 @@ export function getSocialPostsApi() {
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
+                withCredentials: true 
             });
             console.log("EditPost User:", response.data);
             toast.success("🎉 Post Created successfully!");
@@ -139,6 +145,7 @@ export function deletePostApi (postid, navigate){
                 headers: {
                     Authorization: `Bearer ${token}`, // Token should be sent in headers
                 },
+                withCredentials: true 
             });
             console.log("deletePost User:", response.data);
             toast.success("🎉 Post deleted successfully!");

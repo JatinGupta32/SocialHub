@@ -8,11 +8,12 @@ export function getUserApi(userid) {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
+      // console.log(token);
       const response = await axios.get(`${url}/api/v1/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`, // Token should be sent in headers
-      },
+        },
+        withCredentials: true 
       });
 
       // console.log('getUserApi: ', response.data);
@@ -28,11 +29,12 @@ export function getUserDetailsApi(userid) {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token);
+      // console.log("Token:", token);
       const response = await axios.get(`${url}/api/v1/getUserDetails?userid=${userid}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Token should be sent in headers
         },
+        withCredentials: true 
       });
       // console.log("getUserDetailsApi Response:", response.data);
       dispatch(setUser(response.data.loginUserDetails));
@@ -52,6 +54,7 @@ export function updateFollowApi (profileUserid){
               headers: {
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
+              withCredentials: true 
           });
           // console.log("UserDetsils after update follow:", response.data);
           dispatch(setUser(response.data.updatedUserDetails));
@@ -74,6 +77,7 @@ export function editProfileApi (formData,navigate){
               headers: {
                   Authorization: `Bearer ${token}`, // Token should be sent in headers
               },
+              withCredentials: true 
           });
           // console.log("updatedUserDetails:", response.data);
           toast.success("🎉 Profile updated successfully!");
@@ -92,19 +96,20 @@ export function getUnfollowUserApi(){
   return async () => {
     try{
       const token = localStorage.getItem("token");
-      console.log("token: sadsaio ", token);
+      console.log("token: ", token);
       const response = await axios.get(`${url}/api/v1/getUnfollowUser`, {
           headers: {
               Authorization: `Bearer ${token}`, // Token should be sent in headers
           },
+          withCredentials: true // <== This is crucial
       });
-      console.log("unFollowedUsers:", response.data);
+      // console.log("unFollowedUsers:", response.data);
       // toast.success("🎉 Get unfollowed Users successfully!");
       return response.data.unFollowedUsers;
     }
     catch(error){
-        console.error("Error sending data:", error);
-        toast.error(error.response?.data?.message || "Unable to get Unfollow users");
+        console.error("Error getting data:", error);
+        // toast.error(error.response?.data?.message || "Unable to get Unfollow users");
     }
   }
 }

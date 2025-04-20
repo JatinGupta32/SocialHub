@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 exports.getUser = async (req,res) => {
     try{
         const userid = req.user.id;
-        console.log("12");
         const userDetails = await User.findById(
             userid,
             {
@@ -373,7 +372,7 @@ exports.getUnfollowUser = async (req, res) => {
         // Await the Post.find() query
         const unFollowedUsers = await User.find({ _id: { $nin: followedUsers } });
 
-        console.log("unFollowedUsers: ", unFollowedUsers);
+        // console.log("unFollowedUsers: ", unFollowedUsers);
 
         return res.status(200).json({
             success: true,

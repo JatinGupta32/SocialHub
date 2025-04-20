@@ -5,11 +5,26 @@ import { setToken } from "../slices/authSlice";
 import { setSignUpData } from "../slices/authSlice";
 const url = import.meta.env.VITE_API_URL;
 
+export function getTokenApi() {  
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`${url}/api/v1/getToken`, {withCredentials: true} );
+            // console.log("Response:", response.data);
+            // toast.success("✅ Token get successfully!");
+            return response.data.token;
+        } catch (error) {
+            console.error("Error sending data:", error);
+            // toast.error(error.response?.data?.message || "Token not get");
+        }
+    }
+    
+};
+
 export function signupApi(username,fullname,identifier,password,confirmPassword,otp,navigate) {  
     return async (dispatch) => {
         try {
             const response = await axios.post(`${url}/api/v1/signup`, {username,fullname,identifier,password,confirmPassword,otp});  
-            console.log("Response:", response.data);
+            // console.log("Response:", response.data);
             toast.success("✅ Signed up successfully!");
             dispatch(setUser(response.data.user))
             navigate("/");
@@ -40,12 +55,12 @@ export function loginApi(identifier, password, navigate){
     return async (dispatch) => {
         try{
             const response = await axios.post(`${url}/api/v1/login`,{identifier,password}, 
-                // { withCredentials:true }
+                { withCredentials:true }
             );
             console.log("Response:", response.data);
 
-            localStorage.setItem('token',response.data.token);
-            console.log(localStorage.getItem('token'));
+            // localStorage.setItem('token',response.data.token);
+            // console.log(localStorage.getItem('token'));
             toast.success("🎉 Logged in successfully!");
             const userImage = response.data?.user?.image
             ? response.data.user.image
@@ -56,19 +71,29 @@ export function loginApi(identifier, password, navigate){
         }
         catch(error){
             console.error("Error sending data:", error);
-            toast.error(error.response?.data?.message || "Login failed. Please try again.");
+            // toast.error(error.response?.data?.message || "Login failed. Please try again.");
         }
     }
 }
 
 export function logout(navigate) {
-    return (dispatch) => {
-      dispatch(setToken(null))
-      dispatch(setUser(null))
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-      toast.success("Logged Out")
-      navigate("/")
+    return async (dispatch) => {
+        try{
+            dispatch(setToken(null))
+            dispatch(setUser(null));
+            const response = await axios.post(`${url}/api/v1/logoutUser`, {}, 
+                { withCredentials:true }
+            );
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+            toast.success("Logged Out")
+            navigate("/")
+        }
+        catch(error){
+            console.error("Error sending data:", error);
+            toast.error(error.response?.data?.message || "Logout failed. Please try again.");
+        }
+      
     }
   }
   

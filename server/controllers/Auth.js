@@ -99,6 +99,30 @@ exports.signup = async (req,res) => {
     }
 }
 
+exports.getToken = async (req,res) => {
+    try{
+        const token = req.cookies.token;
+        if(token){
+            return res.status(200).json({
+                success: true,
+                token,
+                message: "Token retrieved successfully."
+            })
+        }
+        return res.status(400).json({
+            success: true,
+            message: "Token not found"
+        })
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success: false,
+            message: "Error in getting token",
+        })
+    }
+}
+
 exports.login = async (req,res) => {
     try{
         const {identifier, password} = req.body;
@@ -140,6 +164,7 @@ exports.login = async (req,res) => {
                 expires: new Date(Date.now() + 3*24*60*60*1000),
                 httpOnly: true,  // Prevents JavaScript from accessing the cookie (enhances security)
             }
+            console.log("token: ",token);
             res.cookie("token",token,options).status(200).json({
                 success: true,
                 token,
@@ -163,6 +188,27 @@ exports.login = async (req,res) => {
         })
     }
 }
+
+exports.logoutUser = async (req, res) => {
+    try{
+        res.clearCookie("token", {
+            httpOnly: true,     // match how it was set
+            secure: true,       // if you're using HTTPS
+            sameSite: "Lax",    // or "None" if cross-site
+          });
+        
+          res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+          });
+    }
+    catch(error){
+        return res.status(500).json({
+            success: false,
+            message: "Logout failed"
+        })
+    }    
+  };
 
 exports.sendotp = async (req,res) => {
     try{

@@ -59,7 +59,7 @@ export function loginApi(identifier, password, navigate){
             );
             console.log("Response:", response.data);
 
-            localStorage.setItem('token',response.data.token);
+            // localStorage.setItem('token',response.data.token);
             // console.log(localStorage.getItem('token'));
             toast.success("🎉 Logged in successfully!");
             const userImage = response.data?.user?.image

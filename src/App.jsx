@@ -18,19 +18,26 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {token} = useSelector((state)=>state.auth)
-  const [isAuthenticated,setIsAuthenticated] = useState(!!token);
+  const isAuthenticated = !!token;
+
+  // useEffect(() => {
+  //   const savedToken = localStorage.getItem('token');
+  //   if (savedToken) {
+  //     dispatch(setToken(savedToken));
+  //   }
+  // }, [dispatch]);
   
   useEffect(()=>{
-    dispatch(setToken(localStorage.getItem('token')))
+    // dispatch(setToken(localStorage.getItem('token')))
       dispatch(getTokenApi())
       .then((res) => {
         dispatch(setToken(res)); 
-        setIsAuthenticated(!!token);
+        // setIsAuthenticated(!!token);
         console.log("isAuthenticated: ", isAuthenticated);
       })
       .catch((err) => console.log(err));
-    // console.log("Token:",token);
-  },[token])
+    console.log("Token:",token);
+  },[dispatch])
 
   
   // console.log("isAuthenticated: ", isAuthenticated);

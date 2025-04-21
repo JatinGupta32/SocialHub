@@ -219,7 +219,7 @@ const CreatePostForm = () => {
             </div>
     
           </div>
-          <div className=' w-full flex justify-center items-center'>
+          <div className='h-[88%] w-full flex justify-center items-center'>
           <div className="bg-white/10 h-[90%] w-[99%] px-20 py-7 backdrop-blur-lg rounded-2xl overflow-y-hidden shadow-lg flex flex-col items-center border border-white/20">
             <form onSubmit={handleOnSubmit} className='flex gap-x-8 h-full w-full'>
                 <div className="flex flex-col w-[40%] pt-3 space-y-[2rem] overflow-y-auto custom-scrollbar scroll-smooth">

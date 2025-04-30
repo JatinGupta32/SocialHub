@@ -25,16 +25,8 @@ function App() {
   const navigate = useNavigate();
   const {token} = useSelector((state)=>state.auth)
   const isAuthenticated = !!token;
-
-  // useEffect(() => {
-  //   const savedToken = localStorage.getItem('token');
-  //   if (savedToken) {
-  //     dispatch(setToken(savedToken));
-  //   }
-  // }, [dispatch]);
   
   useEffect(()=>{
-    // dispatch(setToken(localStorage.getItem('token')))
       dispatch(getTokenApi())
       .then((res) => {
         dispatch(setToken(res)); 
@@ -42,11 +34,8 @@ function App() {
         console.log("isAuthenticated: ", isAuthenticated);
       })
       .catch((err) => console.log(err));
-    console.log("Token:",token);
+    // console.log("Token:",token);
   },[dispatch])
-
-  
-  // console.log("isAuthenticated: ", isAuthenticated);
   
   return (
     <div className='flex min-h-screen w-full flex-col'>

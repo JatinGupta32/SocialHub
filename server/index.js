@@ -21,14 +21,6 @@ const PrivateChat = require("./models/PrivateChat");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
-// Middleware setup
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://socialhub-gamma.vercel.app");
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-});
-
-// 2. Actual CORS middleware
 app.use(
   cors({
     origin: "https://socialhub-gamma.vercel.app",

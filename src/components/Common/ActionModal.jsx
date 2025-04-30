@@ -10,7 +10,7 @@ const ActionModal = ({postid,userid,profileUserid,setSelectedPost,onClose}) => {
 
   return (
     <div className='fixed inset-0 rounded-2xl bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50'>
-        <div className='absolue z-10 w-[23vw] cursor-pointer h-fit rounded-lg bg-gradient-to-b from-gray-900 to-black flex flex-col items-center'>
+        <div className='absolute z-10 w-[23vw] cursor-pointer h-fit rounded-lg bg-gradient-to-b from-gray-900 to-black flex flex-col items-center'>
             {userid!==profileUserid && <div 
             onClick={() => {
               dispatch(updateFollowApi(profileUserid))

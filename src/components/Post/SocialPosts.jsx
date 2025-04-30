@@ -11,7 +11,7 @@ const SocialPosts = () => {
   return (
     <div className="h-screen flex flex-col items-center bg-gradient-to-b from-gray-800 to-black/70">
       {/* The Scrollable Content Wrapper */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar space-y-7 py-6">
+      <div className="flex-1 overflow-y-auto custom-scrollbar space-y-7 p-[1.5rem]">
         {
           socialPosts?.map((post,i)=>(
             <SocialPost key={i} post={post}/>

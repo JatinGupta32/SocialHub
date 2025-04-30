@@ -3,46 +3,6 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const mongoose = require("mongoose");
 
-exports.getUser = async (req,res) => {
-    try{
-        const userid = req.user.id;
-        const userDetails = await User.findById(
-            userid,
-            {
-                username: true,
-                fullname: true,
-                email: true,
-                contactNumber: true,
-                additionalDetails: true,
-                followers: true,
-                following: true,
-                posts: true,
-                image: true,
-            })
-            .populate("additionalDetails followers following posts")
-            .exec()
-        // console.log('userDetails1: ', userDetails);
-        if(!userid){
-            return res.status(403).json({
-                success: false,
-                message: "This user is not exist",
-            })
-        }
-        return res.status(200).json({
-            success: true,
-            userDetails: userDetails,
-            message: "We have successfully retrieved user details",
-        })
-
-    }
-    catch(error){
-        return res.status(500).json({
-            success: false,
-            message: "Error in fetching data",
-        })
-    }
-}
-
 exports.getUserDetails = async (req,res) => {
     try{
         const { userid } = req.query;
@@ -77,13 +37,7 @@ exports.getUserDetails = async (req,res) => {
             })
             .populate("additionalDetails followers following posts")
             .exec()
-        // console.log('userDetails: ', userDetails);
-        // if(!userid){
-        //     return res.status(403).json({
-        //         success: false,
-        //         message: "This user is not exist",
-        //     })
-        // }
+
         return res.status(200).json({
             success: true,
             userDetails: userDetails,
@@ -388,3 +342,20 @@ exports.getUnfollowUser = async (req, res) => {
     }
 };
 
+exports.getAllUsers = async (req, res) => {
+    try {        
+        // Await user details
+        const userDetails = await User.find();
+
+        return res.status(200).json({
+            success: true,
+            userDetails,
+            message: "We have successfully retrieved users",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error in retrieving users",
+        });
+    }
+};

@@ -253,7 +253,7 @@ const CreatePostForm = () => {
                         ))}
                     </div>
                 </div>
-                <div className='flex-col items-center w-[60%] space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar1 pr-10'>
+                <div className='flex-col items-center w-[60%] space-y-5 overflow-y-auto overflow-x-hidden custom-scrollbar1 pr-[2.5rem]'>
                     <div>
                         <label className='block ml-1'>
                             <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Caption</p>
@@ -264,14 +264,15 @@ const CreatePostForm = () => {
                                 value={formData.caption}
                                 onChange={handleOnChange}
                                 placeholder='Write a caption...'
-                                className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
+                                className='px-4 resize-none w-full text-base overflow-y-auto custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                             />
                             <div className='relative inline-block mt-1'>
                                 <button 
                                     onClick={(e) => { e.preventDefault();
                                                     setShowEmojiPicker(!showEmojiPicker)
                                                     }}
-                                    className="px-1.5 py-1.5 cursor-pointer rounded-full border border-gray-200 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+                                    className="px-1.5 py-1.5 cursor-pointer rounded-full border border-gray-700 bg-gradient-to-r from-purple-500 to-indigo-600 text-white 
+                                                    hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-[0_0_11px_#A78BFA]"
                                 >
                                     <MdEmojiEmotions size={25}/>
                                 </button>
@@ -284,7 +285,7 @@ const CreatePostForm = () => {
                         </label>
                     </div>
                     <div className='w-full flex-col ml-1'>                        
-                        <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Upload a Music file</p>
+                        <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Upload a Music file</p>
                         <div className='w-full px-5 py-3 mb-4 cursor-pointer text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'>
                             {musicFile ? musicFile.name : "No file chosen"}
                         </div>
@@ -337,7 +338,7 @@ const CreatePostForm = () => {
                     </div>
                     <div className=''>
                         <label className='block ml-1'>
-                            <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Tag People</p>
+                            <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Tag People</p>
                             <input
                                 type='text'
                                 name='tagPeople'

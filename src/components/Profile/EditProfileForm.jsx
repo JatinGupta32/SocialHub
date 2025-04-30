@@ -169,7 +169,7 @@ const EditProfileForm = () => {
                         </div> */}
 {/*  */}
                         <div className="flex flex-col w-[40%] ">
-                                <label className="w-fit flex flex-col space-y-7 mx-auto my-auto text-gray-300 items-center justify-center overflow-y-auto cursor-pointer ">
+                                <label className=" flex flex-col space-y-7 mx-auto my-auto text-gray-300 items-center justify-center overflow-y-auto cursor-pointer custom-scrollbar ">
                                     <input
                                         type="file"
                                         required
@@ -179,21 +179,27 @@ const EditProfileForm = () => {
                                         onChange={handleFileChange}
                                     />
                                     {imageFile ? (
-                                        <img src={imageFile || ""} alt="Selected" className="border w-[16rem] h-[22rem] object-cover z-2 rounded-3xl hover:ring-2 hover:ring-[#8B5CF6]"/>
+                                        <div className="w-[16rem] h-[22rem] rounded-2xl overflow-hidden hover:border-2 shadow-md hover:border-[#8B5CF6] transition duration-300">
+                                            <img
+                                                src={imageFile}
+                                                alt="Selected"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
                                     ) : (
-                                        <div className='border bg-[#18181b] border-gray-600 rounded-3xl w-[18rem] h-[24rem] flex flex-col justify-center items-center shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed'>
+                                        <div className="p-4 w-[16rem] h-[22rem] flex flex-col justify-center items-center bg-[#18181b] border-2 border-dashed border-gray-600 rounded-2xl shadow-md hover:border-[#8B5CF6] transition duration-300">
                                             <FaCloudUploadAlt className="text-3xl text-gray-600 mb-3" />
-                                            <p className="text-gray-500">Choose a file or drag and drop it here</p>
+                                            <p className="text-gray-500 text-center">Choose a file or drag and drop it here</p>
                                         </div>
                                     )}
                                     <p className='px-4 py-1.5 text-lg font-sans text-white bg-purple-600 hover:brightness-70 rounded-xl font-semibold transition-all'>Change Profile Picture</p> 
                                 </label>
 
                         </div>
-                        <div className='flex-col items-center w-3/5 h-[72vh] space-y-5 overflow-y-auto custom-scrollbar1 pr-10'>
+                        <div className='flex-col items-center w-[60%] space-y-5 overflow-y-auto custom-scrollbar1 pr-[2.5rem]'>
                             <div className='ml-1'>
                                 <label className='block'>
-                                    <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Name</p>
+                                    <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Name</p>
                                     <input
                                         type='text'
                                         name='fullname'
@@ -206,7 +212,7 @@ const EditProfileForm = () => {
                             </div>
                             <div className='ml-1'>
                                 <label className='block'>
-                                    <p className='py-2 text-lg font-medium font-[Segoe_UI]'>Username</p>
+                                    <p className='pb-2 text-lg font-medium font-[Segoe_UI]'>Username</p>
                                     <input
                                         type='text'
                                         name='username'
@@ -227,15 +233,15 @@ const EditProfileForm = () => {
                                         value={formData.bio || ""}
                                         onChange={handleOnChange}
                                         placeholder='Write a Bio...'
-                                        className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-36 text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
+                                        className='resize-none px-4 w-full overflow-y-auto custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                                     />
                                     <div className='relative inline-block mt-1'>
                                         <button 
                                             onClick={(e) => { e.preventDefault();
                                                             setShowEmojiPicker(!showEmojiPicker)
                                                             }}
-                                            className="px-2.5 py-2 cursor-pointer rounded-full border border-gray-700 bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] text-white 
-                                                    hover:from-[#A78BFA] hover:to-[#818CF8] transition-all duration-300 shadow-md hover:shadow-[0_0_15px_#A78BFA]"
+                                            className="px-1.5 py-1.5 cursor-pointer rounded-full border border-gray-700 bg-gradient-to-r from-purple-500 to-indigo-600 text-white 
+                                                    hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-[0_0_11px_#A78BFA]"
                                         >
                                             <MdEmojiEmotions size={25}/>
                                         </button>
@@ -255,7 +261,7 @@ const EditProfileForm = () => {
                                         name="gender"
                                         value={formData.gender || ""}
                                         onChange={handleOnChange}
-                                        className="w-full bg-[#18181b] px-4 py-3 text-gray-300  border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300"
+                                        className="w-full bg-[#18181b] px-4 py-3 text-gray-300 border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300"
                                     >
                                     <option value="" className="bg-[#1E1E2E] text-gray-300">Select an option</option>
                                     <option value="Female" className="bg-[#1E1E2E] text-gray-300">Female</option>
@@ -279,7 +285,7 @@ const EditProfileForm = () => {
                                 </div>
                             </div>
 
-                            <div className="relative inline-block w-full ml-1 mb-3">
+                            <div className="relative inline-block w-full ml-1 ">
                             <div className="pb-2 text-lg font-medium font-[Segoe_UI]">Date of Birth</div>
                                 <div className="relative">
                                     <input

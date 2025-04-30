@@ -271,7 +271,7 @@ const EditPostForm = () => {
                                     value={formData.caption}
                                     onChange={handleOnChange}
                                     placeholder='Write a caption...'
-                                    className='px-4 w-full overflow-y-auto custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
+                                    className='px-4 w-full overflow-y-auto resize-none custom-scrollbar py-3 h-[9rem] text-gray-300 bg-[#18181b] border border-gray-600 rounded-xl appearance-none focus:ring-2 focus:ring-[#8B5CF6] focus:outline-none shadow-md hover:border-[#8B5CF6] transition duration-300'
                                 />
                                 <div className='relative inline-block mt-1'>
                                     <button 

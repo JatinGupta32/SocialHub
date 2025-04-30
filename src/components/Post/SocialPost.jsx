@@ -103,10 +103,10 @@ const SocialPost = ({post}) => {
     };
 
     return (
-        <div className='h-fit overflow-x-hidden bg-black/10 backdrop-blur-lg w-14/15 rounded-xl mx-auto shadow-lg p-6 border border-white/20 transition-all'>
+        <div className='h-fit overflow-x-hidden bg-black/10 backdrop-blur-lg rounded-xl mx-auto shadow-lg p-[1.5rem] border border-white/20 transition-all'>
             <div className='h-fit flex items-center justify-between'>
                 <div className='flex gap-x-2 items-center'>
-                    <img onClick={()=>navigate(`/profile/:${post?.user?._id}`)} src={Post?.user?.image} className='w-10 h-10 rounded-full object-cover cursor-pointer' alt="Profile"/>
+                    <img onClick={()=>navigate(`/profile/:${post?.user?._id}`)} src={Post?.user?.image} className='w-[2.5rem] h-[2.5rem] rounded-full object-cover cursor-pointer' alt="Profile"/>
                     <div className='flex-col '>
                         <div><span  onClick={()=>navigate(`/profile/:${post?.user?._id}`)} className='font-[Segoe_UI] font-semibold text-md cursor-pointer hover:brightness-70'>{Post?.user?.username}  </span ><span className='text-md font-[Segoe_UI] font-normal opacity-70'>· 2d</span></div>
                         <div className='opacity-80 text-sm font-[Segoe_UI] font-normal'>{Post.location}</div>
@@ -115,8 +115,8 @@ const SocialPost = ({post}) => {
                 <HiDotsHorizontal onClick={()=>setAction(1)} size={26} className='hover:brightness-60 cursor-pointer'/>
             </div>
 
-            <div className='space-y-5 h-fit w-full py-4 flex flex-col justify-between items-center '>
-                <div className='font-sans text-md'>
+            <div className='space-y-5 h-fit w-full py-[1rem] flex flex-col justify-between items-center '>
+                <div className='font-sans text-md whitespace-pre-wrap mr-auto'>
                     <p>
                         {isExpanded ? Post.caption.trim() : `${Post.caption.slice(0, 300)}...`}
                         <span 
@@ -146,7 +146,7 @@ const SocialPost = ({post}) => {
                             <img
                                 key={i}
                                 src={photo}
-                                className="cursor-pointer w-65 h-80 object-cover rounded-xl mx-auto snap-center"
+                                className="cursor-pointer w-[15rem] h-[20rem] object-cover rounded-xl mx-auto snap-center"
                                 alt="Post"
                                 draggable="false"
                             />
@@ -154,8 +154,8 @@ const SocialPost = ({post}) => {
                     </div>
                 </div>
             </div>
-            <div className='flex items-center justify-between py-4 border-y-1 border-white/20 px-3'>
-                <div className='flex gap-4'>
+            <div className='flex items-center justify-between p-[0.75rem] border-y-1 border-white/20'>
+                <div className='flex gap-[1rem]'>
                     {
                       Post?.likes.some(like => like?._id === user?._id) ?  
                       <FaHeart size={25} onClick={handleOnLike} className="cursor-pointer text-red-500"/> : 
@@ -164,25 +164,26 @@ const SocialPost = ({post}) => {
                     <FaRegComment onClick={()=>setSelectedPost(Post)} size={25} className='cursor-pointer hover:brightness-60'/>
                     <LuSend size={25} className='cursor-pointer hover:brightness-60'/>
                 </div>
-                <div className='flex gap-2'>
+                <div className='flex gap-[0.5rem]'>
                     <LuForward onClick={()=>setSelectedPost(Post)} size={25} className='cursor-pointer hover:brightness-60'/>
                     <FiBookmark size={25} className='cursor-pointer hover:brightness-60'/>
                 </div>
             </div>
-            <div className='py-4 flex justify-between items-center text-md font-sans'>
+            <div className='py-[0.75rem] flex justify-between items-center text-md font-sans'>
                 {Post?.likes.length===0 ? <p className='cursor-pointer hover:brightness-60'>No Likes</p> : 
                 (Post?.likes.length===1 ? <p onClick={()=>navigate('/')} className='hover:brightness-60 cursor-pointer'>1 Like</p> : 
                 <p className='hover:brightness-60 cursor-pointer'>{Post?.likes.length} Likes</p>)}
                 <div onClick={()=>setSelectedPost(Post)} className='hover:brightness-60 cursor-pointer'>{Post?.comments.length==0 ? "No comments yet." : `View all ${Post?.comments.length} Comments`}</div>
             </div>
-            <div className="h-fit border-1 border-white/40 px-3 py-1 rounded-xl">
+            <div className="h-fit border-1 border-white/40 px-[0.75rem] py-1 rounded-xl">
                 <label className="flex items-center gap-4">
                     <div className='relative inline-block '>
                         <button 
                             onClick={(e) => { e.preventDefault();
                                             setShowEmojiPicker(!showEmojiPicker)
                                             }}
-                            className="mt-1 px-1 py-1 cursor-pointer rounded-full border border-gray-200 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
+                            className="mt-1 px-1 py-1 cursor-pointer rounded-full border border-gray-700 bg-gradient-to-r from-purple-500 to-indigo-600 text-white 
+                                                    hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-[0_0_11px_#A78BFA]"
                         >
                             <MdEmojiEmotions size={20}/>
                         </button>
@@ -210,9 +211,9 @@ const SocialPost = ({post}) => {
             {selectedPost && (
                 <PostModalSocial Post={selectedPost} user={user} setSelectedPost={setSelectedPost} onClose={() =>{setSelectedPost(null)}} />
             )}
-            {
+            {/* {
                 action && <ActionModal postid={Post?._id} userid={user?._id} profileUserid={post?.user?._id} setSelectedPost={setSelectedPost} onClose={()=>setAction(null)}></ActionModal>
-            }
+            } */}
         </div>
     );
 }

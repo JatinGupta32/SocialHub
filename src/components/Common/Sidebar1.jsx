@@ -31,7 +31,7 @@ const Sidebar1 = () => {
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>navigate('/message')} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <TbMessageFilled className="w-7 h-7" />
                 </button>
             </div>

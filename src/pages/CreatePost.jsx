@@ -16,12 +16,12 @@ const CreatePost = () => {
       <div className='w-[5%]'>
         <Sidebar1/>
       </div>
-      <div className='w-full pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] h-screen px-4 bg-gradient-to-b from-gray-900 to-black text-amber-50 flex flex-col items-center'>
+      <div className='w-full h-screen px-4 bg-gradient-to-b from-gray-900 to-black text-amber-50 flex flex-col items-center'>
         <CreatePostForm/>
       </div>
 
     </div>
   )
 }
-//hgjh
 export default CreatePost
+//pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]

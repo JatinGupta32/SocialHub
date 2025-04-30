@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    privateChats: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "privateChat",
+        }
+    ],
     token: {
         type: String
     },

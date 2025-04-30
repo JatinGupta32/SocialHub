@@ -215,7 +215,8 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
                 <div className="text-sm w-fit">
                       <span className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{post?.user?.username}</span>
                       <span>&nbsp;</span>
-                      {post.caption}
+                      <span className='whitespace-pre-wrap'>{post.caption}</span>
+                      
                     </div>
                 
             </div>
@@ -227,7 +228,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
                     <div className="text-sm w-fit">
                       <span onClick={()=>{setSelectedPost(null); navigate(`/profile/:${comment?.user?._id}`)}} className="font-[Segoe_UI] font-bold text-md cursor-pointer hover:brightness-50">{comment?.user?.username}</span>
                       <span>&nbsp;</span>
-                      {comment?.statement}
+                      <span className='whitespace-pre-wrap'>{comment?.statement}</span>
                     </div>
                 </div>
               ))
@@ -296,7 +297,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
                     value={comment}
                     onChange={(e)=>setComment(e.target.value)}
                     placeholder="Add a comment..."
-                    className="w-full placeholder:text-sm placeholder:font-[Segoe_UI] placeholder:font-semibold text-sm h-[3vw] outline-none"
+                    className="w-full resize-none placeholder:text-sm placeholder:font-[Segoe_UI] placeholder:font-semibold text-sm h-[3vw] outline-none"
                 />
                 <button onClick={handleOnComment} className="text-purple-500 hover:text-white cursor-pointer font-semibold text-md">Post</button>
             </label>

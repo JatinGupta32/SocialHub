@@ -20,7 +20,7 @@ const Home = () => {
     },[dispatch])
 
     return (
-      <div className="w-full min-h-screen flex overflow-x-hidden scrollbar-hide">
+      <div className="w-full min-h-[100dvh] flex overflow-x-hidden scrollbar-hide">
           <div className="w-1/6">
             <Sidebar/> 
           </div>

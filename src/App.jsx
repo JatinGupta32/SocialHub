@@ -13,6 +13,12 @@ import EditProfile from './pages/EditProfile';
 import EditPost from './pages/EditPost';
 import { setToken } from './slices/authSlice';
 import { getTokenApi } from './apis/authAPI';
+import Message from './pages/Message';
+import {io} from 'socket.io-client'
+
+var socket = io.connect(import.meta.env.VITE_API_URL,
+  {withCredential: true,}
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -59,6 +65,7 @@ function App() {
             <Route path="/profile/:userId" element={<Profile />} />
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/edit-post" element={<EditPost />} />
+            <Route path="/message" element={<Message socket={socket} />} />
           </>
         ) : (
           // Catch all routes and redirect to login

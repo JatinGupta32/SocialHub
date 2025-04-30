@@ -24,8 +24,8 @@ const PORT = process.env.PORT || 4000;
 // Middleware setup
 app.use(
     cors({
-        origin: "http://localhost:5173",
-        // origin: "https://socialhub-gamma.vercel.app",
+        // origin: "http://localhost:5173",
+        origin: "https://socialhub-gamma.vercel.app",
         credentials: true,
     })
 );
@@ -35,8 +35,8 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }))
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173",
-        // origin: "https://socialhub-gamma.vercel.app",
+        // origin: "http://localhost:5173",
+        origin: "https://socialhub-gamma.vercel.app",
         credentials: true,
     }
 })

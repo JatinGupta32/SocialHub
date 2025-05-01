@@ -7,12 +7,10 @@ const url = import.meta.env.VITE_API_URL;
 export function getUserApi(userid) {
   return async (dispatch) => {
     try {
-      const token = localStorage.getItem("token");
-      // console.log(token);
       const response = await axios.get(`${url}/api/v1/getUser`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Token should be sent in headers
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`, // Token should be sent in headers
+        // },
         withCredentials: true 
       });
 

@@ -161,8 +161,10 @@ exports.login = async (req,res) => {
             user.token = token;
             // Set cookie for token and return success response
             const options ={
-                expires: new Date(Date.now() + 3*24*60*60*1000),
-                httpOnly: true,  // Prevents JavaScript from accessing the cookie (enhances security)
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly: true,
+                sameSite: "None", 
+                secure: true 
             }
             console.log("token: ",token);
             res.cookie("token",token,options).status(200).json({

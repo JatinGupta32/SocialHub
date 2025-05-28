@@ -5,11 +5,13 @@ import SocialPosts from "../components/Post/SocialPosts";
 import { useDispatch, useSelector } from "react-redux";
 import { getSocialPostsApi } from "../apis/postAPI";
 import RightSidebar from "../components/Common/RightSidebar";
+import Spinner from "./Spinner";
+import Loader from "../components/Common/Loader";
 
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
-    const {token} = useSelector((state) => state.auth);
+    const {token,loading} = useSelector((state) => state.auth);
 
     useEffect(()=>{
       if(!token) navigate('/');
@@ -19,7 +21,14 @@ const Home = () => {
       dispatch(getSocialPostsApi())
     },[dispatch])
 
+    useEffect(()=>{
+      console.log(loading);
+    },[loading])
+
+
+
     return (
+      // loading ? <Spinner/> : 
       <div className="w-full min-h-[100dvh] flex overflow-x-hidden scrollbar-hide">
           <div className="w-1/6">
             <Sidebar/> 

@@ -10,6 +10,7 @@ const MessageModal = ({onClose}) => {
 
     const [users, setUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [groupName, setGroupName] = useState('');
     const dispatch = useDispatch();
     const {user} = useSelector((state)=>state.profile)
 
@@ -27,12 +28,12 @@ const MessageModal = ({onClose}) => {
       },[]);
 
       const handleOncreate = () => {
-        if(selectedUsers.length===0) return;
+        if(selectedUsers.length===0 || !groupName) return;
         if(selectedUsers.length===1){
           dispatch(createPrivateChatApi(selectedUsers));
         }
         else{
-          dispatch(createGroupApi(selectedUsers));
+          dispatch(createGroupApi(selectedUsers,groupName));
         }
         onClose();
       }
@@ -44,7 +45,7 @@ const MessageModal = ({onClose}) => {
                 <div className='flex-1 text-center font-sans font-bold'>Create a New Group</div>
                 <RxCross2 onClick={onClose} size={27} className='hover:text-purple-500 cursor-pointer'/>
             </div>
-            <div className=' w-full px-[1rem] py-[0.5rem] border-b border-gray-400 flex gap-4 items-center '>
+            <div className=' w-full bg-gray-900 px-[1rem] py-[0.5rem] border-b border-gray-400 flex gap-4 items-center '>
                 <div className='font-sans font-bold'>To: </div>
                 <input
                     type='text'
@@ -53,7 +54,7 @@ const MessageModal = ({onClose}) => {
                 />
             </div>
             <div className='w-full font-sans font-bold text-sm px-[1rem] py-[0.7rem]'>Suggested</div>
-            <div className='w-full h-[65%] flex-col items-center justify-center overflow-y-auto '>
+            <div className='w-full h-[65%] flex-col items-center justify-center overflow-y-auto'>
                 {users?.map((User,i)=>
                     (
                       user._id!==User._id && (
@@ -79,6 +80,18 @@ const MessageModal = ({onClose}) => {
                     )
                     
                 )}
+            </div>
+            <div className='w-full px-[1rem] mt-4'>
+              <div className=' w-full px-[1rem] py-[0.5rem] border rounded-xl border-gray-400 flex bg-gray-900 gap-4 items-center '>
+                  <div className='font-sans font-bold'>Group Name: </div>
+                  <input
+                      type='text'
+                      placeholder='Type...'
+                      value={groupName}
+                      onChange={(e) => setGroupName(e.target.value)}
+                      className='text-sm outline-none placeholder:text-gray-300'
+                  />
+              </div>
             </div>
             <div className='px-[1rem] w-full py-[1rem]'>
                 <button onClick={handleOncreate} className='w-full px-[1rem] py-[0.5rem] rounded-xl font-sans text-lg font-semibold bg-purple-500 hover:bg-purple-700 hover:font-bold cursor-pointer hover:text-white transition-all'>Create</button>

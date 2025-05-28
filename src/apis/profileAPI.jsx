@@ -1,11 +1,13 @@
 import axios from "axios";
 import { setUser } from "../slices/profileSlice";
 import toast from "react-hot-toast";
+import { setLoading } from "../slices/authSlice";
 // import { setSocialPosts } from "../slices/postSlice";
 const url = import.meta.env.VITE_API_URL;
 
 export function getUserApi(userid) {
   return async (dispatch) => {
+    dispatch(setLoading(true));
     try {
       const response = await axios.get(`${url}/api/v1/getUser`, {
         // headers: {
@@ -20,11 +22,13 @@ export function getUserApi(userid) {
       console.error("Error sending data:", error);
       toast.error(error.response?.data?.message || "Unable to fetch User details");
     }
+    dispatch(setLoading(false));
   };
 }
 
 export function getUserDetailsApi(userid) {
   return async (dispatch) => {
+    dispatch(setLoading(true));
     try {
       const token = localStorage.getItem("token");
       // console.log("Token:", token);
@@ -41,11 +45,13 @@ export function getUserDetailsApi(userid) {
       console.error("Error fetching user details:", error);
       toast.error(error.response?.data?.message || "Unable to fetch User details");
     }
+    dispatch(setLoading(false));
   };
 }
 
 export function updateFollowApi (profileUserid){
   return async (dispatch) => {
+    dispatch(setLoading(true));
       try{
           const token = localStorage.getItem("token");
           const response = await axios.post(`${url}/api/v1/updateFollow`, {profileUserid}, {
@@ -64,11 +70,13 @@ export function updateFollowApi (profileUserid){
           console.error("Error sending data:", error);
           toast.error(error.response?.data?.message || "Unable to update follow");
       }
+      dispatch(setLoading(false));
   }
 }
 
 export function editProfileApi (formData,navigate){
   return async (dispatch) => {
+    dispatch(setLoading(true));
       try{
           const token = localStorage.getItem("token");
           const response = await axios.post(`${url}/api/v1/editProfile`, formData ,{
@@ -87,11 +95,13 @@ export function editProfileApi (formData,navigate){
           console.error("Error sending data:", error);
           toast.error(error.response?.data?.message || "Unable to edit a post");
       }
+      dispatch(setLoading(false));
   }
 }
 
 export function getUnfollowUserApi(){
-  return async () => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
     try{
       const token = localStorage.getItem("token");
       console.log("token: ", token);
@@ -109,5 +119,6 @@ export function getUnfollowUserApi(){
         console.error("Error getting data:", error);
         // toast.error(error.response?.data?.message || "Unable to get Unfollow users");
     }
+    dispatch(setLoading(false));
   }
 }

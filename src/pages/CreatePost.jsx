@@ -3,15 +3,17 @@ import Sidebar1 from '../components/Common/Sidebar1'
 import CreatePostForm from '../components/Post/CreatePostForm'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Spinner from './Spinner';
 
 const CreatePost = () => {
   const navigate = useNavigate()
-  const {token} = useSelector((state) => state.auth);
+  const {token,loading} = useSelector((state) => state.auth);
   useEffect(()=>{
     if(!token) navigate('/');
   },[])
 
   return (
+    // loading ? <Spinner/> : 
     <div className="flex w-full min-h-[100dvh]">
       <div className='w-[5%]'>
         <Sidebar1/>

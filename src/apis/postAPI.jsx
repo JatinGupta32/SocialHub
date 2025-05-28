@@ -2,10 +2,12 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {setUser} from "../slices/profileSlice"
 import { setSocialPosts } from "../slices/postSlice";
+import { setLoading } from "../slices/authSlice";
 const url = import.meta.env.VITE_API_URL;
 
 export function createPostApi (formData,navigate){
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try{
             const token = localStorage.getItem("token");
             const response = await axios.post(`${url}/api/v1/createPost`, formData ,{
@@ -24,11 +26,13 @@ export function createPostApi (formData,navigate){
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Unable to create a post");
         }
+        dispatch(setLoading(false));
     }
 }
 
 export function getPostDetailsApi(postid) {
     return async (dispatch) => {
+        dispatch(setLoading(true));
       try {
         // console.log('postId: ', postid);
         const token = localStorage.getItem("token");
@@ -45,11 +49,13 @@ export function getPostDetailsApi(postid) {
         console.error("Error sending data:", error);
         toast.error(error.response?.data?.message || "Unable to fetch Post details");
     }
+    dispatch(setLoading(false));
 };
 }
 
 export function updateLikeOnPostApi (postid){
     return async () => {
+        dispatch(setLoading(true));
         try{
             const token = localStorage.getItem("token");
             const response = await axios.post(`${url}/api/v1/updateLikeOnPost`, {postid}, {
@@ -66,11 +72,13 @@ export function updateLikeOnPostApi (postid){
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Unable to update like on post");
         }
+        dispatch(setLoading(false));
     }
 }
 
 export function addCommentOnPostApi (postid,comment){
     return async () => {
+        dispatch(setLoading(true));
         try{
             // console.log(postid, statement)
             const token = localStorage.getItem("token");
@@ -88,11 +96,13 @@ export function addCommentOnPostApi (postid,comment){
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Unable to add comment on post");
         }
+        dispatch(setLoading(false));
     }
 }
 
 export function getSocialPostsApi() {
     return async (dispatch) => {
+        dispatch(setLoading(true));
       try {
         const token = localStorage.getItem("token");
         // console.log('token: ', token);
@@ -111,11 +121,13 @@ export function getSocialPostsApi() {
         console.error("Error sending data:", error);
         // toast.error(error.response?.data?.message || "Unable to fetch HomeUser details");
       }
+      dispatch(setLoading(false));
     };
   }
   
   export function editPostApi (formData, postid, navigate){
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try{
             const token = localStorage.getItem("token");
             const response = await axios.post(`${url}/api/v1/editPost`, {...formData,postid} ,{
@@ -134,11 +146,13 @@ export function getSocialPostsApi() {
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Unable to create a post");
         }
+        dispatch(setLoading(false));
     }
 }
 
 export function deletePostApi (postid, navigate){
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try{
             const token = localStorage.getItem("token");
             const response = await axios.post(`${url}/api/v1/deletePost`, {postid} ,{
@@ -157,5 +171,6 @@ export function deletePostApi (postid, navigate){
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Unable to create a post");
         }
+        dispatch(setLoading(false));
     }
 }

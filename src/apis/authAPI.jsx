@@ -1,12 +1,13 @@
 import axios from "axios";  
 import toast from "react-hot-toast";
 import { setUser } from '../slices/profileSlice';
-import { setToken } from "../slices/authSlice";
+import { setLoading, setToken } from "../slices/authSlice";
 import { setSignUpData } from "../slices/authSlice";
 const url = import.meta.env.VITE_API_URL;
 
 export function getTokenApi() {  
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try {
             const response = await axios.get(`${url}/api/v1/getToken`, {withCredentials: true} );
             // console.log("Response:", response.data);
@@ -16,12 +17,14 @@ export function getTokenApi() {
             console.error("Error sending data:", error);
             // toast.error(error.response?.data?.message || "Token not get");
         }
+        dispatch(setLoading(false));
     }
     
 };
 
 export function signupApi(username,fullname,identifier,password,confirmPassword,otp,navigate) {  
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try {
             const response = await axios.post(`${url}/api/v1/signup`, {username,fullname,identifier,password,confirmPassword,otp});  
             // console.log("Response:", response.data);
@@ -33,12 +36,14 @@ export function signupApi(username,fullname,identifier,password,confirmPassword,
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Signup failed. Please try again.");
         }
+        dispatch(setLoading(false));
     }
     
 };
 
 export function sendOtpApi(identifier, username, navigate) {  
     return async () => {
+        dispatch(setLoading(true));
         try {
             const response = await axios.post(`${url}/api/v1/sendotp`, {identifier, username}); 
             console.log("Response:", response.data);
@@ -48,11 +53,13 @@ export function sendOtpApi(identifier, username, navigate) {
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Signup failed. Please try again.");
         }
+        dispatch(setLoading(false));
     }
 };
 
 export function loginApi(identifier, password, navigate){
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try{
             const response = await axios.post(`${url}/api/v1/login`,{identifier,password}, 
                 { withCredentials:true }
@@ -73,11 +80,13 @@ export function loginApi(identifier, password, navigate){
             console.error("Error sending data:", error);
             // toast.error(error.response?.data?.message || "Login failed. Please try again.");
         }
+        dispatch(setLoading(false));
     }
 }
 
 export function logout(navigate) {
     return async (dispatch) => {
+        dispatch(setLoading(true));
         try{
             dispatch(setToken(null))
             dispatch(setUser(null));
@@ -93,7 +102,7 @@ export function logout(navigate) {
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "Logout failed. Please try again.");
         }
-      
+        dispatch(setLoading(false));
     }
   }
   

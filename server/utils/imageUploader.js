@@ -7,6 +7,7 @@ const uploadImageToCloudinary = async (base64Image, folderName) => {
             timeout: 60000,  // Set timeout to 60 seconds
             resource_type: "auto",
         });
+        console.log(result)
         return result;
     } catch (error) {
         console.error("Cloudinary Upload Error:", error);

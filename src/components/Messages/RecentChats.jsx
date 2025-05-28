@@ -47,7 +47,6 @@ const RecentChats = ({socket}) => {
 
     <div className='flex items-center gap-[0.5rem] px-[1.5rem] py-[1rem]'>
       <button onClick={()=>setGroup(0)} className='px-[1rem] py-[0.25rem] bg-white/10 rounded-3xl text-gray-400 text-sm hover:bg-purple-800/30 hover:text-purple-300 cursor-pointer'>Direct</button>
-      <button className='px-[1rem] py-[0.25rem] bg-white/10 rounded-3xl text-gray-400 text-sm hover:bg-purple-800/30 hover:text-purple-300 cursor-pointer'>All</button>
       <button onClick={()=>setGroup(1)} className='px-[1rem] py-[0.25rem] bg-white/10 rounded-3xl text-gray-400 text-sm hover:bg-purple-800/30 hover:text-purple-300 cursor-pointer'>Groups</button>
     </div>
 

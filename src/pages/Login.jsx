@@ -4,12 +4,14 @@ import LoginForm from '../components/Auth/LoginForm';
 import logo from '../assets/logo1.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import Spinner from './Spinner';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [showBird, setShowBird] = useState(false);
+  const {loading} = useSelector((state) => state.auth);
   return (
+    // loading ? <Spinner/> : 
     
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-slate-900 to-purple-800 backdrop-blur-lg z-1">
       <Background />

@@ -6,6 +6,7 @@ import { getUserDetailsApi } from '../apis/profileAPI'
 import { useState,useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation  } from 'react-router-dom'
+import Spinner from './Spinner';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,9 @@ const Profile = () => {
   const userid = parts[parts.length - 1].replace(":", "");
   // console.log("Extracted User ID:", userid);
   const {user} = useSelector((state)=>state.profile);
-  const {token} = useSelector((state) => state.auth);
+  const {token,loading} = useSelector((state) => state.auth);
   const [profileUser,setProfileUser] = useState({});
+  
   useEffect(() => {
     if (!token) {
       navigate('/');
@@ -36,6 +38,7 @@ const Profile = () => {
   if(!profileUser) return <div>No user exist by this id</div>
 
   return (
+    // loading ? <Spinner/> : 
     <div className="w-full min-h-screen flex overflow-x-hidden scrollbar-hide">
       <div className='w-1/19'>
         <Sidebar1/>

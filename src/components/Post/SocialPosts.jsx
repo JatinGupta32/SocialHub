@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react'
 import SocialPost from './SocialPost'
 import { useSelector } from 'react-redux'
+import Loader from '../Common/Loader'
 
 const SocialPosts = () => {
   const {user} = useSelector((state)=>state.profile)
+  const {loading} = useSelector((state)=>state.auth)
   const {socialPosts} = useSelector((state)=>state.post)
     // useEffect(()=>{
     //     console.log("user freom SocialPost: ", user);
     // })
   return (
+    // loading ? <Loader/> : 
     <div className="h-screen flex flex-col items-center bg-gradient-to-b from-gray-800 to-black/70">
       {/* The Scrollable Content Wrapper */}
       <div className="flex-1 overflow-y-auto custom-scrollbar space-y-7 p-[1.5rem]">

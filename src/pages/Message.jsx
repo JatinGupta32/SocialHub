@@ -3,15 +3,18 @@ import RecentChats from '../components/Messages/RecentChats'
 import ChatSection from '../components/Messages/ChatSection'
 import Sidebar1 from '../components/Common/Sidebar1'
 import { getUser1Api } from '../apis/messageAPI'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import Spinner from './Spinner';
 
 const Message = ({socket}) => {
   const dispatch = useDispatch();
+  const {loading} = useSelector((state) => state.auth);
   useEffect(()=>{
     dispatch(getUser1Api());
   },[])
 
   return (
+    // loading ? <Spinner/> : 
     <div className="w-full min-h-screen flex overflow-x-hidden scrollbar-hide">
       <div className='w-1/19'>
         <Sidebar1/>

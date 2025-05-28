@@ -2,11 +2,14 @@ const { default: mongoose } = require("mongoose");
 const GroupChat = require("../models/GroupChat");
 const PrivateChat = require("../models/PrivateChat");
 const User = require("../models/User");
+const {uploadImageToCloudinary} = require('../utils/imageUploader')
+const cloudinary = require("cloudinary");
 require('dotenv').config();
+
 
 exports.createGroup = async (req, res) => {
     try {
-        const { users } = req.body;
+        const { users,groupName } = req.body;
 
         let userIds = [], usernames = [];
 
@@ -32,6 +35,8 @@ exports.createGroup = async (req, res) => {
         const group = await GroupChat.create({
             roomId: roomId,
             users: userIds,
+            groupName: groupName,
+            // groupPhoto: null,
         });
 
         console.log(group);
@@ -222,7 +227,7 @@ exports.getGroupMessage = async (req,res) => {
                 select: "image fullname",
             },
         });
-        console.log(groupMessage);
+        // console.log(groupMessage);
         
         return res.status(200).json({
             success: true,
@@ -252,7 +257,7 @@ exports.getPrivateMessage = async (req,res) => {
                 select: "image fullname",
             },
         });
-        console.log(privateMessage);
+        // console.log(privateMessage);
         
         return res.status(200).json({
             success: true,
@@ -265,5 +270,89 @@ exports.getPrivateMessage = async (req,res) => {
             success: false,
             message: "Error in fetching private messages",
         })
+    }
+}
+
+exports.saveGroupPhoto = async (req, res) => {
+    try {
+        const groupId = req.body.groupId;
+        const imageFile = req.file; // multer parses this
+
+        const base64Image = `data:${imageFile.mimetype};base64,${imageFile.buffer.toString("base64")}`;
+
+        const group = await GroupChat.findById(groupId);
+        const previousPublicId = group.groupPhotoPublicId;
+
+        // Delete previous photo from Cloudinary (if exists)
+        if (previousPublicId) {
+            await cloudinary.uploader.destroy(previousPublicId);
+        }
+
+        const result = await uploadImageToCloudinary(base64Image, process.env.FOLDER_NAME);
+
+        const groupMessage = await GroupChat.findByIdAndUpdate(groupId,
+            {
+                groupPhoto: result.secure_url,
+                groupPhotoPublicId: result.public_id,
+            },
+            {new: true},
+        )
+        .populate("users", "username fullname image") 
+        .populate({
+            path: "messages",
+            populate: {
+                path: "sender",
+                model: "user",
+                select: "image fullname",
+            },
+        });
+        console.log(groupMessage);
+
+        return res.status(200).json({
+            success: true,
+            message: "Group Photo saved successfully",
+            groupMessage,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to Save Group Photo",
+        });
+    }
+}
+
+exports.saveGroupName = async (req, res) => {
+    try {
+        const {groupId,groupName} = req.body;
+
+        const groupMessage = await GroupChat.findByIdAndUpdate(groupId,
+            {
+                groupName: groupName,
+            },
+            {new: true},
+        )
+        .populate("users", "username fullname image") 
+        .populate({
+            path: "messages",
+            populate: {
+                path: "sender",
+                model: "user",
+                select: "image fullname",
+            },
+        });
+        console.log(groupMessage);
+
+        return res.status(200).json({
+            success: true,
+            message: "groupName saved successfully",
+            groupMessage,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to Save groupName",
+        });
     }
 }

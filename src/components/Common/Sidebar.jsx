@@ -24,7 +24,7 @@ const Sidebar = () => {
               {/* Home Button */}
               <div className="w-full px-[0.5rem]"> 
                   <button onClick={()=>navigate('/home')} className="flex items-center cursor-pointer gap-[1rem] w-full px-[1rem] py-[0.5rem] rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
-                      <AiFillHome className="w-[1.75] h-[1.75]" />
+                      <AiFillHome className="w-[1.75rem] h-[1.75rem]" />
                       <p>Home</p>
                   </button>
               </div>

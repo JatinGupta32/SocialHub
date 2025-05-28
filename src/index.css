@@ -1,7 +1,4 @@
 @import "tailwindcss";
-/* @import "tailwindcss/preflight";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities"; */
 
 @keyframes scroll {
   from {
@@ -12,30 +9,6 @@
   }
 }
 
-/* @theme {
-  --breakpoint-*: initial;
-  --breakpoint-md: { 'raw': '(max-width: 1920px)' };
-  --breakpoint-lg: { 'raw': '(max-width: 2160px)' };
-
-} */
-
-/* .app-container {
-  height: 100vh;
-  width: 100vw;
-  background-color: #0f172a;
-  background-image: 
-    linear-gradient(135deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    linear-gradient(225deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    linear-gradient(315deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.03), transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 60%);
-  background-size: 80px 80px, 80px 80px, 80px 80px, 80px 80px, 100% 100%, 100% 100%;
-  animation: glowShift 20s ease-in-out infinite;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 @keyframes glowShift {
   0% {
@@ -47,7 +20,8 @@
   100% {
     background-position: 0 0, 0 0, 0 0, 0 0, 30% 30%, 70% 70%;
   }
-} */
+} 
+
 .chat-bubble {
   position: relative;
   background: #ffffff;
@@ -166,6 +140,7 @@ body {
 .cursor-grabbing {
   cursor: grabbing !important;
 }
+
 /* a {
   font-weight: 500;
   color: #646cff;

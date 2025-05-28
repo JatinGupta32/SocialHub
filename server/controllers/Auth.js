@@ -185,7 +185,6 @@ exports.login = async (req,res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            user,
             message: "Login Failure Please Try Again"
         })
     }

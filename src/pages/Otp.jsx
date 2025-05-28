@@ -4,17 +4,14 @@ import OTPInput from 'react-otp-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signupApi } from '../apis/authAPI';
+import Spinner from './Spinner';
 
 const Otp = () => {
     const [otp, setOtp] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {signUpData,token} = useSelector((state) => state.auth);
-    // useEffect(()=>{
-    //   if(!token){
-    //     navigate('/');
-    //   }
-    // },[])
+    const {signUpData,loading} = useSelector((state) => state.auth);
+
     const handleOnClick = async (e) => {
         e.preventDefault();
         const {
@@ -29,6 +26,7 @@ const Otp = () => {
     }
 
   return (
+    // loading ? <Spinner/> : 
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-slate-900 to-purple-800 backdrop-blur-lg z-1">
       <Background />
       <div className="relative flex-col items-center w-100 p-6 bg-slate-800/60 justify-center backdrop-blur-xs rounded-2xl shadow-lg">

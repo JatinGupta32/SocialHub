@@ -4,10 +4,14 @@ import Background from '../components/Auth/Background';
 import logo from '../assets/logo1.png';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Spinner from './Spinner';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const {loading} = useSelector((state) => state.auth);
   return (
+    // loading ? <Spinner/> : 
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-slate-900 to-purple-800 backdrop-blur-lg z-1">
       <Background/>
       <motion.div

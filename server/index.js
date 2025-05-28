@@ -23,7 +23,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: "https://socialhub-gamma.vercel.app",
+    origin: "http://localhost:5173",
+    // origin: "https://socialhub-gamma.vercel.app",
     credentials: true,
   })
 );
@@ -34,8 +35,8 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }))
 
 const io = new Server(server, {
     cors: {
-        // origin: "http://localhost:5173",
-        origin: "https://socialhub-gamma.vercel.app",
+        origin: "http://localhost:5173",
+        // origin: "https://socialhub-gamma.vercel.app",
         credentials: true,
     }
 })
@@ -100,7 +101,6 @@ io.on('connection',(socket)=>{
 
 })
 
-// Health Check Route
 app.get("/", (req, res) => {
     return res.json({
         success: true,

@@ -5,10 +5,12 @@ import Sidebar1 from '../components/Common/Sidebar1'
 import { getUser1Api } from '../apis/messageAPI'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from './Spinner';
+import NotificationBar from '../components/Common/NotificationBar'
 
 const Message = ({socket}) => {
   const dispatch = useDispatch();
   const {loading} = useSelector((state) => state.auth);
+  const {notificationBar} = useSelector((state) => state.profile);
   useEffect(()=>{
     dispatch(getUser1Api());
   },[])
@@ -27,6 +29,11 @@ const Message = ({socket}) => {
             <ChatSection socket={socket}/>
         </div>
       </div>
+      {
+        notificationBar && (
+          <NotificationBar />
+        )
+      }
       
     </div>
   )

@@ -42,7 +42,7 @@ export function signupApi(username,fullname,identifier,password,confirmPassword,
 };
 
 export function sendOtpApi(identifier, username, navigate) {  
-    return async () => {
+    return async (dispatch) => {
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`${url}/api/v1/sendotp`, {identifier, username}); 

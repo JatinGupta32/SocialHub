@@ -6,6 +6,8 @@ import {motion} from 'framer-motion'
 import PostModal from '../Profile/PostModal'
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa";
+import { FaUserLock } from "react-icons/fa";
+
 
 const PostSection = ({User,user}) => {
   const [hovered1,setHovered1] = useState(false);
@@ -14,6 +16,26 @@ const PostSection = ({User,user}) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activePost, setActivePost] = useState(null);
   const [hoverPost,setHoverPost] = useState(1);
+
+  if (user._id!==User._id && (User?.privacyStatus === "private" && !user.following.some(f => f._id === User._id))) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black border-l border-white/20 flex justify-center items-center px-4">
+        <div className="w-fit flex flex-col items-center justify-center text-center gap-4 p-8 bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-2xl border border-purple-600/30 animate-fade-in">
+          
+          <FaUserLock size={60} className="text-purple-500 drop-shadow-glow animate-pulse" />
+
+          <h2 className="text-2xl font-bold text-white font-[Segoe_UI]">This Account is Private</h2>
+          
+          <p className="text-md text-gray-400 font-[Segoe_UI]">Follow to see their photos and videos.</p>
+
+          <button className="mt-4 px-5 py-1.5 bg-purple-600 text-white font-semibold text-lg font-[Segoe_UI] cursor-pointer rounded-full hover:bg-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
+            Follow
+          </button>
+
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className=' min-h-screen overflow-x-hidden bg-gradient-to-b from-gray-900 to-black border-l border-white/20 flex-col justify-between px-8 py-4'>
@@ -40,8 +62,18 @@ const PostSection = ({User,user}) => {
           </div>
             
         </div>
+        {
+          User?.posts?.length===0 ? 
+          <div className='flex justify-center items-center min-h-screen'>
+            <div className="w-fit flex items-center justify-center text-center gap-4 py-7 px-10 bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-2xl border border-purple-600/30 animate-fade-in">
+              <h2 className="text-xl font-semibold text-white/80 font-[Segoe_UI]">No Posts yet.</h2>
+              
+            </div>
+          </div> :
+          
         <div className='grid grid-cols-3 my-8 gap-4'>
         {
+          
           User?.posts?.map((post, i) => (
               <div key={i} 
                 className='relative cursor-pointer transition-all duration-300 brightness-100 hover:brightness-50'
@@ -67,6 +99,7 @@ const PostSection = ({User,user}) => {
         }
             
         </div>
+        }
 
         {selectedPost && (
           <PostModal Post={selectedPost} activePost={activePost} user={user} profileUserid={User._id} setActivePost={setActivePost} selectedPost={selectedPost} setSelectedPost={setSelectedPost} onClose={() =>{setActivePost(null); setSelectedPost(null)}} />

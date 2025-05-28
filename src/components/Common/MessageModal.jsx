@@ -13,6 +13,7 @@ const MessageModal = ({onClose}) => {
     const [groupName, setGroupName] = useState('');
     const dispatch = useDispatch();
     const {user} = useSelector((state)=>state.profile)
+    console.log("user: ",user)
 
     useEffect(()=>{
         const fetchUsers = async () => {
@@ -57,7 +58,7 @@ const MessageModal = ({onClose}) => {
             <div className='w-full h-[65%] flex-col items-center justify-center overflow-y-auto'>
                 {users?.map((User,i)=>
                     (
-                      user._id!==User._id && (
+                      user._id!==User._id && (User.privacyStatus==="public" || user?.following?.some((follower) => follower === User._id)) && (
                         <div onClick={() => {
                           if (selectedUsers?.includes(User)) {
                             setSelectedUsers(selectedUsers.filter(u => u !== User));

@@ -8,10 +8,12 @@ import { FaUserCircle } from "react-icons/fa";
 import { CgDetailsMore } from "react-icons/cg";
 import logo from '../../assets/logo1.png';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotificationBar } from '../../slices/profileSlice';
 
 const Sidebar1 = () => {
-    const {user} = useSelector((state)=>state.profile)
+    const {user,notificationBar} = useSelector((state)=>state.profile)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
   return (
     <div className="bg-gradient-to-b h-screen fixed left-0 top-0 from-gray-900 to-black flex flex-col items-center border-r border-gray-700 shadow-lg">
@@ -21,32 +23,32 @@ const Sidebar1 = () => {
         <div className="flex flex-col w-full mt-13 gap-y-2">
             {/* Home Button */}
             <div className="w-full px-2"> 
-                <button onClick={()=>navigate('/home')} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>{navigate('/home'); dispatch(setNotificationBar(false))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <AiFillHome className="w-7 h-7" />
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button  onClick={()=>{dispatch(setNotificationBar(false))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <IoSearch className="w-7 h-7" />
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button onClick={()=>navigate('/message')} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>{navigate('/message') ; dispatch(setNotificationBar(false))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <TbMessageFilled className="w-7 h-7" />
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>{dispatch(setNotificationBar(!notificationBar))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <IoNotificationsSharp className="w-7 h-7" />
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button onClick={()=>navigate('/create-post')}  className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>{navigate('/create-post') ; dispatch(setNotificationBar(false))}}  className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <IoMdCreate className="w-7 h-7" />
                 </button>
             </div>
             <div className="w-full px-2"> 
-                <button onClick={()=>navigate(`/profile/:${user?._id}`)} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                <button onClick={()=>{navigate(`/profile/:${user?._id}`) ; dispatch(setNotificationBar(false))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                     <FaUserCircle className="w-7 h-7" />
                 </button>
             </div>

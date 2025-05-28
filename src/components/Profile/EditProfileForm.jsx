@@ -12,11 +12,12 @@ import { editProfileApi, getUserApi} from '../../apis/profileAPI';
 const EditProfileForm = () => {
     const navigate = useNavigate();
     const {user} = useSelector((state)=> state.profile);
-    const [imageFile,setImageFile] = useState(user?.image);
+    const [imageFile,setImageFile] = useState(null);
     const dispatch = useDispatch();
     const pickerRef = useRef(null)
     const textAreaRef = useRef(null)
     const [formData, setFormData] = useState({});
+    const [selectedImage, setSelectedImage] = useState(user?.image);
 
     useEffect(() => {
         dispatch(getUserApi()).then(res=>{
@@ -37,48 +38,62 @@ const EditProfileForm = () => {
             [e.target.name]: e.target.value,
         }))
     }
-    const handleFileChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
-        // console.log(file);
-        if (!file) return;
+        let imageUrl = await convertToBase64(file);
+        // if (file) {
+        //     setImageFile(file);
+            
+            setSelectedImage(imageUrl); // For preview
+        // }
+        // const file = e.target.files[0];
+        // // console.log(file);
+        // if (!file) return;
         
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+        // const reader = new FileReader();
+        // reader.readAsDataURL(file);
         
-        reader.onload = () => {
-            const img = new Image();
-            img.src = reader.result;
+        // reader.onload = () => {
+        //     const img = new Image();
+        //     img.src = reader.result;
 
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
+        //     img.onload = () => {
+        //         const canvas = document.createElement("canvas");
+        //         const ctx = canvas.getContext("2d");
 
-                const maxWidth = 800; // Adjust as needed
-                const maxHeight = 800;
+        //         const maxWidth = 800; // Adjust as needed
+        //         const maxHeight = 800;
 
-                let { width, height } = img;
-                if (width > maxWidth || height > maxHeight) {
-                    const scaleFactor = Math.min(maxWidth / width, maxHeight / height);
-                    width *= scaleFactor;
-                    height *= scaleFactor;
-                }
+        //         let { width, height } = img;
+        //         if (width > maxWidth || height > maxHeight) {
+        //             const scaleFactor = Math.min(maxWidth / width, maxHeight / height);
+        //             width *= scaleFactor;
+        //             height *= scaleFactor;
+        //         }
 
-                canvas.width = width;
-                canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
+        //         canvas.width = width;
+        //         canvas.height = height;
+        //         ctx.drawImage(img, 0, 0, width, height);
 
-                const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7); // Adjust quality (0.7 means 70%)
-                setImageFile(resizedBase64);
-                if (!resizedBase64) {
-                    console.warn("No image selected!"); 
-                    return;
-                }
+        //         const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7); // Adjust quality (0.7 means 70%)
+        //         setImageFile(resizedBase64);
+        //         if (!resizedBase64) {
+        //             console.warn("No image selected!"); 
+        //             return;
+        //         }
+        
+                // setFormData((prev) => ({
+                //     ...prev,
+                //     image: resizedBase64,
+                // }));
                 setFormData((prev) => ({
                     ...prev,
-                    image: resizedBase64,
+                    image: imageUrl,
                 }));
-            };
-        };
+                
+            // };
+        // };
+
     };
 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -88,17 +103,30 @@ const EditProfileForm = () => {
     };
     
     const handleOnSubmit = (e) => {
-        e.preventDefault();
-        console.log(user);
-        if (!formData?.image) {
-            toast.error("📸 Add a photo to continue.", {
-                style: { fontSize: "20px"} 
-            });
-            return; 
-        }
-        console.log(formData);
+        e.preventDefault();        
+        // if (!formData?.image) {
+        //     if(!selectedImage){
+        //         toast.error("📸 Add a photo to continue.", {
+        //             style: { fontSize: "20px"} 
+        //         });
+        //         return; 
+        //     }
+        //     else{
+                
+        //     } 
+        // }
+        console.log("formData: ",formData);
         dispatch(editProfileApi(formData,navigate));   
     }
+
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
 
     const handleOnReset = () => {
         setImageFile("");
@@ -146,28 +174,6 @@ const EditProfileForm = () => {
               <div className='h-[88%] w-full flex justify-center items-center'>
                 <div className="bg-white/10 h-[90%] w-[99%] px-20 py-7 backdrop-blur-lg rounded-2xl overflow-y-hidden shadow-lg flex flex-col items-center border border-white/20">
                     <form onSubmit={handleOnSubmit} className='flex gap-x-8 h-full w-full'>
-                        {/* <div className="flex flex-col justify-center w-2/5 space-y-6 h-[72vh] overflow-y-auto custom-scrollbar items-center">
-                                <label className="flex flex-col space-y-7 ml-8 text-gray-300 items-center justify-center cursor-pointer ">
-                                    <input
-                                        type="file"
-                                        required
-                                        name="photos"
-                                        accept='.jpg,.jpeg,.png'
-                                        className="hidden"
-                                        onChange={handleFileChange}
-                                    />
-                                    {imageFile ? (
-                                        <img src={imageFile || ""} alt="Selected" className="border w-70 h-90 z-2 object-cover rounded-4xl hover:ring-2 hover:ring-[#8B5CF6]"/>
-                                    ) : (
-                                        <div className=' border bg-[#18181b] border-gray-600 rounded-4xl w-70 h-90 flex flex-col justify-center items-center shadow-md hover:ring-2 hover:ring-[#8B5CF6] transition duration-300 border-dashed'>
-                                            <FaCloudUploadAlt className="text-3xl text-gray-600 mb-3" />
-                                            <p className="mx-auto w-55 align-supertext-gray-500">Choose a file or drag and drop it here</p>
-                                        </div>
-                                    )}
-                                    <p className='px-5 py-2 text-lg font-sans text-white bg-purple-600 hover:brightness-70 rounded-xl font-semibold transition-all'>Change Profile Picture</p> 
-                                </label>
-                        </div> */}
-{/*  */}
                         <div className="flex flex-col w-[40%] ">
                                 <label className=" flex flex-col space-y-7 mx-auto my-auto text-gray-300 items-center justify-center overflow-y-auto cursor-pointer custom-scrollbar ">
                                     <input
@@ -176,12 +182,12 @@ const EditProfileForm = () => {
                                         name="photos"
                                         accept='.jpg,.jpeg,.png'
                                         className="hidden"
-                                        onChange={handleFileChange}
+                                        onChange={handleImageChange}
                                     />
-                                    {imageFile ? (
+                                    {selectedImage ? (
                                         <div className="w-[16rem] h-[22rem] rounded-2xl overflow-hidden hover:border-2 shadow-md hover:border-[#8B5CF6] transition duration-300">
                                             <img
-                                                src={imageFile}
+                                                src={selectedImage}
                                                 alt="Selected"
                                                 className="w-full h-full object-cover"
                                             />
@@ -308,6 +314,34 @@ const EditProfileForm = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v4m4-4v4m4-4v4m-9 4h10M3 6h18M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
                                     </svg>
                                     </div>
+                                </div>
+                            </div>
+                            <div className='flex items-center gap-5 ml-1'>
+                                <div className='flex items-center gap-2'>
+                                    <input
+                                        type='radio'
+                                        name='privacyStatus'
+                                        value="private"
+                                        checked={formData.privacyStatus==="private"}
+                                        onChange={handleOnChange}
+                                        className='accent-purple-600 w-5 h-5 cursor-pointer'
+                                        />
+                                    <label>
+                                        <p className='text-lg font-[Segoe_UI]'>Private</p>
+                                    </label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <input
+                                        type='radio'
+                                        name='privacyStatus'
+                                        value="public"
+                                        checked={formData.privacyStatus==="public"}
+                                        onChange={handleOnChange}
+                                        className='accent-purple-600 w-5 h-5 cursor-pointer'
+                                        />
+                                    <label>
+                                        <p className='text-lg font-[Segoe_UI]'>Public</p>
+                                    </label>
                                 </div>
                             </div>
                         </div>

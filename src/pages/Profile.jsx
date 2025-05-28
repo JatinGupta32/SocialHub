@@ -7,6 +7,7 @@ import { useState,useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation  } from 'react-router-dom'
 import Spinner from './Spinner';
+import NotificationBar from '../components/Common/NotificationBar'
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const Profile = () => {
   const {user} = useSelector((state)=>state.profile);
   const {token,loading} = useSelector((state) => state.auth);
   const [profileUser,setProfileUser] = useState({});
+  const {notificationBar} = useSelector((state) => state.profile);
   
   useEffect(() => {
     if (!token) {
@@ -49,6 +51,11 @@ const Profile = () => {
       <div className='w-12/19 h-screen overflow-y-scroll custom-scrollbar'>
         <PostSection  User={profileUser} user={user}/>
       </div>
+      {
+        notificationBar && (
+          <NotificationBar />
+        )
+      }
       
     </div>
   )

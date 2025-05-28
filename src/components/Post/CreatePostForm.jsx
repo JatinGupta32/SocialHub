@@ -366,34 +366,7 @@ const CreatePostForm = () => {
                         </Switch.Root>
                         <div className='text-lg font-[Segoe_UI]'>Allow people to comment</div>
                     </div>
-                    <div className='flex items-center gap-5 ml-1'>
-                        <div className='flex items-center gap-2'>
-                            <input
-                                type='radio'
-                                name='privacyStatus'
-                                value="private"
-                                checked={formData.privacyStatus==="private"}
-                                onChange={handleOnChange}
-                                className='accent-purple-600 w-5 h-5 cursor-pointer'
-                                />
-                            <label>
-                                <p className='text-lg font-[Segoe_UI]'>Private</p>
-                            </label>
-                        </div>
-                        <div className='flex items-center gap-2'>
-                            <input
-                                type='radio'
-                                name='privacyStatus'
-                                value="public"
-                                checked={formData.privacyStatus==="public"}
-                                onChange={handleOnChange}
-                                className='accent-purple-600 w-5 h-5 cursor-pointer'
-                                />
-                            <label>
-                                <p className='text-lg font-[Segoe_UI]'>Public</p>
-                            </label>
-                        </div>
-                    </div>
+                    
                 </div>
             </form>
         </div>

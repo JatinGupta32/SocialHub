@@ -4,10 +4,12 @@ import CreatePostForm from '../components/Post/CreatePostForm'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Spinner from './Spinner';
+import NotificationBar from '../components/Common/NotificationBar';
 
 const CreatePost = () => {
   const navigate = useNavigate()
   const {token,loading} = useSelector((state) => state.auth);
+  const {notificationBar} = useSelector((state) => state.profile);
   useEffect(()=>{
     if(!token) navigate('/');
   },[])
@@ -22,6 +24,11 @@ const CreatePost = () => {
         <CreatePostForm/>
       </div>
 
+      {
+        notificationBar && (
+          <NotificationBar />
+        )
+      }
     </div>
   )
 }

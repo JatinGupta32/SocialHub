@@ -32,7 +32,7 @@ const ProfileSection = ({User,setProfileUser}) => {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-gray-900 to-black p-8">
 
-        <div className="bg-white/10 h-fit backdrop-blur-lg rounded-2xl shadow-lg p-8 flex flex-col items-center border border-white/20">
+        <div className="bg-white/10  h-fit backdrop-blur-lg rounded-2xl shadow-lg p-8 flex flex-col items-center border border-white/20">
           {/* Profile Image */}
           <img
             src={User.image}
@@ -64,10 +64,10 @@ const ProfileSection = ({User,setProfileUser}) => {
               <div className="flex items-center gap-3 mt-2">
                 {
                   user?.following?.some((follower) => follower._id === User._id) ? 
-                    <button onClick={handleOnfollow} className="flex items-center bg-purple-500 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+                    <button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
                       <RiUserFollowFill className="mr-1"/>Following
                     </button> :
-                    <button onClick={handleOnfollow} className="flex items-center bg-purple-900 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+                    <button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
                       <RiUserFollowFill className="mr-1"/>Follow
                     </button>
                 }

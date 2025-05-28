@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiFillHome } from "react-icons/ai";
 import { IoSearch } from "react-icons/io5";
 import { TbMessageFilled } from "react-icons/tb";
@@ -9,11 +9,14 @@ import { CgDetailsMore } from "react-icons/cg";
 import logo from '../../assets/logo1.png';
 import "@fontsource/pacifico";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotificationBar } from '../../slices/profileSlice';
 
 const Sidebar = () => {
-    const {user} = useSelector((state)=>state.profile)
+    const {user,notificationBar} = useSelector((state)=>state.profile)
     const navigate = useNavigate();
+    const dispatch = useDispatch()
+
     return (
       <div className="w-1/6 bg-gradient-to-b from-gray-900 to-black h-screen fixed left-0 top-0 flex flex-col items-center border-r border-gray-700 shadow-lg">
           <div className="flex justify-center mt-[2.5rem] cursor-pointer">
@@ -41,7 +44,7 @@ const Sidebar = () => {
                   </button>
               </div>
               <div className="w-full px-[0.5rem]"> 
-                  <button className="flex items-center cursor-pointer gap-[1rem] w-full px-[1rem] py-[0.5rem] rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                  <button onClick={()=>{dispatch(setNotificationBar(!notificationBar))}} className="flex items-center cursor-pointer gap-[1rem] w-full px-[1rem] py-[0.5rem] rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                       <IoNotificationsSharp className="w-[1.75rem] h-[1.75rem]" />
                       <p>Notifications</p>
                   </button>

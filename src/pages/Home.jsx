@@ -7,11 +7,13 @@ import { getSocialPostsApi } from "../apis/postAPI";
 import RightSidebar from "../components/Common/RightSidebar";
 import Spinner from "./Spinner";
 import Loader from "../components/Common/Loader";
+import NotificationBar from "../components/Common/NotificationBar";
 
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const {token,loading} = useSelector((state) => state.auth);
+    const {notificationBar} = useSelector((state) => state.profile);
 
     useEffect(()=>{
       if(!token) navigate('/');
@@ -20,12 +22,6 @@ const Home = () => {
     useEffect(()=>{
       dispatch(getSocialPostsApi())
     },[dispatch])
-
-    useEffect(()=>{
-      console.log(loading);
-    },[loading])
-
-
 
     return (
       // loading ? <Spinner/> : 
@@ -39,6 +35,11 @@ const Home = () => {
           <div className="w-1/4 h-screen flex-col items-center">
             <RightSidebar/>
           </div>
+          {
+            notificationBar && (
+              <NotificationBar />
+            )
+          }
       </div>
   )
   

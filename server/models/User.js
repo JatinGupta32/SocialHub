@@ -46,6 +46,11 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    privacyStatus: {
+            type: String,
+            enum: ["private", "public"], 
+            default: "private", 
+        },
     privateChats: [
         {
             type: mongoose.Schema.Types.ObjectId,

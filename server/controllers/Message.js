@@ -180,7 +180,7 @@ exports.getUser1 = async (req, res) => {
         console.log(userid);
       
         const userDetail = await User.findById(userid)
-          .select("username fullname privateChats")
+          .select("username fullname privateChats following")
           .lean()
           .populate({
             path: "privateChats",

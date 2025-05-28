@@ -2,6 +2,8 @@ const Profile = require("../models/Profile");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const mongoose = require("mongoose");
+const {uploadImageToCloudinary} = require('../utils/imageUploader')
+const cloudinary = require("cloudinary");
 
 exports.getUserDetails = async (req,res) => {
     try{
@@ -19,6 +21,7 @@ exports.getUserDetails = async (req,res) => {
                 following: true,
                 posts: true,
                 image: true,
+                privacyStatus: true,
             })
             .populate("additionalDetails followers following posts")
             .exec()
@@ -34,6 +37,7 @@ exports.getUserDetails = async (req,res) => {
                 following: true,
                 posts: true,
                 image: true,
+                privacyStatus: true,
             })
             .populate("additionalDetails followers following posts")
             .exec()
@@ -70,6 +74,7 @@ exports.getUser = async (req,res) => {
                 following: true,
                 posts: true,
                 image: true,
+                privacyStatus: true,
             })
             .populate("additionalDetails followers following posts")
             .exec()
@@ -244,11 +249,10 @@ exports.createPost = async (req,res) => {
 
 exports.editProfile = async (req, res) => {
     try {        
-        const { username, fullname, bio, image, gender, dateOfBirth } = req.body;
+        const {username, fullname, bio, image, gender, dateOfBirth, privacyStatus} = req.body;
+        console.log("privacyStatus: ", privacyStatus);
         const userid = req.user.id;
         
-        // console.log("userid", userid);
-
         // Find user by ID
         const userdetail = await User.findById(userid);
         if (!userdetail) {
@@ -266,22 +270,23 @@ exports.editProfile = async (req, res) => {
             { new: true }
         );
 
-        // Update User details
-        if (!image.startsWith("data:image")) {
-            console.error("Invalid base64 format at index", i);
-        }
+        let imageUrl = userdetail?.image;
         try {
-            let imageUrl = await uploadImageToCloudinary(image, process.env.FOLDER_NAME);
-            image.push(imageUrl.secure_url);
-        } catch (error) {
+            if(image && userdetail?.image!==image){
+                imageUrl = await uploadImageToCloudinary(image, process.env.FOLDER_NAME);
+            }
+        }
+        catch (error) {
             console.error("Upload failed for image", error);
         }
+        console.log("imageUrl: ",imageUrl.secure_url);
         const updatedUserDetails = await User.findByIdAndUpdate(
             userid,
             {
                 username: username,
                 fullname: fullname,
-                image: image,
+                image: imageUrl.secure_url,
+                privacyStatus: privacyStatus,
             },
             { new: true }
         ).populate("additionalDetails followers following posts")

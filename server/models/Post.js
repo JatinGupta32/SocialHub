@@ -24,11 +24,6 @@ const postSchema = new mongoose.Schema({
     commentAllowed: {
         type: Boolean,
     },
-    privacyStatus: {
-        type: String,
-        enum: ["private", "public"], 
-        default: "private", 
-    },
     likes: [
         {
             type: mongoose.Schema.Types.ObjectId,

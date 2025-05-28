@@ -83,6 +83,7 @@ exports.signup = async (req,res) => {
             contactNumber,
             additionalDetails: profileDetails,
             image: "",
+            privacyStatus: "public"
         })
         return res.status(200).json({
             sucess: true,

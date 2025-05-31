@@ -62,7 +62,8 @@
 }
 
 :root {
-  font-family: 'Poppins', 'Lora', "Segoe UI", system-ui, Avenir, Helvetica, Arial, Inter, sans-serif, var(--font-sans);
+  font-family: 'Poppins', 'Lora', "Segoe UI", system-ui, Avenir, Helvetica, 'Roboto', Arial, Inter, sans-serif, var(--font-sans);
+
 
   line-height: 1.5;
   font-weight: 400;

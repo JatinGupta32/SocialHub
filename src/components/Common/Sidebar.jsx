@@ -23,7 +23,7 @@ const Sidebar = () => {
               <img src={logo} alt="Logo" className="w-[6.25rem] " />
           </div>
           <h2 className='text-3xl text-white font-bold mb-[2rem] font-[Pacifico] mt-[0.5rem] cursor-pointer'>SocialHub</h2>
-          <div className="flex flex-col w-full gap-y-[0.5rem]">
+          <div className="flex flex-col w-full gap-y-[0.5rem] ">
               {/* Home Button */}
               <div className="w-full px-[0.5rem]"> 
                   <button onClick={()=>navigate('/home')} className="flex items-center cursor-pointer gap-[1rem] w-full px-[1rem] py-[0.5rem] rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
@@ -46,6 +46,9 @@ const Sidebar = () => {
               <div className="w-full px-[0.5rem]"> 
                   <button onClick={()=>{dispatch(setNotificationBar(!notificationBar))}} className="flex items-center cursor-pointer gap-[1rem] w-full px-[1rem] py-[0.5rem] rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
                       <IoNotificationsSharp className="w-[1.75rem] h-[1.75rem]" />
+                      { user?.notifications?.length>0 && <div className='absolute translate-x-[1rem] translate-y-[-0.5rem] px-3 py-3 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center' >
+                            <div className='font-[roboto] font-semibold text-sm'>{user?.notifications?.length}</div>
+                        </div>}
                       <p>Notifications</p>
                   </button>
               </div>

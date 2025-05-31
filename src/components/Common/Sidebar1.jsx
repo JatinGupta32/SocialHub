@@ -39,6 +39,9 @@ const Sidebar1 = () => {
             </div>
             <div className="w-full px-2"> 
                 <button onClick={()=>{dispatch(setNotificationBar(!notificationBar))}} className="cursor-pointer w-full px-4 py-2 rounded-lg text-gray-300 text-lg hover:bg-purple-700 hover:text-white transition-all">
+                    { user?.notifications?.length>0 && <div className='absolute translate-x-[1rem] translate-y-[-0.5rem] px-3 py-3 h-5 w-5 bg-red-500 rounded-full flex items-center justify-center' >
+                            <div className='font-[roboto] font-semibold text-sm'>{user?.notifications?.length}</div>
+                        </div>}
                     <IoNotificationsSharp className="w-7 h-7" />
                 </button>
             </div>

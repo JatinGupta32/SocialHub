@@ -6,28 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdEdit } from "react-icons/md";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { getUserApi, updateFollowApi } from "../../apis/profileAPI";
-import { useEffect } from "react";
+
 import ModalPortal from "../Common/ModalPortal";
+import { updateFollowApi } from "../../apis/profileAPI";
 
 const ProfileSection = ({User,setProfileUser}) => {
   const {user} = useSelector((state)=>state.profile);
-  console.log("User: ",User);
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [action, setAction] = useState(false);
-  // console.log("Logined User: ", user?._id);
-  // console.log("Profile User: ", User._id);
+  // console.log("Logined User: ", user);
+  // console.log("Profile User: ", User);
   const handleOnfollow = (e) =>{
     e.preventDefault();
     dispatch(updateFollowApi(User._id))
     .then((res)=>setProfileUser(res))
     .catch((err) => console.log(err));
   }
-
-  // useEffect(()=>{
-  //         dispatch(getUserApi())
-  //       },[])
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-gray-900 to-black p-8">
@@ -61,15 +56,21 @@ const ProfileSection = ({User,setProfileUser}) => {
           {/* Buttons */}
           {
             (user?._id!==User._id) ? 
-              <div className="flex items-center gap-3 mt-2">
+              <div className="flex items-center gap-3 mt-2 font-[Roboto]">
                 {
                   user?.following?.some((follower) => follower._id === User._id) ? 
-                    <button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+                    (<button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-purple-800 transition">
                       <RiUserFollowFill className="mr-1"/>Following
-                    </button> :
-                    <button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
-                      <RiUserFollowFill className="mr-1"/>Follow
-                    </button>
+                    </button>) :
+                    (
+                      user?.requested?.some((follower) => follower === User._id) ? 
+                      (<button className="flex items-center bg-gray-700 hover:bg-gray-800 cursor-pointer text-white px-4 py-2 rounded-full text-sm font-medium shadow-md transition">
+                        <RiUserFollowFill className="mr-1"/>Requested
+                      </button>) :
+                      (<button onClick={handleOnfollow} className="flex items-center bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-purple-800 transition">
+                        <RiUserFollowFill className="mr-1"/>Follow
+                      </button>)
+                    )
                 }
                 
                 <button className="p-2 bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
@@ -79,11 +80,11 @@ const ProfileSection = ({User,setProfileUser}) => {
                   <FiMoreHorizontal size={18} className="text-white" />
                 </button>
               </div>  :
-              <div className="flex items-center gap-3 mt-2">
-                <button onClick={()=>(navigate('/edit-profile'))} className="flex items-center bg-purple-500 cursor-pointer text-white px-3 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+              <div className="flex items-center gap-3 mt-2 font-[Roboto]">
+                <button onClick={()=>(navigate('/edit-profile'))} className="flex items-center bg-purple-600 cursor-pointer text-white px-3 py-2 rounded-full text-sm font-medium shadow-md hover:bg-purple-800 transition">
                   <MdEdit size={19} className="mr-1"/>Edit Profile
                 </button>
-                <button className="flex items-center bg-purple-500 cursor-pointer text-white px-3 py-2 rounded-lg text-sm font-medium shadow-md hover:bg-purple-700 transition">
+                <button className="flex items-center bg-purple-600 cursor-pointer text-white px-3 py-2 rounded-full text-sm font-medium shadow-md hover:bg-purple-800 transition">
                   <IoShareSocialSharp size={19} className="mr-1"/>Share Profile
                 </button>
                 <button className="p-2 bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
@@ -94,7 +95,7 @@ const ProfileSection = ({User,setProfileUser}) => {
           
 
           {/* About Section */}
-          <div className="w-full mt-6 text-left">
+          <div className="w-full mt-6 text-left ">
             <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-sm">ABOUT</h3>
             <p className="text-gray-400 text-sm leading-relaxed mt-1">
               {User?.additionalDetails?.bio}
@@ -121,7 +122,7 @@ const ProfileSection = ({User,setProfileUser}) => {
               </div>
             </div>
             <div className="flex-col space-y-2">
-              <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-md">Following</h3>
+              <h3 className="text-gray-300 font-[Segoe_UI] font-bold text-md ">Following</h3>
               <div className="grid grid-cols-6 gap-3 mt-3">
                   {
                     User?.following?.map((f,i)=>(
@@ -131,13 +132,11 @@ const ProfileSection = ({User,setProfileUser}) => {
                         className="w-12 h-12 cursor-pointer rounded-full object-cover hover:brightness-75" />
                     ))
                   }
-
                   <button className="w-12 h-12 flex justify-center items-center bg-white/20 cursor-pointer rounded-full shadow-md hover:bg-white/30 transition">
                       <GrLinkNext size={18} className="text-white" />
                   </button>
               </div>
             </div>
-            
           </div>
 
         </div>

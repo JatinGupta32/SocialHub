@@ -180,17 +180,24 @@ exports.getUser1 = async (req, res) => {
         console.log(userid);
       
         const userDetail = await User.findById(userid)
-          .select("username fullname privateChats following")
-          .lean()
-          .populate({
+        .select("username fullname privateChats following notifications")  // Fixed typo: "notification" -> "notifications"
+        .populate({
+            path: "notifications",
+            populate: {
+            path: "sender",
+            select: "username image"
+            }
+        })
+        .populate({
             path: "privateChats",
             select: "roomId users",
             populate: {
-              path: "users",
-              model: "user",
-              select: "username fullname image",
+            path: "users",
+            model: "user",
+            select: "username fullname image",
             },
-          });
+        })
+        .lean();
       
         if (!userDetail) {
           return res.status(404).json({

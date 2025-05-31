@@ -51,7 +51,7 @@ const RightSidebar = () => {
             <div>
                 {
                     unfollowedUsers?.map((User,i) => (
-                        <div className="flex justify-between items-center mt-[1rem] mb-[0.75rem]">
+                        <div className="flex justify-between items-center mt-[1rem] mb-[0.75rem] ">
                             <div className='flex gap-[0.75rem]'>
                                 <img onClick={()=>{navigate(`/profile/:${User?._id}`)}} src={User?.image ? User?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${User?.fullname}`} className="w-11 h-11 mb-auto rounded-full object-cover cursor-pointer"></img>
                                 <div className='flex-col justify-center'>
@@ -59,9 +59,16 @@ const RightSidebar = () => {
                                     <div className='font-serif brightness-75 text-sm '>{User?.fullname}</div>
                                 </div>
                             </div>
-                            <div className="text-sm w-fit">
-                                <button onClick={()=>(dispatch(updateFollowApi(User?._id)))} className="font-sans cursor-pointer hover:text-white font-semibold text-purple-500">Follow</button>
-                            </div>
+                            {
+                                user?.requested?.some((follower) => follower === User._id) ? 
+                                <div className="text-sm w-fit">
+                                    <button className="font-sans cursor-pointer hover:text-white font-semibold text-purple-500">Requested</button>
+                                </div> :
+                                <div className="text-sm w-fit">
+                                    <button onClick={()=>(dispatch(updateFollowApi(User?._id)))} className="font-sans cursor-pointer hover:text-white font-semibold text-purple-500">Follow</button>
+                                </div>
+                            }
+                            
                         </div>
                     ))
                 }

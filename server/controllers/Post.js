@@ -1,7 +1,8 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment")
-const {uploadImageToCloudinary} = require('../utils/imageUploader')
+const {uploadImageToCloudinary} = require('../utils/imageUploader');
+const Notification = require("../models/Notification");
 require('dotenv').config();
 const cloudinary = require("cloudinary").v2;
 
@@ -54,7 +55,14 @@ exports.createPost = async (req,res) => {
                 }
             },
             { new: true }
-        ).populate("additionalDetails followers following posts")
+        ).populate("additionalDetails followers following posts notifications")
+        .populate({
+            path: "notifications",
+            populate: {
+            path: "sender",
+            select: "username image"
+            }
+        })
         .exec();
         // console.log(newPost, updatedUserDetails);
         return res.status(200).json({
@@ -119,7 +127,7 @@ exports.updateLikeOnPost = async (req,res) => {
         }
         // Fetch post details
         const postdetails = await Post.findById(postid);
-
+        // console.log("postdetails:" , postdetails.user._id);
         if (!postdetails) {
             return res.status(404).json({
                 success: false,
@@ -168,6 +176,26 @@ exports.updateLikeOnPost = async (req,res) => {
                 },
             })
             .exec();
+            const notification = await Notification.create(
+                { 
+                    sender: userid,
+                    message: "liked",
+                    photo: updatedPostDetails.photos[0], 
+                },
+            )
+            // console.log("notification: ", notification)
+            const updatedUserDetails = await User.findByIdAndUpdate(
+                postdetails.user._id,
+                { $push: {
+                    notifications: {
+                        $each: [notification._id],
+                        $position: 0  // Insert at the beginning
+                    },
+                }},
+                { new: true }
+            )
+            // console.log("user: ", updatedUserDetails)
+
         }
 
         // console.log("updatedPostDetails: ", updatedPostDetails);
@@ -226,8 +254,27 @@ exports.addCommentOnPost = async (req,res) => {
             },
         })
         .exec();
+
+        const notification = await Notification.create(
+                { 
+                    sender: userid,
+                    message: comment,
+                    photo: updatedPostDetails.photos[0], 
+                },
+            )
+            // console.log("notification: ", notification)
+            const updatedUserDetails = await User.findByIdAndUpdate(
+                updatedPostDetails.user._id,
+                { $push: {
+                    notifications: {
+                        $each: [notification._id],
+                        $position: 0  // Insert at the beginning
+                    },
+                }},
+                { new: true }
+            )
         
-        // console.log("updatedPostDetails: ", updatedPostDetails);
+        // console.log("updatedPostDetails: ", updatedUserDetails);
         return res.status(200).json({
             success: true,
             updatedPostDetails,
@@ -266,8 +313,6 @@ exports.getSocialPosts = async (req, res) => {
             });
         }
 
-        // console.log("Following Users:", user.following);
-
         // Step 2: Fetch and sort posts
         const posts = await Post.find({ user: { $in: user.following } })
             .populate("user", "username fullname image")
@@ -278,7 +323,14 @@ exports.getSocialPosts = async (req, res) => {
             .exec();
 
         // console.log("Posts Found:", posts.length);
-        const userDetails = await User.findById(userid,{password:false});
+        const userDetails = await User.findById(userid,{password:false})
+        .populate({
+            path: "notifications",
+            populate: {
+            path: "sender",
+            select: "username image"
+            }
+        });
         return res.status(200).json({
             success: true,
             postDetails: posts,

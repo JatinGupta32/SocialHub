@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    requested: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "user",
+        }
+    ],
     privacyStatus: {
             type: String,
             enum: ["private", "public"], 
@@ -55,6 +61,12 @@ const userSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "privateChat",
+        }
+    ],
+    notifications: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "notification",
         }
     ],
     token: {

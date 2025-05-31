@@ -66,7 +66,7 @@ export function getUser1Api() {
                 withCredentials: true 
             });
             dispatch(setUser(response.data.userDetail));
-            console.log(response.data.message);
+            console.log("getUser1: ",response.data);
             console.log(response.data);
             // toast.success("✅ User get successfully!");
         } catch (error) {

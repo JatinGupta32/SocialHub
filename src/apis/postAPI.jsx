@@ -54,7 +54,7 @@ export function getPostDetailsApi(postid) {
 }
 
 export function updateLikeOnPostApi (postid){
-    return async () => {
+    return async (dispatch) => {
         dispatch(setLoading(true));
         try{
             const token = localStorage.getItem("token");
@@ -77,10 +77,10 @@ export function updateLikeOnPostApi (postid){
 }
 
 export function addCommentOnPostApi (postid,comment){
-    return async () => {
-        dispatch(setLoading(true));
+    return async (dispatch) => {
+        // dispatch(setLoading(true));
         try{
-            // console.log(postid, statement)
+            // console.log(postid, comment)
             const token = localStorage.getItem("token");
             const response = await axios.post(`${url}/api/v1/addCommentOnPost`, {postid,comment}, {
                 headers: {

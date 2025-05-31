@@ -10,13 +10,10 @@ export function getUserApi(userid) {
     dispatch(setLoading(true));
     try {
       const response = await axios.get(`${url}/api/v1/getUser`, {
-        // headers: {
-        //   Authorization: `Bearer ${token}`, // Token should be sent in headers
-        // },
         withCredentials: true 
       });
 
-      // console.log('getUserApi: ', response.data);
+      console.log('getUserApi: ', response.data);
       dispatch(setUser(response.data.userDetails));
     } catch (error) {
       console.error("Error sending data:", error);
@@ -31,14 +28,10 @@ export function getUserDetailsApi(userid) {
     dispatch(setLoading(true));
     try {
       const token = localStorage.getItem("token");
-      // console.log("Token:", token);
       const response = await axios.get(`${url}/api/v1/getUserDetails?userid=${userid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Token should be sent in headers
-        },
         withCredentials: true 
       });
-      // console.log("getUserDetailsApi Response:", response.data);
+      console.log("getUserDetailsApi Response:", response.data);
       dispatch(setUser(response.data.loginUserDetails));
       return response.data.userDetails;
     } catch (error) {
@@ -60,7 +53,7 @@ export function updateFollowApi (profileUserid){
               },
               withCredentials: true 
           });
-          // console.log("UserDetsils after update follow:", response.data);
+          console.log("UserDetsils after update follow:", response.data);
           dispatch(setUser(response.data.updatedUserDetails));
           toast.success("🎉 Follow updated successfully!");
 
@@ -69,6 +62,29 @@ export function updateFollowApi (profileUserid){
       catch(error){
           console.error("Error sending data:", error);
           toast.error(error.response?.data?.message || "Unable to update follow");
+      }
+      dispatch(setLoading(false));
+  }
+}
+
+export function acceptFollowRequestApi (followerid,notificationId){
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+      try{
+          const token = localStorage.getItem("token");
+          const response = await axios.post(`${url}/api/v1/acceptFollowRequest`, {followerid,notificationId}, {
+              headers: {
+                  Authorization: `Bearer ${token}`, // Token should be sent in headers
+              },
+              withCredentials: true 
+          });
+          console.log("UserDetsils after accept follow:", response.data);
+          dispatch(setUser(response.data.updatedUserDetails));
+          toast.success("🎉 Follow accepted successfully!");
+      }
+      catch(error){
+          console.error("Error sending data:", error);
+          toast.error(error.response?.data?.message || "Unable to accept follow");
       }
       dispatch(setLoading(false));
   }

@@ -7,17 +7,21 @@ import PostModal from '../Profile/PostModal'
 import { FaHeart } from "react-icons/fa";
 import { FaComment } from "react-icons/fa";
 import { FaUserLock } from "react-icons/fa";
+import { RiUserFollowFill } from "react-icons/ri";
+import { updateFollowApi } from '../../apis/profileAPI';
+import { useDispatch } from 'react-redux';
 
 
 const PostSection = ({User,user}) => {
   const [hovered1,setHovered1] = useState(false);
   const [hovered2,setHovered2] = useState(false);
   const [hovered3,setHovered3] = useState(false);
+  const dispatch = useDispatch();
   const [selectedPost, setSelectedPost] = useState(null);
   const [activePost, setActivePost] = useState(null);
   const [hoverPost,setHoverPost] = useState(1);
 
-  if (user._id!==User._id && (User?.privacyStatus === "private" && !user.following.some(f => f._id === User._id))) {
+  if (user?._id!==User?._id && (User?.privacyStatus === "private" && !user?.following.some(f => f?._id === User?._id))) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black border-l border-white/20 flex justify-center items-center px-4">
         <div className="w-fit flex flex-col items-center justify-center text-center gap-4 p-8 bg-gray-800/30 backdrop-blur-md rounded-2xl shadow-2xl border border-purple-600/30 animate-fade-in">
@@ -28,9 +32,16 @@ const PostSection = ({User,user}) => {
           
           <p className="text-md text-gray-400 font-[Segoe_UI]">Follow to see their photos and videos.</p>
 
-          <button className="mt-4 px-5 py-1.5 bg-purple-600 text-white font-semibold text-lg font-[Segoe_UI] cursor-pointer rounded-full hover:bg-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
-            Follow
-          </button>
+          {
+            user?.requested?.some((follower) => follower === User?._id) ? 
+            <button className="flex items-center mt-4 px-5 py-1.5 bg-gray-700 hover:bg-gray-800 text-white font-semibold text-lg font-[Segoe_UI] cursor-pointer rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+              <RiUserFollowFill className="mr-1"/>Requested
+            </button>:
+            <button onClick={()=>(dispatch(updateFollowApi(User?._id)))} className="flex items-center mt-4 px-5 py-1.5 bg-purple-600 text-white font-semibold text-lg font-[Segoe_UI] cursor-pointer rounded-full hover:bg-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
+              <RiUserFollowFill className="mr-1"/>Follow
+            </button>
+          }
+          
 
         </div>
       </div>

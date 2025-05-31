@@ -4,6 +4,7 @@ const Post = require("../models/Post");
 const mongoose = require("mongoose");
 const {uploadImageToCloudinary} = require('../utils/imageUploader')
 const cloudinary = require("cloudinary");
+const Notification = require("../models/Notification");
 
 exports.getUserDetails = async (req,res) => {
     try{
@@ -38,9 +39,20 @@ exports.getUserDetails = async (req,res) => {
                 posts: true,
                 image: true,
                 privacyStatus: true,
+                notifications: true,
+                requested: true,
             })
-            .populate("additionalDetails followers following posts")
+            .populate("additionalDetails followers following posts notifications")
+            .populate({
+                path: "notifications",
+                populate: {
+                path: "sender",
+                select: "username image"
+            }
+        })
             .exec()
+        
+        // console.log("loginUserDetails: ",loginUserDetails)
 
         return res.status(200).json({
             success: true,
@@ -75,10 +87,19 @@ exports.getUser = async (req,res) => {
                 posts: true,
                 image: true,
                 privacyStatus: true,
+                notifications: true,
+                requested: true,
             })
-            .populate("additionalDetails followers following posts")
+            .populate("additionalDetails followers following posts notifications")
+            .populate({
+                path: "notifications",
+                populate: {
+                path: "sender",
+                select: "username image"
+            }
+        })
             .exec()
-        // console.log('userDetails1: ', userDetails);
+        console.log('userDetails1: ', userDetails);
         if(!userid){
             return res.status(403).json({
                 success: false,
@@ -104,6 +125,7 @@ exports.updateFollow = async (req, res) => {
     try {
         let { profileUserid } = req.body;
         let userid = req.user.id;
+        // console.log(profileUserid);
 
         // Convert user IDs to ObjectId
         if (!mongoose.Types.ObjectId.isValid(userid) || !mongoose.Types.ObjectId.isValid(profileUserid)) {
@@ -128,6 +150,8 @@ exports.updateFollow = async (req, res) => {
         let updatedUserDetails, updatedProfileUserDetails;
         const userDetails = await User.findById(userid);
         const profileUserDetails = await User.findById(profileUserid);
+        console.log("userDetails: ",userDetails)
+        console.log("profileUserDetails: ",profileUserDetails)
 
         if (!userDetails || !profileUserDetails) {
             return res.status(404).json({ success: false, message: "User not found" });
@@ -138,13 +162,42 @@ exports.updateFollow = async (req, res) => {
                 userid,
                 { $pull: { following: profileUserid } },  // Directly use ObjectId
                 { new: true }
-            ).populate("additionalDetails followers following posts").exec();
+            ).populate("additionalDetails followers following posts requested").exec();
         } else {
-            updatedUserDetails = await User.findByIdAndUpdate(
-                userid,
-                { $push: { following: profileUserid } },
-                { new: true }
-            ).populate("additionalDetails followers following posts").exec();
+            if(profileUserDetails.privacyStatus === "public"){
+                updatedUserDetails = await User.findByIdAndUpdate(
+                    userid,
+                    { $push: {
+                        following: profileUserid,
+                    }},
+                    { new: true }
+                ).populate("additionalDetails followers following posts notifications requested")
+                .populate({
+                    path: "notifications",
+                    populate: {
+                    path: "sender",
+                    select: "username image"
+                    }
+                })
+                .exec();
+            }
+            else{
+                updatedUserDetails = await User.findByIdAndUpdate(
+                    userid,
+                    { $push: {
+                        requested: profileUserid,
+                    }},
+                    { new: true }
+                ).populate("additionalDetails followers following posts notifications requested")
+                .populate({
+                    path: "notifications",
+                    populate: {
+                    path: "sender",
+                    select: "username image"
+                    }
+                })
+                .exec();
+            }
         }
 
         if (profileUserDetails.followers.includes(userid)) {
@@ -154,15 +207,46 @@ exports.updateFollow = async (req, res) => {
                 { new: true }
             ).populate("additionalDetails followers following posts").exec();
         } else {
-            updatedProfileUserDetails = await User.findByIdAndUpdate(
-                profileUserid,
-                { $push: { followers: userid } },
-                { new: true }
-            ).populate("additionalDetails followers following posts").exec();
+            let msg = profileUserDetails.privacyStatus === "public" ? "started" : "requested";
+            const notification = await Notification.create(
+                { 
+                    sender: userid,
+                    message: msg,
+                },
+            )
+            // console.log("notification: ", notification)
+            if(profileUserDetails.privacyStatus === "public"){
+                updatedProfileUserDetails = await User.findByIdAndUpdate(
+                    profileUserid,
+                    { $push: { 
+                        followers: userid,
+                        notifications: {
+                            $each: [notification._id],
+                            $position: 0  // Insert at the beginning
+                        },
+                    } },
+                    { new: true }
+                ).populate("additionalDetails followers following posts")
+                .exec();
+            }
+            else{
+                updatedProfileUserDetails = await User.findByIdAndUpdate(
+                    profileUserid,
+                    { $push: { 
+                        notifications: {
+                            $each: [notification._id],
+                            $position: 0  // Insert at the beginning
+                        },
+                    } },
+                    { new: true }
+                ).populate("additionalDetails followers following posts")
+                .exec();
+            }
+            
         }
 
-        // console.log("updatedUserDetails: ", updatedUserDetails);
-        // console.log("updatedProfileUserDetails: ", updatedProfileUserDetails);
+        console.log("updatedUserDetails: ",updatedUserDetails)
+        console.log("updatedProfileUserDetails: ",updatedProfileUserDetails)
 
         return res.status(200).json({
             success: true,
@@ -180,72 +264,88 @@ exports.updateFollow = async (req, res) => {
     }
 };
 
-exports.createPost = async (req,res) => {
-    try{
-        const {photos,caption,music,location,tagPeople,commentAllowed,privacyStatus} = req.body;
-        const userid = req.user.id;
-        // console.log(userid);
-        if(!userid){
+exports.acceptFollowRequest = async (req, res) => {
+    try {
+        let { followerid,notificationId } = req.body;
+        let userid = req.user.id;
+
+        // userid = new mongoose.Types.ObjectId(userid);
+        // profileUserid = new mongoose.Types.ObjectId(profileUserid);
+
+        // console.log(userid, profileUserid);
+
+        if (!userid) {
             return res.status(401).json({
                 success: false,
                 message: "This user does not exist",
-            })
+            });
         }
-        if(!photos){
-            return res.status(400).json({
-                success: false,
-                message: "This user does not exist",
-            })
-        }
-        const Photos = [];
-        for (let i = 0; i < photos.length; i++) {
-            if (!photos[i].startsWith("data:image")) {
-                console.error("Invalid base64 format at index", i);
-                continue;
-            }
-            try {
-                let imageUrl = await uploadImageToCloudinary(photos[i], process.env.FOLDER_NAME);
-                Photos.push(imageUrl.secure_url);
-            } catch (error) {
-                console.error("Upload failed for image", i, error);
-            }
-        }
-        // console.log("Cloudinary_urls",Photos);
-        const newPost = await Post.create({
-            user: userid,
-            photos: Photos, 
-            caption, music, location, tagPeople, commentAllowed, privacyStatus,
-            likes:[],
-            comments:[],
-        });
-        const updatedUserDetails = await User.findByIdAndUpdate(
-            userid,
-            {
+
+        await Notification.findByIdAndDelete(notificationId);
+
+        const notification1 = await Notification.create(
+            { 
+                sender: userid,
+                message: "accepted",
+            },
+        )
+        const updatedFollowerDetails = await User.findByIdAndUpdate(
+            followerid,
+            { 
                 $push: {
-                    posts: {
-                        $each: [newPost._id],
+                    following: userid,
+                    notifications: {
+                        $each: [notification1._id],
                         $position: 0  // Insert at the beginning
-                    }
-                }
+                    },
+                },
+                $pull: {
+                    requested: userid,
+                },        
             },
             { new: true }
-        ).populate("additionalDetails followers following posts")
+        )
+
+        const notification2 = await Notification.create(
+            { 
+                sender: followerid,
+                message: "started",
+            },
+        )
+        updatedUserDetails = await User.findByIdAndUpdate(
+            userid,
+            { $push: { 
+                followers: followerid,
+                notifications: {
+                    $each: [notification2._id],
+                    $position: 0  // Insert at the beginning
+                },
+            } },
+            { new: true }
+        ).populate("additionalDetails followers following posts requested")
+        .populate({
+            path: "notifications",
+            populate: {
+            path: "sender",
+            select: "username image"
+            }
+        })
         .exec();
-        // console.log(newPost, updatedUserDetails);
+
         return res.status(200).json({
             success: true,
             updatedUserDetails,
-            message: "New Post Created",
-        })
-    }
-    catch(error){
-        console.log(error)
+            message: "Accepted follow request successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({
             success: false,
-            message: "Some error is coming while creating post",
-        })
+            message: "Some error occurred while accepting Follow request",
+        });
     }
-}
+};
 
 exports.editProfile = async (req, res) => {
     try {        
@@ -289,7 +389,14 @@ exports.editProfile = async (req, res) => {
                 privacyStatus: privacyStatus,
             },
             { new: true }
-        ).populate("additionalDetails followers following posts")
+        ).populate("additionalDetails followers following posts requested")
+        .populate({
+            path: "notifications",
+            populate: {
+            path: "sender",
+            select: "username image"
+            }
+        })
         .exec();
 
         return res.status(200).json({

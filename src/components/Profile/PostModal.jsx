@@ -107,6 +107,7 @@ const PostModal = ({ Post, activePost, setActivePost, user, profileUserid, selec
   };
 
   const handleOnComment = () => {
+    // console.log(comment);
     dispatch(addCommentOnPostApi(post._id,comment)).then(setPost).catch(console.error);
     setComment('');
   }

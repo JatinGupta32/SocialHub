@@ -149,7 +149,6 @@ const NotificationBar = () => {
                                   {
                                     notification?.message === "accepted" && 
                                     <div className="flex items-center justify-between w-full">
-                                      {/* Left Text Section */}
                                       <div className="flex-1">
                                         <span
                                           onClick={() => {
@@ -163,7 +162,6 @@ const NotificationBar = () => {
                                         <span className="text-md">accepted your follow request</span>
                                       </div>
 
-                                      {/* Right Button Section with spacing */}
                                       <button onClick={()=>dispatch(updateFollowApi(notification?.sender?._id))} className="ml-4 px-3 py-1 bg-purple-600 cursor-pointer hover:bg-purple-800 rounded-lg text-white text-sm font-semibold transition-all duration-300">
                                         Following
                                       </button>

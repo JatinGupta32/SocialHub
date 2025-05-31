@@ -29,10 +29,11 @@ const MessageModal = ({onClose}) => {
       },[]);
 
       const handleOncreate = () => {
-        if(selectedUsers.length===0 || !groupName) return;
+        console.log("selectedUsers:", selectedUsers);
         if(selectedUsers.length===1){
           dispatch(createPrivateChatApi(selectedUsers));
         }
+        else if(selectedUsers.length===0 || !groupName) return;
         else{
           dispatch(createGroupApi(selectedUsers,groupName));
         }

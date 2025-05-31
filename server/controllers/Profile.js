@@ -150,8 +150,8 @@ exports.updateFollow = async (req, res) => {
         let updatedUserDetails, updatedProfileUserDetails;
         const userDetails = await User.findById(userid);
         const profileUserDetails = await User.findById(profileUserid);
-        console.log("userDetails: ",userDetails)
-        console.log("profileUserDetails: ",profileUserDetails)
+        // console.log("userDetails: ",userDetails)
+        // console.log("profileUserDetails: ",profileUserDetails)
 
         if (!userDetails || !profileUserDetails) {
             return res.status(404).json({ success: false, message: "User not found" });
@@ -245,8 +245,8 @@ exports.updateFollow = async (req, res) => {
             
         }
 
-        console.log("updatedUserDetails: ",updatedUserDetails)
-        console.log("updatedProfileUserDetails: ",updatedProfileUserDetails)
+        // console.log("updatedUserDetails: ",updatedUserDetails)
+        // console.log("updatedProfileUserDetails: ",updatedProfileUserDetails)
 
         return res.status(200).json({
             success: true,
@@ -468,6 +468,58 @@ exports.getAllUsers = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in retrieving users",
+        });
+    }
+};
+
+
+exports.cancelRequest = async (req, res) => {
+    try {
+        let { notificationId,senderId } = req.body;
+        let userid = req.user.id;
+
+        if (!userid) {
+            return res.status(401).json({
+                success: false,
+                message: "This user does not exist",
+            });
+        }
+        
+        const updatedUserDetails = User.findByIdAndUpdate(
+            userid,
+            { $pull: { 
+                notifications: notificationId,
+            } },
+            { new: true }
+        ).populate("additionalDetails followers following posts requested")
+            .populate({
+                path: "notifications",
+                populate: {
+                    path: "sender",
+                    select: "username image",
+                },
+            })
+            .exec();
+
+        await Notification.findByIdAndDelete(notificationId);
+
+        await User.findByIdAndUpdate(
+            senderId,
+            { $pull: { requested: userid } },
+            { new: true }
+        )            
+
+        return res.status(200).json({
+            success: true,
+            updatedUserDetails,
+            message: "Cancel Request successfully!",
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Some error occurred while Cancelling Request!",
         });
     }
 };

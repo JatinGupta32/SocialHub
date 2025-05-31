@@ -41,12 +41,10 @@ export function getGroupsApi() {
 
 export function createPrivateChatApi(users) {  
     return async (dispatch) => {
-        dispatch(setLoading(true));
         try {
-            const response = await axios.post(`${url}/api/v1/createPrivateChat`, {users} ,{
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/createPrivateChat`, {users} ,{
                 withCredentials: true 
             });
-            console.log(response.data.message);
             // console.log(response.data);
             dispatch(setUser(response.data.updatedUserDetails1));
             // toast.success("✅ PrivateChat create successfully!");
@@ -54,7 +52,6 @@ export function createPrivateChatApi(users) {
             console.error("Error sending data:", error);
             toast.error(error.response?.data?.message || "PrivateChat not created");
         }
-        dispatch(setLoading(false));
     }
 };
 

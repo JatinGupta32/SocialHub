@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import Sidebar1 from './Sidebar1'
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotificationBar } from '../../slices/profileSlice';
-import { acceptFollowRequestApi, updateFollowApi } from '../../apis/profileAPI';
+import { acceptFollowRequestApi, cancelRequestApi, updateFollowApi } from '../../apis/profileAPI';
 import { useNavigate } from 'react-router-dom';
 
 const NotificationBar = () => {
@@ -105,7 +105,7 @@ const NotificationBar = () => {
                                         >
                                           Confirm
                                         </button>
-                                        <button
+                                        <button onClick={()=>dispatch(cancelRequestApi(notification?._id,notification?.sender?._id))}
                                           className="px-3 py-1 bg-purple-600 cursor-pointer hover:bg-purple-800 rounded-lg text-white text-sm font-semibold transition-all duration-300"
                                         >
                                           Delete

@@ -138,3 +138,23 @@ export function getUnfollowUserApi(){
     dispatch(setLoading(false));
   }
 }
+
+
+export function cancelRequestApi (notificationId,senderId){
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+      try{
+          const response = await axios.post(`${url}/api/v1/cancelRequest`, {notificationId,senderId} ,{
+              withCredentials: true 
+          });
+          // console.log("updatedUserDetails:", response.data);
+          toast.success("🎉 Cancel Request successfully!");
+          dispatch(setUser(response.data.updatedUserDetails));
+      }
+      catch(error){
+          console.error("Error sending data:", error);
+          toast.error(error.response?.data?.message || "Unable to Cancel request");
+      }
+      dispatch(setLoading(false));
+  }
+}

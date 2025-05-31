@@ -183,7 +183,6 @@ exports.updateLikeOnPost = async (req,res) => {
                     photo: updatedPostDetails.photos[0], 
                 },
             )
-            // console.log("notification: ", notification)
             const updatedUserDetails = await User.findByIdAndUpdate(
                 postdetails.user._id,
                 { $push: {
@@ -263,16 +262,16 @@ exports.addCommentOnPost = async (req,res) => {
                 },
             )
             // console.log("notification: ", notification)
-            const updatedUserDetails = await User.findByIdAndUpdate(
-                updatedPostDetails.user._id,
-                { $push: {
-                    notifications: {
-                        $each: [notification._id],
-                        $position: 0  // Insert at the beginning
-                    },
-                }},
-                { new: true }
-            )
+        const updatedUserDetails = await User.findByIdAndUpdate(
+            updatedPostDetails.user._id,
+            { $push: {
+                notifications: {
+                    $each: [notification._id],
+                    $position: 0  // Insert at the beginning
+                },
+            }},
+            { new: true }
+        )
         
         // console.log("updatedPostDetails: ", updatedUserDetails);
         return res.status(200).json({

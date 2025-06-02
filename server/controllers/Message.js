@@ -197,6 +197,10 @@ exports.getUser1 = async (req, res) => {
             select: "username fullname image",
             },
         })
+        // .populate({
+        //     path: "following",
+        //     select: "username image",
+        // })
         .lean();
       
         if (!userDetail) {

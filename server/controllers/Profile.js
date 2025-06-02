@@ -171,7 +171,7 @@ exports.updateFollow = async (req, res) => {
                         following: profileUserid,
                     }},
                     { new: true }
-                ).populate("additionalDetails followers following posts notifications requested")
+                ).populate("additionalDetails followers following posts requested")
                 .populate({
                     path: "notifications",
                     populate: {
@@ -179,7 +179,7 @@ exports.updateFollow = async (req, res) => {
                     select: "username image"
                     }
                 })
-                .exec();
+                // .exec();
             }
             else{
                 updatedUserDetails = await User.findByIdAndUpdate(
@@ -188,7 +188,7 @@ exports.updateFollow = async (req, res) => {
                         requested: profileUserid,
                     }},
                     { new: true }
-                ).populate("additionalDetails followers following posts notifications requested")
+                ).populate("additionalDetails followers following posts requested")
                 .populate({
                     path: "notifications",
                     populate: {
@@ -196,7 +196,7 @@ exports.updateFollow = async (req, res) => {
                     select: "username image"
                     }
                 })
-                .exec();
+                // .exec();
             }
         }
 
